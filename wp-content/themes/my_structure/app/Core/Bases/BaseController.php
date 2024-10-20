@@ -20,13 +20,21 @@ abstract class BaseController
 
     protected function addCss($handle, $src, $deps = [], $ver = false)
     {
-        $fullSrc = get_template_directory_uri() . '/source/assets/css/' . ltrim($src, '/');
+        if (filter_var($src, FILTER_VALIDATE_URL) && preg_match('/^https?:\/\//', $src)) {
+            $fullSrc = $src;
+        } else {
+            $fullSrc = get_template_directory_uri() . '/source/assets/css/' . ltrim($src, '/');
+        }
         wp_enqueue_style($handle, $fullSrc, $deps, $ver);
     }
 
     protected function addJs($handle, $src, $deps = [], $in_footer = false, $ver = false)
     {
-        $fullSrc = get_template_directory_uri() . '/source/assets/js/' . ltrim($src, '/');
+        if (filter_var($src, FILTER_VALIDATE_URL) && preg_match('/^https?:\/\//', $src)) {
+            $fullSrc = $src;
+        } else {
+            $fullSrc = get_template_directory_uri() . '/source/assets/js/' . ltrim($src, '/');
+        }
         add_action('wp_enqueue_scripts', function () use ($handle, $fullSrc, $deps, $ver, $in_footer) {
             wp_enqueue_script($handle, $fullSrc, $deps);
         });

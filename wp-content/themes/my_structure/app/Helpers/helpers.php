@@ -33,8 +33,12 @@ if (!function_exists('my_theme_setup')) {
 if (!function_exists('add_base_css')) {
     function add_base_css() {
         add_action('wp_enqueue_scripts', function() {
-            $fullSrc = vite_asset('scss/style.scss');
-            wp_enqueue_style('style', $fullSrc);
+            $fullSrcStyle = vite_asset('scss/style.scss');
+            $fullSrcNunito = vite_asset('fonts/nunito/Nunito-Bold.ttf');
+            $fullSrcNunitoSans = vite_asset('fonts/nunito-sans/NunitoSans-Regular.ttf');
+            wp_enqueue_style('style', $fullSrcStyle);
+            wp_enqueue_style('nunito', $fullSrcNunito);
+            wp_enqueue_style('nunitoSans', $fullSrcNunitoSans);
         });
     }
 }

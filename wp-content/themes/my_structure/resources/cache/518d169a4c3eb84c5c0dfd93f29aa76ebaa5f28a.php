@@ -1,14 +1,15 @@
 <?php
 $options = \Models\Options\OpzioniGlobaliFields::get();
 ?>
-<header x-data="{ open: false }" class="pb-6 bg-white lg:pb-0">
+<header x-data="{ open: false }" class="p-6 bg-white lg:pb-0">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <!-- lg+ -->
         <nav class="flex items-center justify-between h-16 lg:h-20">
-            <div class="flex-shrink-0">
+            <div class="text-center flex flex-col items-center justify-between">
                 <a href="#" title="" class="flex">
-                    <img class="w-auto h-8 lg:h-10" src="<?php echo e($options->logo['url']); ?>" alt="" />
+                    <img class="w-auto h-12 lg:h-12" src="<?php echo e($options->logo['url']); ?>" alt="" />
                 </a>
+                <div class="text-custom-dark-green font-bold text-xs">Project Africa Conservation</div>
             </div>
 
             <button @click="open = !open" type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
@@ -25,7 +26,7 @@ $options = \Models\Options\OpzioniGlobaliFields::get();
 
             <div class="hidden lg:flex lg:items-center lg:ml-auto lg:space-x-10">
                 <?php $__currentLoopData = $menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e($item->url); ?>" title="" class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> <?php echo e($item->title); ?> </a>
+                    <a href="<?php echo e($item->url); ?>" title="" class="text-base font-medium text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 font-nunitoSans"> <?php echo e($item->title); ?> </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 

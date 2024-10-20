@@ -6,9 +6,18 @@ module.exports = {
     "./source/assets/scss/**/*.scss",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        nunito: ['Nunito', 'sans-serif'],
+        nunitoSans: ['Nunito Sans', 'sans-serif'],
+      },
+      colors: {
+        'button-green': '#84CE59',
+        'custom-dark-green': '#45752c',
+      },
+    },
   },
   plugins: [
-
+    require('@tailwindcss/forms')
   ],
 }

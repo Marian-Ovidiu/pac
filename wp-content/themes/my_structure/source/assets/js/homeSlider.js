@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     var swiper = new Swiper(".vertical-slide-carousel", {
         loop: true,
@@ -6,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
         mousewheel: {
             releaseOnEdges: true,
         },
-        spaceBetween: 30,
         grabCursor: true,
         pagination: {
             el: ".vertical-slide-carousel .swiper-pagination",

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.9",
     "alpinejs": "^3.14.1",
     "axios": "^1.7.7",
     "swiper": "^11.1.14",

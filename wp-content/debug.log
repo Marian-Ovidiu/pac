@@ -1684,3 +1684,61 @@ Stack trace:
 [19-Oct-2024 12:47:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /Users/editweb2/Sites/01progetti-test/pac/wp-includes/script-loader.php:2936) in /Users/editweb2/Sites/01progetti-test/pac/wp-includes/pluggable.php on line 1435
 [19-Oct-2024 12:47:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /Users/editweb2/Sites/01progetti-test/pac/wp-includes/script-loader.php:2936) in /Users/editweb2/Sites/01progetti-test/pac/wp-includes/pluggable.php on line 1438
 [19-Oct-2024 12:53:08 UTC] PHP Notice:  Undefined variable: opions in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/518d169a4c3eb84c5c0dfd93f29aa76ebaa5f28a.php on line 3
+[19-Oct-2024 13:52:50 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 13:52:51 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 13:56:57 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 13:56:58 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 13:56:58 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 13:56:58 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 13:56:58 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 13:57:00 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 13:57:04 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 13:57:04 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 13:57:04 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:00 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:00 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:00 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:54 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:54 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:06:54 UTC] PHP Warning:  htmlspecialchars() expects parameter 1 to be string, array given in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/support/helpers.php on line 118
+[19-Oct-2024 14:07:39 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:07:39 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:07:40 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:22:03 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:22:04 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:22:05 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:27:53 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:48:20 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:48:20 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 14:48:21 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:03:12 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.scss
+[19-Oct-2024 16:03:12 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.scss
+[19-Oct-2024 16:03:56 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.scss
+[19-Oct-2024 16:03:56 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.scss
+[19-Oct-2024 16:04:48 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:04:48 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:04:48 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:04:48 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:04:50 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 16:04:55 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.scss
+[19-Oct-2024 16:04:55 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.scss
+[19-Oct-2024 16:07:09 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.ttf
+[19-Oct-2024 16:07:09 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.ttf
+[19-Oct-2024 16:07:12 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.ttf
+[19-Oct-2024 16:07:12 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.ttf
+[19-Oct-2024 16:07:24 UTC] Asset non trovato nel manifest: assets/fonts/Nunito-Bold.ttf
+[19-Oct-2024 16:07:24 UTC] Asset non trovato nel manifest: assets/fonts/NunitoSans-Regular.ttf
+[19-Oct-2024 16:51:09 UTC] PHP Warning:  require(): http:// wrapper is disabled in the server configuration by allow_url_include=0 in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/app/Helpers/helpers.php on line 18
+[19-Oct-2024 16:51:09 UTC] PHP Warning:  require(http://pac.localhost/wp-content/themes/my_structure/public/ttf/Nunito-Bold-CZ01jYvx.ttf): failed to open stream: no suitable wrapper could be found in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/app/Helpers/helpers.php on line 18
+[19-Oct-2024 16:51:09 UTC] PHP Fatal error:  require(): Failed opening required 'http://pac.localhost/wp-content/themes/my_structure/public/ttf/Nunito-Bold-CZ01jYvx.ttf' (include_path='.:/usr/local/Cellar/php@7.4/7.4.33_6/share/php@7.4/pear') in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/app/Helpers/helpers.php on line 18
+[19-Oct-2024 20:12:06 UTC] PHP Deprecated:  La funzione wp_update_https_detection_errors è <strong>deprecata</strong> dalla versione 6.4.0 senza alcuna alternativa disponibile. in /Users/editweb2/Sites/01progetti-test/pac/wp-includes/functions.php on line 6085
+[19-Oct-2024 20:17:01 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 20:40:49 UTC] PHP Notice:  Undefined variable: options in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/eeed0f38eb8b7ec4d0c3ac1ae9371b3e46271271.php on line 8
+[19-Oct-2024 20:40:49 UTC] PHP Notice:  Trying to get property 'logo' of non-object in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/eeed0f38eb8b7ec4d0c3ac1ae9371b3e46271271.php on line 8
+[19-Oct-2024 20:40:49 UTC] PHP Notice:  Trying to access array offset on value of type null in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/eeed0f38eb8b7ec4d0c3ac1ae9371b3e46271271.php on line 8
+[19-Oct-2024 20:56:14 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 20:56:14 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 20:56:14 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 20:56:14 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json
+[19-Oct-2024 21:10:23 UTC] Automatic updates starting...
+[19-Oct-2024 21:10:26 UTC] Automatic updates complete.
