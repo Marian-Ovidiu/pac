@@ -12,8 +12,9 @@ module.exports = {
         nunitoSans: ['Nunito Sans', 'sans-serif'],
       },
       colors: {
-        'button-green': '#84CE59',
+        'custom-green': '#84CE59',
         'custom-dark-green': '#45752c',
+        'custom-light-green': '#E8FCCF',
       },
     },
   },

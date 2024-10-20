@@ -1,9 +1,8 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    var swiper = new Swiper(".vertical-slide-carousel", {
+    var verticalSwiper = new Swiper(".vertical-slide-carousel", {
         loop: true,
         direction: 'vertical',
-        mousewheelControl: true,
         mousewheel: {
             releaseOnEdges: true,
         },
@@ -16,5 +15,17 @@ document.addEventListener('DOMContentLoaded', function () {
             delay: 5500,
             disableOnInteraction: false,
         },
+
+    });
+
+    var logoSwiper = new Swiper(".logo-carousel", {
+        slidesPerView: 3,
+        loop: true,
+        speed: 8000,
+        autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+        },
+        grabCursor: false,
     });
 });

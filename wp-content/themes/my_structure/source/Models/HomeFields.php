@@ -19,6 +19,10 @@ class HomeFields extends BaseGroupAcf
     public $cta_1;
     public $cta_2;
     public $cta_3;
+    public $titolo_missione;
+    public $testo_missione;
+    public $cta_missione_dona_ora;
+    public $cta_missione_galleria;
     public function __construct($postId = null) {
         parent::__construct('group_6712db9b59faa', $postId ?: get_the_ID());
         $this->defineAttributes();
@@ -26,6 +30,7 @@ class HomeFields extends BaseGroupAcf
 
     public function defineAttributes()
     {
+        //Slider
         $this->addField('immagine_1');
         $this->addField('immagine_2');
         $this->addField('immagine_3');
@@ -38,5 +43,11 @@ class HomeFields extends BaseGroupAcf
         $this->addField('cta_1');
         $this->addField('cta_2');
         $this->addField('cta_3');
+
+        //La nostra missione
+        $this->addField('titolo_missione');
+        $this->addField('testo_missione');
+        $this->addField('cta_missione_dona_ora');
+        $this->addField('cta_missione_galleria');
     }
 }

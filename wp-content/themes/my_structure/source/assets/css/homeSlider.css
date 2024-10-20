@@ -1,6 +1,8 @@
-.swiper-wrapper {
+.sw-wrapper-vertical {
     width: 100%;
     height: 100%;
+    max-height: 500px;
+    z-index: 10;
     padding-bottom: 64px !important;
     -webkit-transition-timing-function: linear !important;
     transition-timing-function: linear !important;
@@ -13,11 +15,6 @@
     background: #84CE59 !important;
 }
 
-.swiper-container {
-    max-height: 500px;
-    z-index: 10;
-    position: relative;
-}
 .swiper-slide, .content-slide {
     height: 100%;
 }
@@ -31,4 +28,16 @@
     transform: translateX(-50%);
     bottom: 10px;
     z-index: 999;
+}
+
+.swiper-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.sw-wrapper-linear {
+    transition-timing-function: linear;
+    width: 100%;
+    height: 100%;
+    max-height: 30px;
 }
