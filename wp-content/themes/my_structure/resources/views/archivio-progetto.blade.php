@@ -45,7 +45,7 @@
                             </div>
                             <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
                                 <div class="text-center md:text-left">
-                                    <h3 class="font-bold leading-tight text-white text-4xl lg:text-5xl">{{$progetto->titoloProgetto}}</h3>
+                                    <h3 class="font-bold leading-tight text-white text-4xl lg:text-5xl">{{$progetto->titolo_card}}</h3>
                                     <p class="mt-4 text-base text-gray-200">{!! $progetto->content !!}</p>
                                 </div>
                             </div>

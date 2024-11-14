@@ -28,4 +28,16 @@ class ProgettoController extends BaseController
             'opzioniArchivio' => $opzioniArchivio
         ]);
     }
+
+    public function single()
+    {
+        $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
+        $this->addJs('single-donation', 'single-donation.js', ['stripe'], true);
+        $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+
+        $this->render('single-progetto', [
+            'progetto' => Progetto::find(get_the_ID()),
+            'pagamenti_disponibili' => $available_gateways
+        ]);
+    }
 }
