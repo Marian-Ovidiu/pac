@@ -44,21 +44,20 @@
             <div class="grid grid-cols-1 sm:grid-cols-1 lg:col-span-2 lg:grid-cols-1">
                 <div>
                     <ul class="mt-6 sm:mt-3 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> About </a>
-                        </li>
 
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Services </a>
-                        </li>
 
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Projects </a>
-                        </li>
-
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Blog </a>
-                        </li>
+                        <?php $__currentLoopData = $menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li>
+                                <a class="text-gray-700 transition hover:text-gray-700/75" href="<?php echo e($item->url); ?>"> <?php echo e($item->title); ?> </a>
+                            </li>
+                            <?php if(!empty($item->children)): ?>
+                                <?php $__currentLoopData = $item->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subkey => $subitem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li>
+                                        <a class="text-gray-700 transition hover:text-gray-700/75" href="<?php echo e($subitem->url); ?>"> <?php echo e($subitem->title); ?> </a>
+                                    </li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
 

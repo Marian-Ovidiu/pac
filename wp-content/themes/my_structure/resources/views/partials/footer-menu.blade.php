@@ -44,21 +44,20 @@
             <div class="grid grid-cols-1 sm:grid-cols-1 lg:col-span-2 lg:grid-cols-1">
                 <div>
                     <ul class="mt-6 sm:mt-3 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> About </a>
-                        </li>
 
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Services </a>
-                        </li>
 
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Projects </a>
-                        </li>
-
-                        <li>
-                            <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Blog </a>
-                        </li>
+                        @foreach($menu as $key => $item)
+                            <li>
+                                <a class="text-gray-700 transition hover:text-gray-700/75" href="{{$item->url}}"> {{$item->title}} </a>
+                            </li>
+                            @if(!empty($item->children))
+                                @foreach($item->children as $subkey => $subitem)
+                                    <li>
+                                        <a class="text-gray-700 transition hover:text-gray-700/75" href="{{$subitem->url}}"> {{$subitem->title}} </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
 

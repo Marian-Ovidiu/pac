@@ -80,6 +80,4 @@ $options = \Models\Options\OpzioniGlobaliFields::get();
         </nav>
     </div>
 </header>
-
-
 <?php /**PATH /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/views/partials/header-menu.blade.php ENDPATH**/ ?>

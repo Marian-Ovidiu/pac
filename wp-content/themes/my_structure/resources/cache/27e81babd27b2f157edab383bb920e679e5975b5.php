@@ -159,7 +159,7 @@
 
                             <!-- Step 2: Dettagli di fatturazione -->
                             <div x-show="step === 2" class="w-full text-center">
-                                <p class="mt-8 font-serif text-xl font-bold text-blue-900">Dettagli di fatturazione</p>
+                                <p class="mt-8 font-serif text-xl font-bold text-custom-dark-green">Dettagli di fatturazione</p>
                                 <div class="mt-4 mx-auto grid grid-cols-1 gap-6 lg:max-w-xl">
                                     <input x-model="formData.name" type="text" placeholder="Nome" name="name" required class="w-full rounded-lg border-gray-300 px-4 py-2"/>
                                     <input x-model="formData.surname" type="text" placeholder="Cognome" name="surname" required class="w-full rounded-lg border-gray-300 px-4 py-2"/>
@@ -185,7 +185,7 @@
 
                             <!-- Step 3: Dati della carta di credito -->
                             <div x-show="step === 3" class="w-full text-center">
-                                <p class="mt-8 font-serif text-xl font-bold text-blue-900">Dati della carta di credito</p>
+                                <p class="mt-8 font-serif text-xl font-bold text-custom-dark-green">Dati della carta di credito</p>
                                 <div class="mt-4 mx-auto grid grid-cols-1 gap-6 lg:max-w-xl">
                                     <?php $__currentLoopData = $pagamenti_disponibili; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php if($p->id === 'stripe'): ?>

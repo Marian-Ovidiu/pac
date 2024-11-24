@@ -8,6 +8,7 @@
 </head>
 <body class="flex flex-col min-h-screen font-nunitoSansRegular">
    <?php wp_head(); ?>
+    <?php the_widget('Widget\MenuWidget', ['menu_name' => 'LanguageMenu']); ?>
     <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>
 
     <main class="flex-grow main">
