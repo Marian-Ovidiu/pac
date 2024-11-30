@@ -9,8 +9,12 @@ class StripePayments
 {
     public static function createIntent()
     {
+        var_dump('ciao1');
         Stripe::setApiKey(my_env('SECRET_KEY'));
+        var_dump('ciao2');
         $data = json_decode(file_get_contents("php://input"), true);
+        var_dump($data); die();
+
         $amount = isset($data['amount']) ? $data['amount'] : 0;
         $paymentIntent = PaymentIntent::create([
             'amount' => $amount,
