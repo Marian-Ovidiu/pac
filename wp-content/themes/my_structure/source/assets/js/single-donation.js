@@ -21,7 +21,7 @@
                 call.post('/create-payment-intent', {'amount' : selectedDonationAmount, 'progetto_id': progettoId}).then(response => {
 
                     this.clientSecret = response.clientSecret;
-
+                    console.log(this.clientSecret);
                     this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
                     this.elements = this.stripe.elements({
                         clientSecret: this.clientSecret,
@@ -29,6 +29,7 @@
                     });
 
                     const paymentElement = this.elements.create('payment');
+                    console.log('#payment-element-' + progettoId);
                     paymentElement.mount('#payment-element-' + progettoId);
 
                     this.loading = false;
