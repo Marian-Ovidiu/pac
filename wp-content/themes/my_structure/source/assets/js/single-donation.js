@@ -22,7 +22,7 @@
 
                     this.clientSecret = response.clientSecret;
 
-                    this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8'); // Sostituisci con la tua chiave pubblica
+                    this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
                     this.elements = this.stripe.elements({
                         clientSecret: this.clientSecret,
                         paymentMethodCreation: 'manual'
@@ -43,7 +43,7 @@
                 const { error, paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'http://pac.localhost',
+                        return_url: 'https://project-africa-conservation.org',
                         payment_method_data: {
                             billing_details: {
                                 name: `${this.formData.name} ${this.formData.surname}`,
@@ -129,35 +129,37 @@
     }
 
     function typingEffect() {
-        return {
-            texts: highlights,
-            currentText: 0,
-            displayText: "",
-            speed: 100, // Velocità di digitazione (in ms)
-            pauseBetweenTexts: 1000,
-            startTyping() {
-                this.displayText = ""; // Resetta il testo visualizzato
-                let fullText = this.texts[this.currentText];
-                let i = 0;
+        if(typeof highlights !== 'undefined') {
+            return {
+                texts: highlights,
+                currentText: 0,
+                displayText: "",
+                speed: 100, // Velocità di digitazione (in ms)
+                pauseBetweenTexts: 1000,
+                startTyping() {
+                    this.displayText = ""; // Resetta il testo visualizzato
+                    let fullText = this.texts[this.currentText];
+                    let i = 0;
 
-                let typingInterval = setInterval(() => {
-                    if (i < fullText.length) {
-                        this.displayText += fullText[i];
-                        i++;
-                    } else {
-                        clearInterval(typingInterval);
-                        setTimeout(() => {
-                            this.currentText++;
-                            if (this.currentText >= this.texts.length) {
-                                this.currentText = 0; // Ritorna al primo testo
-                            }
-                            this.startTyping();
-                        }, this.pauseBetweenTexts); // Ritardo prima del prossimo testo
-                    }
-                }, this.speed);
-            },
-            init() {
-                this.startTyping();
-            }
-        };
+                    let typingInterval = setInterval(() => {
+                        if (i < fullText.length) {
+                            this.displayText += fullText[i];
+                            i++;
+                        } else {
+                            clearInterval(typingInterval);
+                            setTimeout(() => {
+                                this.currentText++;
+                                if (this.currentText >= this.texts.length) {
+                                    this.currentText = 0; // Ritorna al primo testo
+                                }
+                                this.startTyping();
+                            }, this.pauseBetweenTexts); // Ritardo prima del prossimo testo
+                        }
+                    }, this.speed);
+                },
+                init() {
+                    this.startTyping();
+                }
+            };
+        }
     }
