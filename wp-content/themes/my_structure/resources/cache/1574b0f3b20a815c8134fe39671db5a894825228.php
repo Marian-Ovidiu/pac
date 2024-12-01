@@ -59,9 +59,10 @@
                    <?php endif; ?>
                 </div>
                 <?php if($fields->shortcode_form): ?>
-                    <?php echo do_shortcode($fields->shortcode_form); ?>
+                    <?php echo apply_filters('the_content', wpautop(do_shortcode($fields->shortcode_form))); ?>
 
                 <?php endif; ?>
+
                 
             </div>
         </section>

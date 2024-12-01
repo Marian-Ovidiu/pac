@@ -22,3 +22,10 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.wpcf7-response-output {
+  @apply text-sm text-green-600 mt-4;
+}
+.wpcf7-validation-errors {
+  @apply text-sm text-red-600 mt-4;
+}
