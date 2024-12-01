@@ -23,7 +23,7 @@
 define( 'DB_NAME', 'u597020236_yj8DQ' );
 
 /** Database username */
-define( 'DB_USER', 'u597020236_783vB' );
+define( 'DB_USER', 'u597020236_7root83vB' );
 
 /** Database password */
 define( 'DB_PASSWORD', 'projectAfricaC2024' );

@@ -5,6 +5,7 @@
  */
 ?>
 
+
 <?php $__env->startSection('content'); ?>
     <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
         <div class="absolute inset-0">
