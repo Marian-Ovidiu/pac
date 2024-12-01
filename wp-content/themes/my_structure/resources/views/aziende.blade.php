@@ -57,8 +57,10 @@
                        <p class="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-500">{!! $fields->form_testo !!}</p>
                    @endif
                 </div>
-
-                <div class="max-w-5xl mx-auto mt-12 sm:mt-16">
+                @if($fields->shortcode_form)
+                    {!! do_shortcode($fields->shortcode_form) !!}
+                @endif
+                {{--<div class="max-w-5xl mx-auto mt-12 sm:mt-16">
                     <div class="mt-6 overflow-hidden bg-white rounded-xl">
                         <div class="px-6 py-12 sm:p-12">
                             <h3 class="text-3xl font-semibold text-center text-custom-dark-green">Scrivici</h3>
@@ -109,7 +111,7 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
         </section>
     </div>

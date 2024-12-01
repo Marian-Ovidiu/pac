@@ -83,7 +83,7 @@
                                     />
                                 </svg>
 
-                                <span class="flex-1 text-gray-700">pac@gmail.com</span>
+                                <span class="flex-1 text-gray-700">marian@project-africa-conservation.org</span>
                             </a>
                         </li>
 
@@ -102,7 +102,7 @@
                             </svg>
 
                             <address class="-mt-0.5 flex-1 not-italic text-gray-700">
-                                213 Lane, London, United Kingdom
+                                Via Cavour 7 -12042, Bra (CN)
                             </address>
                         </li>
                     </ul>
@@ -113,7 +113,7 @@
         </div>
         <div class="flex justify-center">
             <div>
-                <p class="text-xs text-gray-500">&copy; 2024. PAC - Project Africa Conservation. All rights reserved.</p>
+                <p class="text-xs text-gray-500">&copy; 2024. PAC - Project Africa Conservation A.P.S. All rights reserved.</p>
             </div>
         </div>
         <div class="flex justify-center bg-[#45752c]">

@@ -17,6 +17,7 @@ class AziendeFields extends BaseGroupAcf
     public $form_testo;
     public $immagine_hero;
     public $immagine_banner;
+    public $shortcode_form;
     public function __construct($postId = null) {
         parent::__construct('group_6735fa35e43e1', $postId ?: get_the_ID());
         $this->defineAttributes();
@@ -34,5 +35,6 @@ class AziendeFields extends BaseGroupAcf
         $this->addField('form_testo');
         $this->addField('immagine_hero');
         $this->addField('immagine_banner');
+        $this->addField('shortcode_form');
     }
 }

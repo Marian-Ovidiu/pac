@@ -86,5 +86,51 @@ if (!function_exists('my_env')) {
     }
 }
 
+/*if (!function_exists('do_shortcode')) {
+    function do_shortcode( $content, $ignore_html = false ) {
+        global $shortcode_tags;
+
+        if ( ! str_contains( $content, '[' ) ) {
+            return $content;
+        }
+
+        if ( empty( $shortcode_tags ) || ! is_array( $shortcode_tags ) ) {
+            return $content;
+        }
+
+        // Find all registered tag names in $content.
+        preg_match_all( '@\[([^<>&/\[\]\x00-\x20=]++)@', $content, $matches );
+        $tagnames = array_intersect( array_keys( $shortcode_tags ), $matches[1] );
+
+        if ( empty( $tagnames ) ) {
+            return $content;
+        }
+
+        // Ensure this context is only added once if shortcodes are nested.
+        $has_filter   = has_filter( 'wp_get_attachment_image_context', '_filter_do_shortcode_context' );
+        $filter_added = false;
+
+        if ( ! $has_filter ) {
+            $filter_added = add_filter( 'wp_get_attachment_image_context', '_filter_do_shortcode_context' );
+        }
+
+        $content = do_shortcodes_in_html_tags( $content, $ignore_html, $tagnames );
+
+        $pattern = get_shortcode_regex( $tagnames );
+        $content = preg_replace_callback( "/$pattern/", 'do_shortcode_tag', $content );
+
+        // Always restore square braces so we don't break things like <!--[if IE ]>.
+        $content = unescape_invalid_shortcodes( $content );
+
+        // Only remove the filter if it was added in this scope.
+        if ( $filter_added ) {
+            remove_filter( 'wp_get_attachment_image_context', '_filter_do_shortcode_context' );
+        }
+
+        return $content;
+    }
+
+}*/
+
 
 
