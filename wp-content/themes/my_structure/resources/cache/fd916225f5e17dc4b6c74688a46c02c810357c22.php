@@ -1,4 +1,4 @@
-<div class="flex justify-center mx-auto max-w-lg overflow-y-hidden sm:hidden">
+<div class="flex justify-center mx-auto max-w-lg overflow-y-hidden sm:hidden py-8">
     <div class="flex flex-col gap-2 px-4">
         <?php $__currentLoopData = $progetti; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $progetto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php if($key === 0): ?>

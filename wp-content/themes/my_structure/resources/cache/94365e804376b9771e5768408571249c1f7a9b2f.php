@@ -22,22 +22,14 @@
         'cta_missione_dona_ora_url' => $data->cta_missione_dona_ora['url'], 'cta_missione_dona_ora_titolo' => $data->cta_missione_dona_ora['title'],
         'cta_missione_galleria_url' => $data->cta_missione_galleria['url'], 'cta_missione_galleria_titolo' => $data->cta_missione_galleria['title'],
     ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <?php echo $__env->make('components.linear-slider', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
     <?php echo $__env->make('components.testo-sottotesto',[
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,
     ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('components.home-cards', ['progetti' => $data->progetti], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('components.home-mobile-cards', ['progetti' => $data->progetti], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <div class="container mx-auto py-12">
-        <div class="flex flex-col items-center justify-center md:flex-row-reverse">
-            <?php echo $__env->make('components.testo-sottotesto',[
-                'titolo' => $data->titolo_chart,
-                'sottotitolo' => $data->descrizione_chart,
-            ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-            <?php echo $__env->make('components.chart', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-        </div>
-    </div>
+    
     <?php echo $__env->make('components.aziende', [
         'titolo' => $data->titolo_azienda,
         'descrizione' => $data->descrizione_azienda,

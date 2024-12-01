@@ -50,9 +50,6 @@
                             <li>
                                 <a class="text-gray-700 transition hover:text-gray-700/75" href="{{$item->url}}"> {{$item->title}} </a>
                             </li>
-                            <li>
-                                {!! do_shortcode('[iub-pp-button]') !!}
-                            </li>
                             @if(!empty($item->children))
                                 @foreach($item->children as $subkey => $subitem)
                                     <li>
@@ -115,8 +112,9 @@
         </div>
         </div>
         <div class="flex justify-center">
-            <div>
-                <p class="text-xs text-gray-500">&copy; 2024. PAC - Project Africa Conservation A.P.S. All rights reserved.</p>
+            <div class="px-4">
+                <p class="mt-4 max-w-xs text-center text-xs text-gray-500"> &copy; 2024. PAC - Project Africa Conservation A.P.S. All rights reserved.
+                    <br> &copy; This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply. </p>
             </div>
         </div>
         <div class="flex justify-center bg-[#45752c]">

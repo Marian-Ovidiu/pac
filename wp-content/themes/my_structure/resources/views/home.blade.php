@@ -22,14 +22,14 @@
         'cta_missione_dona_ora_url' => $data->cta_missione_dona_ora['url'], 'cta_missione_dona_ora_titolo' => $data->cta_missione_dona_ora['title'],
         'cta_missione_galleria_url' => $data->cta_missione_galleria['url'], 'cta_missione_galleria_titolo' => $data->cta_missione_galleria['title'],
     ])
-    @include('components.linear-slider')
+    {{--@include('components.linear-slider')--}}
     @include('components.testo-sottotesto',[
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,
     ])
     @include('components.home-cards', ['progetti' => $data->progetti])
     @include('components.home-mobile-cards', ['progetti' => $data->progetti])
-    <div class="container mx-auto py-12">
+    {{--<div class="container mx-auto py-12">
         <div class="flex flex-col items-center justify-center md:flex-row-reverse">
             @include('components.testo-sottotesto',[
                 'titolo' => $data->titolo_chart,
@@ -37,7 +37,7 @@
             ])
             @include('components.chart')
         </div>
-    </div>
+    </div>--}}
     @include('components.aziende', [
         'titolo' => $data->titolo_azienda,
         'descrizione' => $data->descrizione_azienda,

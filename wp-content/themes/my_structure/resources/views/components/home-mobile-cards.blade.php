@@ -1,4 +1,4 @@
-<div class="flex justify-center mx-auto max-w-lg overflow-y-hidden sm:hidden">
+<div class="flex justify-center mx-auto max-w-lg overflow-y-hidden sm:hidden py-8">
     <div class="flex flex-col gap-2 px-4">
         @foreach($progetti as $key => $progetto)
             @if($key === 0)
