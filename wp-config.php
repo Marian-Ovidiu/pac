@@ -20,13 +20,13 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'pac' );
+define( 'DB_NAME', 'u597020236_yj8DQ' );
 
 /** Database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', 'u597020236_783vB' );
 
 /** Database password */
-define( 'DB_PASSWORD', '' );
+define( 'DB_PASSWORD', 'projectAfricaC2024' );
 
 /** Database hostname */
 define( 'DB_HOST', 'localhost' );
