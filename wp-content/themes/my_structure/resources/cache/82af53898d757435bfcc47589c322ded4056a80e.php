@@ -1,21 +1,19 @@
 <?php
 /**
- * @var \Models\Progetto[] $progetti
- * @var \Models\Options\OpzioniArchivioProgettoFields $opzioniArchivio
+ * @var \Models\Progetti[] $fields
  */
 ?>
-
 
 <?php $__env->startSection('content'); ?>
     <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
         <div class="absolute inset-0">
-            <img class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left" src="<?php echo e($opzioniArchivio->immagine_hero['url']); ?>" alt="" />
+            <img class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left" src="<?php echo e($fields->immagine_hero['url']); ?>" alt="" />
         </div>
         <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent"></div>
         <div class="absolute inset-0 block bg-black/60 md:hidden"></div>
         <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl" x-data="typingEffect()">
             <div class="text-center md:w-2/3 lg:w-1/2 xl:w-1/3 md:text-left">
-                <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"><?php echo e($opzioniArchivio->titolo_hero); ?></h2>
+                <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"><?php echo e($fields->titolo_hero); ?></h2>
                 <div class="min-h-[1.5rem]">
                     <template x-for="(text, index) in texts" :key="index">
                         <p
@@ -32,10 +30,10 @@
 
     <?php echo $__env->make('components.testo-sottotesto',[
          'titolo' => '',
-         'sottotitolo' => $opzioniArchivio->testo_sotto_hero
+         'sottotitolo' => $fields->testo_sotto_hero
      ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    <?php $__currentLoopData = $progetti; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $progetto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <?php $__currentLoopData = $fields->progetti; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $progetto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <section class="<?php echo e($index === 0 ? 'py-10' : 'pb-10'); ?> sm:py-16 lg:py-24">
             <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:items-stretch md:grid-cols-2 gap-y-5">

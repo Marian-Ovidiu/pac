@@ -45,7 +45,8 @@ if (!function_exists('add_base_js')) {
     function add_base_js() {
         $fullSrc = vite_asset('js/main.js');
         add_action('wp_enqueue_scripts', function () use($fullSrc) {
-            wp_enqueue_script('main', $fullSrc, []);
+            wp_enqueue_script('main', $fullSrc, ['jquery'], null, true);
+            wp_script_add_data('main', 'data-iub-consent', 'necessary');
         });
     }
 }
