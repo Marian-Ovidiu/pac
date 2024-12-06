@@ -15,7 +15,7 @@ class Progetti extends BaseGroupAcf
     public $progetti;
     public function __construct($postId = null)
     {
-        parent::__construct('group_6752dc98f10e3', $postId ?: get_the_ID());
+        parent::__construct('group_6752e3f0db400', $postId ?: get_the_ID());
         $this->defineAttributes();
     }
     function defineAttributes()
