@@ -2,6 +2,7 @@
 
 namespace Classes;
 
+use Classes\GrazieEmail;
 use Models\Progetto;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -16,10 +17,8 @@ class StripePayments
         $amount = isset($data['amount']) ? $data['amount'] : 0;
         $progetto_id = isset($data['progetto_id']) ? $data['progetto_id'] : null;
         $progetto = Progetto::find($progetto_id);
-        $progettoName = 'Donazione generica';
-        if($progetto){
-            $progettoName = "Donazione per il progetto: " . $progetto->title;
-        }
+        $progettoName = $progetto ? "Donazione per il progetto: " . htmlspecialchars($progetto->title, ENT_QUOTES, 'UTF-8') : "Donazione generica";
+
         $paymentIntent = PaymentIntent::create([
             'amount' => $amount,
             'currency' => 'eur',
@@ -39,7 +38,14 @@ class StripePayments
 
         $paymentMethodId = $data['paymentMethodId'];
         $amount = $data['amount'];
-        \Stripe\Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
+        $email = $data['email'] ?? null;
+
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            wp_send_json_error(['message' => 'Indirizzo email non valido.']);
+            return;
+        }
+
+        Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
 
         try {
             $paymentIntent = \Stripe\PaymentIntent::create([
@@ -52,9 +58,17 @@ class StripePayments
             ]);
 
             if ($paymentIntent->status === 'succeeded') {
-                if (isset($data['email']) && !email_exists($data['email'])) {
+                if (isset($data['email'])) {
+                    $progetto_id = $data['progettoId'] ?? null;
+                    $progetto = Progetto::find($progetto_id);
+                    $progettoName = $progetto ? "Donazione per il progetto: " . htmlspecialchars($progetto->title, ENT_QUOTES, 'UTF-8') : "Donazione generica";
+
+                    GrazieEmail::sendThankYouEmail($email, $progettoName, $amount);
+                }
+                if (!email_exists($email)) {
                     self::createUser($data);
                 }
+
                 wp_send_json_success([
                     'success' => true,
                     'redirect' => 'progetto/',

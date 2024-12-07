@@ -4,7 +4,7 @@
  */
 ?>
 <?php
-    $thankYouUrl = get_permalink(pll_get_post(377, pll_current_language()));
+    $thankYouUrl = get_permalink(pll_get_post(412, pll_current_language()));
 ?>
 
 <?php $__env->startSection('content'); ?>

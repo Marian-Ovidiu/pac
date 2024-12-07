@@ -62,9 +62,7 @@
                     return;
                 }
                 const paymentMethodType = paymentIntent.payment_method_types[0];
-                console.log(paymentMethodType);
                 if (paymentMethodType === 'card'){
-
                     let elements = this.elements;
                     elements.submit();
                     const { error, paymentMethod } = await this.stripe.createPaymentMethod({
@@ -99,10 +97,8 @@
                     })
                     .then(response => {
                         if (response.success) {
-                            console.log(response);
-                            window.location.href = response.redirect;
+                            window.location.href = thankYouUrl;
                         } else {
-                            console.log(response);
                             alert("Errore nella creazione dell'ordine");
                         }
                         this.loading = false;

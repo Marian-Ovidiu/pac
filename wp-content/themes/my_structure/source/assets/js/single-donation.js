@@ -95,7 +95,7 @@
                     })
                     .then(response => {
                         if (response.success) {
-                            window.location.href = response.redirect;
+                            window.location.href = thankYouUrl;
                         } else {
                             alert("Errore nella creazione dell'ordine");
                         }
