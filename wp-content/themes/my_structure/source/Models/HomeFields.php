@@ -33,8 +33,11 @@ class HomeFields extends BaseGroupAcf
     public $titolo_tutti_progetti;
     public $cta_tutti_progetti;
     public $immagine_sociale_ghana;
+    public $immagine_sociale_nigeria;
     public $titolo_sociale_ghana;
+    public $titolo_sociale_nigeria;
     public $cta_sociale_ghana;
+    public $cta_sociale_nigeria;
     public $immagine_antibracconaggio;
     public $titolo_antibracconaggio;
     public $cta_antibracconaggio;
@@ -86,8 +89,11 @@ class HomeFields extends BaseGroupAcf
         $this->addField('titolo_tutti_progetti');
         $this->addField('cta_tutti_progetti');
         $this->addField('immagine_sociale_ghana');
+        $this->addField('immagine_sociale_nigeria');
         $this->addField('titolo_sociale_ghana');
+        $this->addField('titolo_sociale_nigeria');
         $this->addField('cta_sociale_ghana');
+        $this->addField('cta_sociale_nigeria');
         $this->addField('immagine_antibracconaggio');
         $this->addField('titolo_antibracconaggio');
         $this->addField('cta_antibracconaggio');
@@ -112,8 +118,11 @@ class HomeFields extends BaseGroupAcf
         $this->repeater_progetti[0]['titolo'] = $this->titolo_tutti_progetti;
         $this->repeater_progetti[0]['cta'] = $this->cta_tutti_progetti;
         $this->repeater_progetti[1]['immagine'] = $this->immagine_sociale_ghana;
+        $this->repeater_progetti[1]['immagine'] = $this->immagine_sociale_nigeria;
         $this->repeater_progetti[1]['titolo'] = $this->titolo_sociale_ghana;
+        $this->repeater_progetti[1]['titolo'] = $this->titolo_sociale_nigeria;
         $this->repeater_progetti[1]['cta'] = $this->cta_sociale_ghana;
+        $this->repeater_progetti[1]['cta'] = $this->cta_sociale_nigeria;
         $this->repeater_progetti[2]['immagine'] = $this->immagine_antibracconaggio;
         $this->repeater_progetti[2]['titolo'] = $this->titolo_antibracconaggio;
         $this->repeater_progetti[2]['cta'] = $this->cta_antibracconaggio;
