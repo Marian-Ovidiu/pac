@@ -1,7 +1,7 @@
 <div class="flex justify-center mx-auto max-w-lg overflow-y-hidden sm:hidden py-8">
     <div class="flex flex-col gap-2 px-4">
         <?php $__currentLoopData = $progetti; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $progetto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php if($key === 0): ?>
+            <?php if($key === 0 && $progetto['titolo']): ?>
                 <article class="out-group mb-4" style="z-index: <?php echo e($key+10); ?>">
                     <div class="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
                         <div class="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md relative"
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </article>
-            <?php else: ?>
+            <?php elseif($progetto['titolo']): ?>
                 <article x-data="{
                             isAtOrAboveCenter: false,
                             checkIfAtOrAboveCenter(el) {
