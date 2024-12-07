@@ -6,6 +6,7 @@ if (!function_exists('disable_woocommerce_features')) {
         remove_post_type_support('product', 'editor');
         unregister_post_type('product');
         remove_action('woocommerce_after_register_post_type', 'woocommerce_register_taxonomy');
+        load_textdomain('woocommerce-gateway-stripe', '/path/to/language/file');
     }
 }
 
