@@ -67,6 +67,7 @@ class HomeFields extends BaseGroupAcf
         $this->addField('testo_1');
         $this->addField('testo_2');
         $this->addField('testo_3');
+        $this->addField('testo_4');
         $this->addField('cta_1');
         $this->addField('cta_2');
         $this->addField('cta_3');
