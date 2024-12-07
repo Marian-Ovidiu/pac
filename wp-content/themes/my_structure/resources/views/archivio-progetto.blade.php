@@ -3,6 +3,10 @@
  * @var \Models\Progetti[] $fields
  */
 ?>
+@php
+    $thankYouUrl = get_permalink(pll_get_post(377, pll_current_language()));
+@endphp
+
 @extends('layouts.mainLayout')
 @section('content')
     <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
@@ -32,7 +36,7 @@
          'titolo' => '',
          'sottotitolo' => $fields->testo_sotto_hero
      ])
-
+    <input type="hidden" id="thank-you-url" value="{{ $thankYouUrl }}">
     @foreach($fields->progetti as $index => $progetto)
         <section class="{{$index === 0 ? 'py-10' : 'pb-10'}} sm:py-16 lg:py-24">
             <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
@@ -58,26 +62,14 @@
                                 <div class="w-full text-center" x-show="step === 1">
                                     <p class="font-serif text-xl font-bold text-custom-dark-green">{{load_static_strings('Scegli quanto donare')}}</p>
                                     <div class="mt-4 mx-auto grid grid-cols-2 gap-2 lg:max-w-xl">
-                                        <button
-                                                @click="selectedAmount = 20; customAmount = ''"
-                                                :class="selectedAmount === 20 && !customAmount ? 'bg-custom-dark-green text-white' : 'bg-custom-light-green text-custom-dark-green'"
-                                                class="rounded-lg px-4 py-2 font-medium active:scale-95"
-                                        >20€</button>
-                                        <button
-                                                @click="selectedAmount = 50; customAmount = ''"
-                                                :class="selectedAmount === 50 && !customAmount ? 'bg-custom-dark-green text-white' : 'bg-custom-light-green text-custom-dark-green'"
-                                                class="rounded-lg px-4 py-2 font-medium active:scale-95"
-                                        >50€</button>
-                                        <button
-                                                @click="selectedAmount = 80; customAmount = ''"
-                                                :class="selectedAmount === 80 && !customAmount ? 'bg-custom-dark-green text-white' : 'bg-custom-light-green text-custom-dark-green'"
-                                                class="rounded-lg px-4 py-2 font-medium active:scale-95"
-                                        >80€</button>
-                                        <button
-                                                @click="selectedAmount = 150; customAmount = ''"
-                                                :class="selectedAmount === 150 && !customAmount ? 'bg-custom-dark-green text-white' : 'bg-custom-light-green text-custom-dark-green'"
-                                                class="rounded-lg px-4 py-2 font-medium active:scale-95"
-                                        >150€</button>
+                                        <template x-for="amount in [20, 50, 80, 150]" :key="amount">
+                                            <button
+                                                    @click="selectedAmount = amount; customAmount = ''"
+                                                    :class="selectedAmount === amount && !customAmount ? 'bg-custom-dark-green text-white' : 'bg-custom-light-green text-custom-dark-green'"
+                                                    class="rounded-lg px-4 py-2 font-medium active:scale-95"
+                                                    x-text="amount + '€'"
+                                            ></button>
+                                        </template>
                                     </div>
                                 </div>
 

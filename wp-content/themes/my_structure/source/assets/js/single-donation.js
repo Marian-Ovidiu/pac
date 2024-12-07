@@ -16,19 +16,16 @@
                 this.loading = true;
                 let selectedDonationAmount = this.customAmount || this.selectedAmount;
                 selectedDonationAmount = selectedDonationAmount*100;
-                console.log(selectedDonationAmount);
                 let call = new window.ApiService();
                 call.post('/create-payment-intent', {'amount' : selectedDonationAmount, 'progetto_id': progettoId}).then(response => {
                     this.clientSecret = response.clientSecret;
-                    console.log(this.clientSecret);
-                    this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
+                    this.stripe = Stripe('pk_test_51QQqzmP9ji9EUZt5KlXT1kZoCf9iqjam8oDHWctYVGYWiq4yni5WAilFuwahhcrWmqK6QXDc1evqP45FoYJZPEIQ0049w30Io7');
                     this.elements = this.stripe.elements({
                         clientSecret: this.clientSecret,
                         paymentMethodCreation: 'manual'
                     });
 
                     const paymentElement = this.elements.create('payment');
-                    console.log('#payment-element-' + progettoId);
                     paymentElement.mount('#payment-element-' + progettoId);
 
                     this.loading = false;
@@ -40,10 +37,11 @@
             },
             async submitForm(){
                 this.loading = true;
+                const thankYouUrl = document.querySelector(`#thank-you-url`).value;
                 const { error, paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'https://project-africa-conservation.org',
+                        return_url: thankYouUrl,
                         payment_method_data: {
                             billing_details: {
                                 name: `${this.formData.name} ${this.formData.surname}`,
@@ -61,7 +59,6 @@
                     return;
                 }
                 const paymentMethodType = paymentIntent.payment_method_types[0];
-                console.log(paymentMethodType);
                 if (paymentMethodType === 'card'){
 
                     let elements = this.elements;
@@ -98,10 +95,8 @@
                     })
                     .then(response => {
                         if (response.success) {
-                            console.log(response);
                             window.location.href = response.redirect;
                         } else {
-                            console.log(response);
                             alert("Errore nella creazione dell'ordine");
                         }
                         this.loading = false;

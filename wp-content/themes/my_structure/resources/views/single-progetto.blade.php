@@ -3,6 +3,9 @@
  * @var \Models\Progetto $progetto
  */
 ?>
+@php
+    $thankYouUrl = get_permalink(pll_get_post(377, pll_current_language()));
+@endphp
 @extends('layouts.mainLayout')
 @section('content')
     <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
@@ -102,6 +105,7 @@
                 </div>
 
                 <div class="h-full">
+                    <input type="hidden" id="thank-you-url" value="{{ $thankYouUrl }}">
                     <div class="container mx-auto" x-data="donationFormData({{ $progetto->id }})" x-ref="donationForm" id="{{$progetto->id}}">
                         <div class="mx-auto flex justify-center flex-col items-center max-w-screen-lg px-6">
                             <!-- Step 1: Selezione dell'importo -->

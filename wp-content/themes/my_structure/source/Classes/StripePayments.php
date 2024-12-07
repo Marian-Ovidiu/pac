@@ -2,6 +2,7 @@
 
 namespace Classes;
 
+use Models\Progetto;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
@@ -9,14 +10,21 @@ class StripePayments
 {
     public static function createIntent()
     {
-        Stripe::setApiKey(my_env('SECRET_KEY'));
+        Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
         $data = json_decode(file_get_contents("php://input"), true);
 
         $amount = isset($data['amount']) ? $data['amount'] : 0;
+        $progetto_id = isset($data['progetto_id']) ? $data['progetto_id'] : null;
+        $progetto = Progetto::find($progetto_id);
+        $progettoName = 'Donazione generica';
+        if($progetto){
+            $progettoName = "Donazione per il progetto: " . $progetto->title;
+        }
         $paymentIntent = PaymentIntent::create([
             'amount' => $amount,
             'currency' => 'eur',
             'automatic_payment_methods' => ['enabled' => true],
+            'description' => $progettoName,
         ]);
         error_log(json_encode($paymentIntent));
 
@@ -31,7 +39,7 @@ class StripePayments
 
         $paymentMethodId = $data['paymentMethodId'];
         $amount = $data['amount'];
-        \Stripe\Stripe::setApiKey(my_env('SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
 
         try {
             $paymentIntent = \Stripe\PaymentIntent::create([

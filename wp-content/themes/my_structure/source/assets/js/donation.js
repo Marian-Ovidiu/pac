@@ -22,7 +22,7 @@
 
                     this.clientSecret = response.clientSecret;
 
-                    this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8'); // Sostituisci con la tua chiave pubblica
+                    this.stripe = Stripe('pk_test_51QQqzmP9ji9EUZt5KlXT1kZoCf9iqjam8oDHWctYVGYWiq4yni5WAilFuwahhcrWmqK6QXDc1evqP45FoYJZPEIQ0049w30Io7');
                     this.elements = this.stripe.elements({
                         clientSecret: this.clientSecret,
                         paymentMethodCreation: 'manual'
@@ -40,10 +40,11 @@
             },
             async submitForm(){
                 this.loading = true;
+                const thankYouUrl = document.querySelector(`#thank-you-url`).value;
                 const { error, paymentIntent } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: 'http://pac.localhost',
+                        return_url: thankYouUrl,
                         payment_method_data: {
                             billing_details: {
                                 name: `${this.formData.name} ${this.formData.surname}`,
