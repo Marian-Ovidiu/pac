@@ -42,3 +42,17 @@ if (!function_exists('register_menus')) {
         register_nav_menus($menus);
     }
 }
+
+
+if (!function_exists('exclude_page_from_sitemap')) {
+    function exclude_page_from_sitemap($url, $type, $object)
+    {
+        switch ($type){
+            case 'category':
+            case 'author':
+                return false;
+            default:
+                return $url;
+        }
+    }
+}
