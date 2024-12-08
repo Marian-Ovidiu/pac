@@ -11,7 +11,7 @@ class StripePayments
 {
     public static function createIntent()
     {
-        Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
+        Stripe::setApiKey(my_env('SECRET_KEY'));
         $data = json_decode(file_get_contents("php://input"), true);
 
         $amount = isset($data['amount']) ? $data['amount'] : 0;
@@ -45,7 +45,7 @@ class StripePayments
             return;
         }
 
-        Stripe::setApiKey(my_env('TEST_SECRET_KEY'));
+        Stripe::setApiKey(my_env('SECRET_KEY'));
 
         try {
             $paymentIntent = \Stripe\PaymentIntent::create([

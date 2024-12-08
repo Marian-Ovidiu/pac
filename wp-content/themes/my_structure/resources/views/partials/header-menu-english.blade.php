@@ -34,8 +34,6 @@ $options = \Models\Options\OpzioniGlobaliFields::get();
                     @endif
                 @endforeach
             </div>
-
-            <a href="#" title="" class="items-center justify-center hidden px-4 py-3 ml-10 text-base font-semibold text-white transition-all duration-200 bg-custom-green border border-transparent rounded-md lg:inline-flex hover:bg-custom-green focus:bg-custom-green" role="button">Dona ora</a>
         </nav>
 
         <!-- xs to lg -->
@@ -70,10 +68,6 @@ $options = \Models\Options\OpzioniGlobaliFields::get();
                         @endif
                     @endforeach
                 </div>
-            </div>
-
-            <div class="px-6 mt-6 text-center">
-                <a href="#" title="" class="inline-flex justify-center px-4 py-3 text-base font-semibold text-white transition-all duration-200 bg-custom-green border border-transparent rounded-md tems-center hover:bg-custom-green focus:bg-custom-green" role="button">Dona ora</a>
             </div>
         </nav>
     </div>
