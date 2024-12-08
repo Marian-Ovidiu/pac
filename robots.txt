@@ -1,10 +1,23 @@
+# Sitemap del sito
+Sitemap: https://project-africa-conservation.org/sitemap_index.xml
+
+# Regole generali per tutti i motori di ricerca
 User-agent: *
-Disallow: /shop/
-Disallow: /cart/
-Disallow: /checkout/
-Disallow: /my-account/
-Disallow: /wp-content/uploads/wc-logs/
-Disallow: /wp-content/uploads/woocommerce_transient_files/
-Disallow: /wp-content/uploads/woocommerce_uploads/
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
+Disallow: /shop/                           # Blocca l'archivio prodotti (se non usato per SEO)
+Disallow: /cart/                           # Blocca il carrello
+Disallow: /checkout/                       # Blocca la pagina di checkout
+Disallow: /my-account/                     # Blocca la pagina "Il mio account"
+Disallow: /wp-content/uploads/wc-logs/     # Blocca i log WooCommerce
+Disallow: /wp-content/uploads/woocommerce_transient_files/  # Blocca file temporanei
+Disallow: /wp-content/uploads/woocommerce_uploads/  # Blocca file caricati
+Disallow: /wp-admin/                       # Blocca l'accesso all'area admin
+Allow: /wp-admin/admin-ajax.php            # Consenti admin-ajax.php per funzionalità necessarie
+
+# Blocca query string e file specifici
+Disallow: /*?preview=true
+Disallow: /*?session_id=
+Disallow: /*.pdf$                          # Blocca i file PDF (se non vuoi che siano indicizzati)
+
+# Evita l'indicizzazione di file privati
+Disallow: /wp-login.php
+Disallow: /wp-register.php
