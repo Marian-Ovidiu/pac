@@ -91,7 +91,7 @@
                                     />
                                 </svg>
 
-                                <span class="flex-1 text-gray-700">marian@project-africa-conservation.org</span>
+                                <span class="flex-1 text-gray-700">info@project-africa-conservation.org</span>
                             </a>
                         </li>
 

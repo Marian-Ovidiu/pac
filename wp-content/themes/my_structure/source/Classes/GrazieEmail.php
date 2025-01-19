@@ -21,8 +21,8 @@ class GrazieEmail
 
         $headers = [
             'Content-Type: text/html; charset=UTF-8',
-            'From: Project Africa Conservation <marian@project-africa-conservation.org>',
-            'Reply-To: marian@project-africa-conservation.org',
+            'From: Project Africa Conservation <info@project-africa-conservation.org>',
+            'Reply-To: info@project-africa-conservation.org',
             'X-Mailer: WP Mail SMTP/GrazieEmail',
         ];
 
