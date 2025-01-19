@@ -13,6 +13,8 @@ Disallow: /wp-content/uploads/woocommerce_uploads/  # Blocca file caricati
 Disallow: /wp-admin/                       # Blocca l'accesso all'area admin
 Allow: /wp-admin/admin-ajax.php            # Consenti admin-ajax.php per funzionalità necessarie
 
+Allow: /wp-content/uploads/
+
 # Blocca query string e file specifici
 Disallow: /*?preview=true
 Disallow: /*?session_id=
