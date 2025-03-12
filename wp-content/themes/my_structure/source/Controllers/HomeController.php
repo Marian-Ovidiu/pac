@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Core\Bases\BaseController;
 use Models\HomeFields;
+use Models\MonoFields;
 
 class HomeController extends BaseController {
     public function index() {
@@ -17,7 +18,8 @@ class HomeController extends BaseController {
         $this->addCss('swiper-css', 'https://unpkg.com/swiper/swiper-bundle.min.css');
         $this->addCss('homeSlider', 'homeSlider.css');
         $this->addCss('overlap', 'overlap.css');
+        
         /*$this->addVarJs('testAjax', 'var_test', ['foo' => 'bar'], true);*/
-        $this->render('home', ['data'=> $data]);
+        $this->render('home', ['data'=> $data, 'mono_fields' => MonoFields::get(get_the_ID()) ?? null]);
     }
 }

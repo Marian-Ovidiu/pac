@@ -1,7 +1,7 @@
 <div class="w-full relative">
     <div class="swiper vertical-slide-carousel swiper-container relative">
         <div class="swiper-wrapper sw-wrapper-vertical" aria-live="polite">
-            <?php if($immagine_1_url && $titolo_1 && $testo_1 && $cta_1_url && $cta_1_title): ?>
+            <?php if($immagine_1_url && $titolo_1 && $testo_1): ?>
                 <div class="swiper-slide swiper-slide-vertical">
                     <section x-data="{ loaded: false }"
                              x-intersect="loaded = true"
@@ -17,6 +17,7 @@
                                     <?php echo e($testo_1); ?>
 
                                 </p>
+                                <?php if($cta_1_url && $cta_1_title): ?>
                                 <div class="mt-4 sm:mt-8">
                                     <a href="<?php echo e($cta_1_url); ?>" aria-label="<?php echo e($cta_1_title); ?>" role="button"
                                        class="inline-block rounded-full px-12 py-3 bg-custom-green
@@ -26,6 +27,7 @@
 
                                     </a>
                                 </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </section>

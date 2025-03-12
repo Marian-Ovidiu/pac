@@ -376,3 +376,150 @@
 [12-Mar-2025 13:02:15 UTC] PHP Notice:  Undefined variable: fields in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/82af53898d757435bfcc47589c322ded4056a80e.php on line 40
 [12-Mar-2025 13:02:15 UTC] PHP Notice:  Trying to get property 'progetti' of non-object in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/82af53898d757435bfcc47589c322ded4056a80e.php on line 40
 [12-Mar-2025 13:02:15 UTC] PHP Warning:  Invalid argument supplied for foreach() in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/82af53898d757435bfcc47589c322ded4056a80e.php on line 40
+[12-Mar-2025 13:29:48 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''immagine_1_url'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine->get('/ in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:04:14 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:05:51 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:07:58 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:08:09 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:08:11 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:10:52 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:42
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 42
+[12-Mar-2025 14:10:57 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:42
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 42
+[12-Mar-2025 14:12:44 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:12:49 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:13:26 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:13:29 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:14:20 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:42
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 42
+[12-Mar-2025 14:14:21 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:42
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 42
+[12-Mar-2025 14:14:37 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:14:39 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:14:56 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:15:08 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:15:10 UTC] PHP Fatal error:  Uncaught ParseError: syntax error, unexpected ''sottotitolo_monologo'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php:43
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(108): Illuminate\Filesystem\Filesystem::Illuminate\Filesystem\{closure}()
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/PhpEngine.php(58): Illuminate\Filesystem\Filesystem->getRequire('/Users/editweb2...', Array)
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Engines/CompilerEngine.php(61): Illuminate\View\Engines\PhpEngine->evaluatePath('/Users/editweb2...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/View.php(139): Illuminate\View\Engines\CompilerEngine-> in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 43
+[12-Mar-2025 14:15:48 UTC] PHP Notice:  Array to string conversion in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 44
+[12-Mar-2025 14:15:48 UTC] PHP Fatal error:  Uncaught InvalidArgumentException: View [components.mono-logoArray] not found. in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php:137
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php(79): Illuminate\View\FileViewFinder->findInPaths('components.mono...', Array)
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Factory.php(138): Illuminate\View\FileViewFinder->find('components.mono...')
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php(45): Illuminate\View\Factory->make('components.mono...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(107): require('/Users/editweb2...')
+#4 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendo in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php on line 137
+[12-Mar-2025 14:15:53 UTC] PHP Notice:  Array to string conversion in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 44
+[12-Mar-2025 14:15:53 UTC] PHP Fatal error:  Uncaught InvalidArgumentException: View [components.mono-logoArray] not found. in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php:137
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php(79): Illuminate\View\FileViewFinder->findInPaths('components.mono...', Array)
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Factory.php(138): Illuminate\View\FileViewFinder->find('components.mono...')
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php(45): Illuminate\View\Factory->make('components.mono...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(107): require('/Users/editweb2...')
+#4 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendo in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php on line 137
+[12-Mar-2025 14:17:10 UTC] PHP Notice:  Array to string conversion in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 44
+[12-Mar-2025 14:17:10 UTC] PHP Fatal error:  Uncaught InvalidArgumentException: View [components.mono-logoArray] not found. in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php:137
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php(79): Illuminate\View\FileViewFinder->findInPaths('components.mono...', Array)
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Factory.php(138): Illuminate\View\FileViewFinder->find('components.mono...')
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php(45): Illuminate\View\Factory->make('components.mono...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(107): require('/Users/editweb2...')
+#4 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendo in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php on line 137
+[12-Mar-2025 14:17:11 UTC] PHP Notice:  Array to string conversion in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php on line 44
+[12-Mar-2025 14:17:11 UTC] PHP Fatal error:  Uncaught InvalidArgumentException: View [components.mono-logoArray] not found. in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php:137
+Stack trace:
+#0 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php(79): Illuminate\View\FileViewFinder->findInPaths('components.mono...', Array)
+#1 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/Factory.php(138): Illuminate\View\FileViewFinder->find('components.mono...')
+#2 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/cache/94365e804376b9771e5768408571249c1f7a9b2f.php(45): Illuminate\View\Factory->make('components.mono...', Array)
+#3 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/filesystem/Filesystem.php(107): require('/Users/editweb2...')
+#4 /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendo in /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/vendor/illuminate/view/FileViewFinder.php on line 137
+[12-Mar-2025 14:29:54 UTC] Il manifest non è stato trovato: /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/public/.vite/manifest.json

@@ -1,7 +1,7 @@
 <div class="w-full relative">
     <div class="swiper vertical-slide-carousel swiper-container relative">
         <div class="swiper-wrapper sw-wrapper-vertical" aria-live="polite">
-            @if($immagine_1_url && $titolo_1 && $testo_1 && $cta_1_url && $cta_1_title)
+            @if($immagine_1_url && $titolo_1 && $testo_1)
                 <div class="swiper-slide swiper-slide-vertical">
                     <section x-data="{ loaded: false }"
                              x-intersect="loaded = true"
@@ -16,6 +16,7 @@
                                 <p class="text-center max-w-lg text-white/90 mt-4 md:mt-6 md:text-lg md:leading-relaxed font-nunitoSansRegular">
                                     {{$testo_1}}
                                 </p>
+                                @if($cta_1_url && $cta_1_title)
                                 <div class="mt-4 sm:mt-8">
                                     <a href="{{$cta_1_url}}" aria-label="{{$cta_1_title}}" role="button"
                                        class="inline-block rounded-full px-12 py-3 bg-custom-green
@@ -24,6 +25,7 @@
                                         {{$cta_1_title}}
                                     </a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </section>

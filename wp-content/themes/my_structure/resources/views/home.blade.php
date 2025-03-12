@@ -37,6 +37,13 @@
         'cta_4_url' => isset($data->cta_4['url']) && $data->cta_4['url'] ? $data->cta_4['url'] : null,
         'cta_4_title' => isset($data->cta_4['title']) && $data->cta_4['title'] ? $data->cta_4['title'] : null,
     ])
+
+    @include('components.mono-logo', [
+        'titolo_monologo' => $mono_fields->titolo_monologo,
+        'sottotitolo_monologo' => $mono_fields->sottotitolo_monologo,
+        'immagine_monologo' =>$mono_fields->immagine_monologo['url']
+    ])
+
     @include('components.missione', [
         'titolo_missione' => $data->titolo_missione,
         'testo_missione' => $data->testo_missione,
