@@ -3,6 +3,10 @@
  * @var \Models\Progetti[] $fields
  */
 ?>
+<?php
+    $thankYouUrl = get_permalink(pll_get_post(412, pll_current_language()));
+?>
+
 
 <?php $__env->startSection('content'); ?>
     <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
@@ -32,7 +36,7 @@
          'titolo' => '',
          'sottotitolo' => $fields->testo_sotto_hero
      ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
+    <input type="hidden" id="thank-you-url" value="<?php echo e($thankYouUrl); ?>">
     <?php $__currentLoopData = $fields->progetti; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $progetto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <section class="<?php echo e($index === 0 ? 'py-10' : 'pb-10'); ?> sm:py-16 lg:py-24">
             <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
