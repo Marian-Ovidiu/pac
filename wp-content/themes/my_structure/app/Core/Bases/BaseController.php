@@ -35,10 +35,12 @@ abstract class BaseController
         } else {
             $fullSrc = get_template_directory_uri() . '/source/assets/js/' . ltrim($src, '/');
         }
+
         add_action('wp_enqueue_scripts', function () use ($handle, $fullSrc, $deps, $ver, $in_footer) {
-            wp_enqueue_script($handle, $fullSrc, $deps);
+            wp_enqueue_script($handle, $fullSrc, $deps, $ver, $in_footer);
         });
     }
+
 
     protected function addVarJs($handle, $var_name, $data, $in_footer = false, $ver = false)
     {
