@@ -1,6 +1,6 @@
 <div class="w-full relative h-[75vh]">
     <div class="swiper-container logo-carousel h-[65vh]">
-        <div class="swiper-wrapper sw-wrapper-linear sw-wrapper-linear-custom h-full !h-full" aria-live="polite">
+        <div class="swiper-wrapper sw-wrapper-linear-custom h-full !h-full" aria-live="polite">
             
             <?php if($immagine_1_url && $titolo_1 && $testo_1): ?>
                 <div class="swiper-slide !h-full">
