@@ -1,43 +1,35 @@
-.sw-wrapper-vertical {
-    width: 100%;
-    height: 100%;
-    max-height: 350px;
-    z-index: 10;
-    padding-bottom: 64px !important;
-    -webkit-transition-timing-function: linear !important;
-    transition-timing-function: linear !important;
+.logo-carousel {
     position: relative;
-}
-.swiper-pagination-bullet {
-    background: #84CE59;
-}
-.swiper-pagination-bullet-active {
-    background: #84CE59 !important;
-}
-
-.swiper-slide, .content-slide {
-    height: 100%;
-}
-.swiper-slide > section {
-    height: 100%;
-    width: 100%;
-}
-.swiper-pagination {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10px;
-    z-index: 999;
-}
-
-.swiper-container {
-    width: 100%;
     overflow: hidden;
+    width: 100%;
+    height: calc(100dvh - 47px);
+
 }
 
-.sw-wrapper-linear {
-    transition-timing-function: linear;
+.sw-wrapper-linear,
+.sw-wrapper-linear-custom,
+.swiper-wrapper {
+    height: 100%;
+}
+
+/* Le singole slide occupano 100% dell’altezza */
+.swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 140px) /* Important: riempie l’altezza dello slider */
+}
+
+/* Sezione con background image */
+.swiper-slide section {
     width: 100%;
     height: 100%;
-    max-height: 30px;
+    background-size: cover !important;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.content-slide-container {
+    min-height: 525px;
 }

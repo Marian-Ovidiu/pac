@@ -1,31 +1,23 @@
-
 document.addEventListener('DOMContentLoaded', function () {
-    var verticalSwiper = new Swiper(".vertical-slide-carousel", {
-        loop: true,
-        direction: 'vertical',
-        mousewheel: {
-            releaseOnEdges: true,
-        },
-        grabCursor: true,
-        pagination: {
-            el: ".vertical-slide-carousel .swiper-pagination",
-            clickable: true,
-        },
-        autoplay: {
-            delay: 5500,
-            disableOnInteraction: false,
-        },
-
-    });
-
-    var logoSwiper = new Swiper(".logo-carousel", {
-        slidesPerView: 3,
-        loop: true,
-        speed: 8000,
-        autoplay: {
-            delay: 0,
-            disableOnInteraction: false,
-        },
-        grabCursor: false,
+    document.querySelectorAll('.logo-carousel').forEach((el) => {
+        new Swiper(el, {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            autoplay: {
+                delay: 40000, // 4 secondi prima di passare alla prossima
+                disableOnInteraction: false,
+            },
+            speed: 600, // velocità della transizione (in ms)
+            pagination: {
+                el: el.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 1 },
+                1024: { slidesPerView: 1 },
+            }
+        });
     });
 });
