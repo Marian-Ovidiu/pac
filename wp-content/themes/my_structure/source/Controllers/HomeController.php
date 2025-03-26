@@ -12,7 +12,7 @@ class HomeController extends BaseController {
         $data = HomeFields::get(get_the_ID());
 
         $this->addJs('swiper-js', 'https://unpkg.com/swiper/swiper-bundle.min.js', [], true);
-        $this->addJs('homeSlider', 'homeSlider.js', ['swiper-js'], true);
+        $this->addJs('homeSlider', 'homeSlider.js', ['swiper-js'], true, time());
         /*$this->addJs('chart', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js', [], true);
         $this->addJs('my-chart', 'Chart.js', ['chart'], true);*/
         $this->addCss('swiper-css', 'https://unpkg.com/swiper/swiper-bundle.min.css');
