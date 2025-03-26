@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function () {
 function donationFormData(progettoId) {
     return {
         step: 1,
@@ -120,3 +121,4 @@ function donationFormData(progettoId) {
         }
     };
 }
+});

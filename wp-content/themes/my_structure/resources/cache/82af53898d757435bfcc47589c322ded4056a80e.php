@@ -127,19 +127,18 @@
                                     </div>
                                 </div>
 
-                                <!-- Step 3: Dati della carta di credito -->
+                               <!-- Step 3: Dati della carta di credito -->
                                 <div x-show="step === 3" class="w-full text-center">
                                     <p class="mt-8 font-serif text-xl font-bold text-custom-dark-green"><?php echo e(load_static_strings('Dati della carta di credito')); ?></p>
                                     <div class="mt-4 mx-auto grid grid-cols-1 gap-6 lg:max-w-xl">
                                         <!-- Google Pay Button -->
                                         <div id="google-pay-button-<?php echo e($progetto->id); ?>" style="display: none;"></div>
+
                                         <?php $__currentLoopData = $pagamenti_disponibili; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <?php if($p->id === 'stripe'): ?>
                                                 <div id="card-element-container-<?php echo e($progetto->id); ?>">
                                                     <form id="payment-form-<?php echo e($progetto->id); ?>">
-                                                        <div id="payment-element-<?php echo e($progetto->id); ?>">
-                                                            <!-- Elemento di Stripe per la carta di credito -->
-                                                        </div>
+                                                        <div id="payment-element-<?php echo e($progetto->id); ?>"></div>
                                                     </form>
                                                 </div>
                                             <?php else: ?>

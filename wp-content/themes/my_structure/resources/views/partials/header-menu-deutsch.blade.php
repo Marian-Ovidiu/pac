@@ -5,13 +5,12 @@ $options = \Models\Options\OpzioniGlobaliFields::get();
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <!-- lg+ -->
         <nav class="flex items-center justify-between h-16 lg:h-20">
-            <div class="text-center flex flex-col items-center justify-between">
-                <a href="#" title="" class="flex">
+            <a href="{{ get_home_url(null, '/de', 'https') }}" title="{{ __('Home', 'text_domain') }}" class="flex">
+                <div class="text-center flex flex-col items-center justify-between">
                     <img class="w-auto h-12 lg:h-12" src="{{$options->logo['url']}}" alt="" />
-                </a>
-                <div class="text-custom-dark-green font-bold text-xs">Project Africa Conservation</div>
-            </div>
-
+                    <div class="text-custom-dark-green font-bold text-xs">Project Africa Conservation</div>
+                </div>
+            </a>
             <button @click="open = !open" type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
                 <!-- Menu open: "hidden", Menu closed: "block" -->
                 <svg x-show="!open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

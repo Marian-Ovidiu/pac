@@ -40,7 +40,7 @@ class PageController extends BaseController {
 
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
         $this->addJs('donation', 'donation.js', ['stripe'], true);
-        
+
         $this->addVarJs('donation', 'highlights', [
             $fields->highlights_frase_1 ?? '',
             $fields->highlights_frase_2 ?? '',
