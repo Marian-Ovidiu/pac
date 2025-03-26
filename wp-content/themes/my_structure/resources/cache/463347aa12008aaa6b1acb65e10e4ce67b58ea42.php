@@ -1,5 +1,5 @@
 <div class="w-full relative h-[75vh]">
-    <div class="swiper-container logo-carousel h-[65vh]">
+    <div class="swiper-container logo-carousel h-[65vh] opacity-0 transition-opacity duration-300" x-init="$nextTick(() => setTimeout(() => $el.classList.remove('opacity-0'), 100))">
         <div class="swiper-wrapper sw-wrapper-linear-custom h-full !h-full" aria-live="polite">
             <?php $__currentLoopData = $slides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php if($slide['url'] && $slide['titolo'] && $slide['testo']): ?>
