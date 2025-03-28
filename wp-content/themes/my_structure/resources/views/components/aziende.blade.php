@@ -1,12 +1,16 @@
 <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
-    <div class="absolute inset-0">
+    <figure class="absolute inset-0">
         <img class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left"
              src="{{ $immagine_url }}"
              alt="{{ $immagine_alt ?? $titolo }}"
              title="{{ $immagine_title ?? '' }}"
              loading="lazy"
              decoding="async">
-    </div>
+        @if($immagine_caption)
+            <figcaption class="sr-only">{{ $immagine_caption }}</figcaption>
+        @endif
+    </figure>
+
     <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent"></div>
     <div class="absolute inset-0 block bg-black/60 md:hidden"></div>
 
@@ -18,6 +22,7 @@
             @if($immagine_caption)
                 <p class="text-sm text-white/80 italic mt-2">{{ $immagine_caption }}</p>
             @endif
+
             @if($immagine_description)
                 <div class="sr-only">{{ $immagine_description }}</div>
             @endif
@@ -31,9 +36,7 @@
                               shadow sm:w-auto sm:mx-2 sm:mt-0 hover:bg-custom-green hover:text-white focus:ring
                               focus:bg-custom-light-green focus:ring-opacity-80">
                         @include('svg.gallery')
-                        <span class="mx-2">
-                            {{ $cta['title'] }}
-                        </span>
+                        <span class="mx-2">{{ $cta['title'] }}</span>
                     </a>
                 </div>
             @endif

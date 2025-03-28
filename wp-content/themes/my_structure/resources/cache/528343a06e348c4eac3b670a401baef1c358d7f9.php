@@ -1,12 +1,16 @@
 <section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
-    <div class="absolute inset-0">
+    <figure class="absolute inset-0">
         <img class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left"
              src="<?php echo e($immagine_url); ?>"
              alt="<?php echo e($immagine_alt ?? $titolo); ?>"
              title="<?php echo e($immagine_title ?? ''); ?>"
              loading="lazy"
              decoding="async">
-    </div>
+        <?php if($immagine_caption): ?>
+            <figcaption class="sr-only"><?php echo e($immagine_caption); ?></figcaption>
+        <?php endif; ?>
+    </figure>
+
     <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent"></div>
     <div class="absolute inset-0 block bg-black/60 md:hidden"></div>
 
@@ -18,6 +22,7 @@
             <?php if($immagine_caption): ?>
                 <p class="text-sm text-white/80 italic mt-2"><?php echo e($immagine_caption); ?></p>
             <?php endif; ?>
+
             <?php if($immagine_description): ?>
                 <div class="sr-only"><?php echo e($immagine_description); ?></div>
             <?php endif; ?>
@@ -31,10 +36,7 @@
                               shadow sm:w-auto sm:mx-2 sm:mt-0 hover:bg-custom-green hover:text-white focus:ring
                               focus:bg-custom-light-green focus:ring-opacity-80">
                         <?php echo $__env->make('svg.gallery', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                        <span class="mx-2">
-                            <?php echo e($cta['title']); ?>
-
-                        </span>
+                        <span class="mx-2"><?php echo e($cta['title']); ?></span>
                     </a>
                 </div>
             <?php endif; ?>

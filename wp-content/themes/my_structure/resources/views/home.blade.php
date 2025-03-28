@@ -85,8 +85,10 @@
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,
     ])
+
     @include('components.home-cards', ['progetti' => $data->progetti])
-    @include('components.home-mobile-cards', ['progetti' => $data->progetti])
+    {{-- @include('components.home-mobile-cards', ['progetti' => $data->progetti]) --}}
+    
     {{--<div class="container mx-auto py-12">
         <div class="flex flex-col items-center justify-center md:flex-row-reverse">
             @include('components.testo-sottotesto',[

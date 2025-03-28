@@ -85,8 +85,10 @@
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,
     ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
     <?php echo $__env->make('components.home-cards', ['progetti' => $data->progetti], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-    <?php echo $__env->make('components.home-mobile-cards', ['progetti' => $data->progetti], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
+    
     
     <?php echo $__env->make('components.aziende', [
         'titolo' => $data->titolo_azienda ?? null,
