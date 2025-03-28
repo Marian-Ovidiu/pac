@@ -112,7 +112,7 @@
 
                     {{-- Form Donazione --}}
                     <div x-data="donationFormData" x-init="init({{ $progetto->id }}, '{{ $thankYouUrl }}')"
-                        class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl p-6">
+                        class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl p-3">
                         {{-- Stepper header --}}
                         <div class="flex justify-between mb-6 text-sm font-semibold text-custom-dark-green">
                             <template x-for="(label, i) in ['Importo', 'Dati', 'Pagamento']" :key="i">
