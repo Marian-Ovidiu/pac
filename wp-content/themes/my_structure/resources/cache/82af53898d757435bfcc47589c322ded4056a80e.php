@@ -35,11 +35,16 @@
                 </h1>
 
                 
-                <div x-data="typingEffect(<?php echo e(json_encode($typingTextHero)); ?>)" class="h-10 sm:h-12 overflow-hidden">
-                    <template x-for="(text, index) in texts" :key="index">
-                        <p x-show="currentText === index" x-text="displayText"
-                            class="text-xl sm:text-2xl lg:text-3xl font-medium text-white" x-transition.opacity></p>
-                    </template>
+                <div x-data="typingEffect(<?php echo e(json_encode($typingTextHero)); ?>)" class="relative text-white">
+                    
+                    <p x-text="displayText"
+                        class="text-xl sm:text-2xl lg:text-3xl font-medium transition-opacity duration-300"></p>
+
+                    
+                    <span class="absolute opacity-0 pointer-events-none text-xl sm:text-2xl lg:text-3xl font-medium">
+                        <?php echo e(collect($typingTextHero)->sortByDesc(fn($t) => strlen($t))->first()); ?>
+
+                    </span>
                 </div>
             </div>
         </div>
@@ -77,15 +82,16 @@
         <section class="py-10 sm:py-16 lg:py-24">
             <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 md:items-stretch gap-y-5">
-                    <figure class="relative">
+                    <figure class="relative py-4">
                         
                         <img src="<?php echo e($progetto->featured_image); ?>" alt="<?php echo e($progetto->titolo_card); ?>"
-                            title="<?php echo e($progetto->titolo_card); ?>" class="object-cover w-full h-full md:object-left md:origin-top-left"
-                            loading="lazy" decoding="async" />
-            
+                            title="<?php echo e($progetto->titolo_card); ?>"
+                            class="object-cover w-full h-full md:object-left md:origin-top-left" loading="lazy"
+                            decoding="async" />
+
                         
                         <div class="absolute inset-0 bg-black/10 sm:bg-black/20 z-10"></div>
-            
+
                         
                         <?php if(!empty($progetto->immagine_card['caption'])): ?>
                             <figcaption class="absolute bottom-0 left-0 bg-black/60 text-white text-xs italic p-2 z-20">
@@ -93,14 +99,15 @@
 
                             </figcaption>
                         <?php endif; ?>
-            
+
                         
                         <?php if(!empty($progetto->immagine_card['description'])): ?>
                             <div class="sr-only"><?php echo e($progetto->immagine_card['description']); ?></div>
                         <?php endif; ?>
-            
+
                         
-                        <div class="absolute inset-0 z-20 flex items-center justify-center md:justify-start px-4 sm:px-6 lg:px-8">
+                        <div
+                            class="absolute inset-0 z-20 flex items-center justify-center md:justify-start px-4 sm:px-6 lg:px-8">
                             <div class="max-w-3xl text-center md:text-left">
                                 <h4 class="font-bold text-white text-3xl lg:text-4xl leading-tight">
                                     <?php echo e($progetto->titolo_card); ?>
@@ -114,7 +121,7 @@
 
                     
                     <div x-data="donationFormData" x-init="init(<?php echo e($progetto->id); ?>, '<?php echo e($thankYouUrl); ?>')"
-                        class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl p-6">
+                        class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">
                         
                         <div class="flex justify-between mb-6 text-sm font-semibold text-custom-dark-green">
                             <template x-for="(label, i) in ['Importo', 'Dati', 'Pagamento']" :key="i">

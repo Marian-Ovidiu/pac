@@ -35,11 +35,15 @@
                 </h1>
 
                 {{-- Frasi emozionali animate sotto l'H1 --}}
-                <div x-data="typingEffect({{ json_encode($typingTextHero) }})" class="inline-block mx-auto text-center">
-                    <template x-for="(text, index) in texts" :key="index">
-                        <p x-show="currentText === index" x-text="displayText"
-                            class="text-xl sm:text-2xl lg:text-3xl font-medium text-white" x-transition.opacity></p>
-                    </template>
+                <div x-data="typingEffect({{ json_encode($typingTextHero) }})" class="relative text-white">
+                    {{-- Frase attiva --}}
+                    <p x-text="displayText"
+                        class="text-xl sm:text-2xl lg:text-3xl font-medium transition-opacity duration-300"></p>
+
+                    {{-- Frase placeholder invisibile ma con altezza visibile (per evitare jump) --}}
+                    <span class="absolute opacity-0 pointer-events-none text-xl sm:text-2xl lg:text-3xl font-medium">
+                        {{ collect($typingTextHero)->sortByDesc(fn($t) => strlen($t))->first() }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -80,26 +84,28 @@
                     <figure class="relative py-4">
                         {{-- Immagine di sfondo --}}
                         <img src="{{ $progetto->featured_image }}" alt="{{ $progetto->titolo_card }}"
-                            title="{{ $progetto->titolo_card }}" class="object-cover w-full h-full md:object-left md:origin-top-left"
-                            loading="lazy" decoding="async" />
-            
+                            title="{{ $progetto->titolo_card }}"
+                            class="object-cover w-full h-full md:object-left md:origin-top-left" loading="lazy"
+                            decoding="async" />
+
                         {{-- Overlay per leggibilità testo --}}
                         <div class="absolute inset-0 bg-black/10 sm:bg-black/20 z-10"></div>
-            
+
                         {{-- Caption visibile (se presente) --}}
                         @if (!empty($progetto->immagine_card['caption']))
                             <figcaption class="absolute bottom-0 left-0 bg-black/60 text-white text-xs italic p-2 z-20">
                                 {{ $progetto->immagine_card['caption'] }}
                             </figcaption>
                         @endif
-            
+
                         {{-- Caption SEO invisibile ma letta dai reader --}}
                         @if (!empty($progetto->immagine_card['description']))
                             <div class="sr-only">{{ $progetto->immagine_card['description'] }}</div>
                         @endif
-            
+
                         {{-- Contenuto sovrapposto (titolo e testo) --}}
-                        <div class="absolute inset-0 z-20 flex items-center justify-center md:justify-start px-4 sm:px-6 lg:px-8">
+                        <div
+                            class="absolute inset-0 z-20 flex items-center justify-center md:justify-start px-4 sm:px-6 lg:px-8">
                             <div class="max-w-3xl text-center md:text-left">
                                 <h4 class="font-bold text-white text-3xl lg:text-4xl leading-tight">
                                     {{ $progetto->titolo_card }}
