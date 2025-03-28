@@ -77,7 +77,7 @@
         <section class="py-10 sm:py-16 lg:py-24">
             <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 md:items-stretch gap-y-5">
-                    <figure class="relative">
+                    <figure class="relative py-4">
                         {{-- Immagine di sfondo --}}
                         <img src="{{ $progetto->featured_image }}" alt="{{ $progetto->titolo_card }}"
                             title="{{ $progetto->titolo_card }}" class="object-cover w-full h-full md:object-left md:origin-top-left"
