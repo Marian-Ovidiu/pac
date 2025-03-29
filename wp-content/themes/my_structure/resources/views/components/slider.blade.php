@@ -36,7 +36,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <img src="{{ $slide['url'] }}" alt="{{ $slide['alt'] ?? $slide['titolo'] }}" title="{{ $slide['title'] ?? '' }}" class="sr-only" loading="lazy" decoding="async">
+                            <x-img :acf="$slide" class="sr-only" />
                         </section>
                     </div>
                 @endif

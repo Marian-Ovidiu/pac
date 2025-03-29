@@ -39,7 +39,18 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <img src="<?php echo e($slide['url']); ?>" alt="<?php echo e($slide['alt'] ?? $slide['titolo']); ?>" title="<?php echo e($slide['title'] ?? ''); ?>" class="sr-only" loading="lazy" decoding="async">
+                            <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.img','data' => ['acf' => $slide,'class' => 'sr-only']]); ?>
+<?php $component->withName('img'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['acf' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($slide),'class' => 'sr-only']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
+<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
+<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
+<?php endif; ?>
                         </section>
                     </div>
                 <?php endif; ?>
