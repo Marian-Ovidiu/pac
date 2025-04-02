@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="<?php echo e(function_exists('pll_current_language') ? pll_current_language() : 'it'); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +14,21 @@
           "url": "https://project-africa-conservation.org",
           "logo": "https://project-africa-conservation.org/wp-content/uploads/2024/12/cropped-pittogramma-1.png",
           "sameAs": [
-            "https://www.facebook.com/share/15kZKmU4gr/",
+            "https://www.facebook.com/15kZKmU4gr/",
             "https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==",
             "https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/"
           ]
         }
     </script>
+    <?php
+        $hreflangs = function_exists('pll_get_the_languages') ? pll_get_the_languages(['raw' => 1]) : [];
+    ?>
+    <?php if(isset($hreflangs)): ?>
+    <?php $__currentLoopData = $hreflangs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <link rel="alternate" hreflang="<?php echo e($lang['locale']); ?>" href="<?php echo e($lang['url']); ?>" />
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    <?php endif; ?>
+    <link rel="canonical" href="<?php echo e(get_permalink()); ?>">
 
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
@@ -30,22 +39,22 @@
 </head>
 <body class="flex flex-col min-h-screen font-nunitoSansRegular">
    <?php wp_head(); ?>
-    <?php the_widget('Widget\MenuWidget', ['menu_name' => 'LanguageMenu']); ?>
+    @widget('LanguageMenu')
     <?php switch(pll_current_language()):
         case ('it'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>
+            @widget('HeaderMenu')
             <?php break; ?>
         <?php case ('en'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuEnglish']); ?>
+            @widget('HeaderMenuEnglish')
             <?php break; ?>
         <?php case ('fr'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuFrancais']); ?>
+            @widget('HeaderMenuFrancais')
             <?php break; ?>
         <?php case ('de'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuDeutsch']); ?>
+            @widget('HeaderMenuDeutsch')
             <?php break; ?>
         <?php default: ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>
+            @widget('HeaderMenu')
             <?php break; ?>
     <?php endswitch; ?>
 
@@ -56,19 +65,19 @@
     <footer class="text-white">
         <?php switch(pll_current_language()):
             case ('it'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>
+                @widget('FooterMenu')
                 <?php break; ?>
             <?php case ('en'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuEnglish']); ?>
+                @widget('FooterMenuEnglish')
                 <?php break; ?>
             <?php case ('fr'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuFrancais']); ?>
+                @widget('FooterMenuFrancais')
                 <?php break; ?>
             <?php case ('de'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuDeutsch']); ?>
+                @widget('FooterMenuDeutsch')
                 <?php break; ?>
             <?php default: ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>
+                @widget('FooterMenu')
                 <?php break; ?>
         <?php endswitch; ?>
     </footer>

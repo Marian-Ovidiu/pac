@@ -18,8 +18,7 @@
         </div>
 
         <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
-            <div
-                class="max-w-3xl mx-auto text-center sm:text-left rounded-xl px-6 py-8 shadow-2xl">
+            <div class="max-w-3xl mx-auto text-center sm:text-left rounded-xl px-6 py-8 shadow-2xl">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight drop-shadow-xl">
                     {{ $progetto->titolo_hero }}
                 </h1>
@@ -30,22 +29,52 @@
         </div>
     </section>
     {{-- Fine Hero --}}
+    @if(function_exists('pll_get_the_languages'))
+    @php
+        $languages = pll_get_the_languages(['raw' => 1]);
+    @endphp
+
+    {{-- Mostra le lingue --}}
+    <ul class="flex gap-2">
+        @foreach($languages as $lang)
+            <li>
+                <a href="{{ $lang['url'] }}" class="{{ $lang['current_lang'] ? 'font-bold underline' : '' }}">
+                    {{ strtoupper($lang['slug']) }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
+@endif
+
+
+    {{-- Mostra le lingue --}}
+    <ul class="flex gap-2">
+        @foreach($languages as $lang)
+            <li>
+                <a href="{{ $lang['url'] }}" class="{{ $lang['current_lang'] ? 'font-bold underline' : '' }}">
+                    {{ strtoupper($lang['slug']) }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
+@endif
+
 
     <section class="container mx-auto">
         {{-- Sezione Problemi --}}
-          @component('components.section', [
-              'titolo' => $progetto->problemi_titolo_1,
-              'items' => $progetto->getProblemi(),
-          ])
-          @endcomponent
-      
+        @component('components.section', [
+            'titolo' => $progetto->problemi_titolo_1,
+            'items' => $progetto->getProblemi(),
+        ])
+        @endcomponent
+
         {{-- Sezione Soluzioni --}}
-          @component('components.section', [
-              'titolo' => $progetto->soluzioni_titolo_1,
-              'items' => $progetto->getSoluzioni(),
-          ])
-          @endcomponent
-      </section>
+        @component('components.section', [
+            'titolo' => $progetto->soluzioni_titolo_1,
+            'items' => $progetto->getSoluzioni(),
+        ])
+        @endcomponent
+    </section>
 
 
     <section class="py-10 sm:py-16 lg:py-24">

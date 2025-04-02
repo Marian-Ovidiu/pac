@@ -3,7 +3,7 @@
         'name' => 'hmari/my_structure',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '2e3b3639971d574fa9b6f80c902ab22a59c09ad4',
+        'reference' => 'e8af0bc8276ca73505e84493d2f98302573aee01',
         'type' => 'wordpress-theme',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -40,7 +40,7 @@
         'hmari/my_structure' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '2e3b3639971d574fa9b6f80c902ab22a59c09ad4',
+            'reference' => 'e8af0bc8276ca73505e84493d2f98302573aee01',
             'type' => 'wordpress-theme',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

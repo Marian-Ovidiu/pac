@@ -1,9 +1,17 @@
 # Config locali e file sensibili
 wp-config.php
-.htaccess
-web.config
 
-# Cache e log
+# Ignora tutta la cartella wp-content
+wp-content/*
+
+# Ma tieni il tuo plugin personalizzato
+!wp-content/plugins/
+!wp-content/plugins/mioplugin-custom/**
+# E il tuo tema custom
+!wp-content/themes/
+!wp-content/themes/my_structure/**
+
+# Cache e log (già dentro wp-content, ma lasciamo per chiarezza)
 wp-content/cache/
 wp-content/uploads/
 wp-content/debug.log
@@ -11,12 +19,6 @@ wp-content/upgrade/
 wp-content/upgrade-temp-backup/
 wp-content/wc-logs/
 *.log
-
-# Plugin e temi di terze parti (se li installi da admin e non via git)
-wp-content/plugins/*
-!wp-content/plugins/mioplugin-custom/
-wp-content/themes/*
-!wp-content/themes/my_structure/
 
 # File di sistema
 .DS_Store

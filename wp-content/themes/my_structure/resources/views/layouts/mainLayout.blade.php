@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="{{ function_exists('pll_current_language') ? pll_current_language() : 'it' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +14,21 @@
           "url": "https://project-africa-conservation.org",
           "logo": "https://project-africa-conservation.org/wp-content/uploads/2024/12/cropped-pittogramma-1.png",
           "sameAs": [
-            "https://www.facebook.com/share/15kZKmU4gr/",
+            "https://www.facebook.com/15kZKmU4gr/",
             "https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==",
             "https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/"
           ]
         }
     </script>
+    @php
+        $hreflangs = function_exists('pll_get_the_languages') ? pll_get_the_languages(['raw' => 1]) : [];
+    @endphp
+    @if(isset($hreflangs))
+    @foreach($hreflangs as $lang)
+        <link rel="alternate" hreflang="{{ $lang['locale'] }}" href="{{ $lang['url'] }}" />
+    @endforeach
+    @endif
+    <link rel="canonical" href="{{ get_permalink() }}">
 
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
