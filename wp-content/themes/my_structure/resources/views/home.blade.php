@@ -8,7 +8,8 @@
     <header class="sr-only">
         <h1>Project Africa Conservation - Un futuro per la fauna e le comunità</h1>
     </header>
-        @include('components.slider', ["slides" => [
+    @include('components.slider', [
+        'slides' => [
             [
                 'url' => $data->immagine_1['url'] ?? null,
                 'alt' => $data->immagine_1['alt'] ?? null,
@@ -53,43 +54,46 @@
                 'cta_url' => $data->cta_4['url'] ?? null,
                 'cta_title' => $data->cta_4['title'] ?? null,
             ],
-        ]]
-        )
-
-
-    @include('components.mono-logo', [
-        'titolo_monologo' => $mono_fields->titolo_monologo,
-        'sottotitolo_monologo' => $mono_fields->sottotitolo_monologo,
-        'immagine_monologo' =>$mono_fields->immagine_monologo['url']
+        ],
     ])
+
+    @include('components.duo-logo', [
+        'titolo_duo_logo_1' => $duo_fields->titolo_duo_logo_1,
+        'immagine_duo_logo_1' => $duo_fields->immagine_duo_logo_1['url'] ?? null,
+        'titolo_duo_logo_2' => $duo_fields->titolo_duo_logo_2,
+        'immagine_duo_logo_2' => $duo_fields->immagine_duo_logo_2['url'] ?? null,
+        'sottotitolo_comune' => $duo_fields->sottotitolo_duo_logo_2
+    ])
+
+
 
     @include('components.missione', [
         'titolo_missione' => $data->titolo_missione ?? null,
         'testo_missione' => $data->testo_missione ?? null,
-
+    
         'immagine_missione_url' => $data->immagine_missione['url'] ?? null,
         'immagine_missione_alt' => $data->immagine_missione['alt'] ?? null,
         'immagine_missione_title' => $data->immagine_missione['title'] ?? null,
         'immagine_missione_caption' => $data->immagine_missione['caption'] ?? null,
         'immagine_missione_description' => $data->immagine_missione['description'] ?? null,
-
+    
         'cta_missione_dona_ora_url' => $data->cta_missione_dona_ora['url'] ?? null,
         'cta_missione_dona_ora_titolo' => $data->cta_missione_dona_ora['title'] ?? null,
-
+    
         'cta_missione_galleria_url' => $data->cta_missione_galleria['url'] ?? null,
         'cta_missione_galleria_titolo' => $data->cta_missione_galleria['title'] ?? null,
     ])
 
-    {{--@include('components.linear-slider')--}}
-    @include('components.testo-sottotesto',[
+    {{-- @include('components.linear-slider') --}}
+    @include('components.testo-sottotesto', [
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,
     ])
 
     @include('components.home-cards', ['progetti' => $data->progetti])
     {{-- @include('components.home-mobile-cards', ['progetti' => $data->progetti]) --}}
-    
-    {{--<div class="container mx-auto py-12">
+
+    {{-- <div class="container mx-auto py-12">
         <div class="flex flex-col items-center justify-center md:flex-row-reverse">
             @include('components.testo-sottotesto',[
                 'titolo' => $data->titolo_chart,
@@ -97,7 +101,7 @@
             ])
             @include('components.chart')
         </div>
-    </div>--}}
+    </div> --}}
     @include('components.aziende', [
         'titolo' => $data->titolo_azienda ?? null,
         'descrizione' => $data->descrizione_azienda ?? null,
@@ -108,5 +112,5 @@
         'immagine_caption' => $data->immagine_azienda['caption'] ?? null,
         'immagine_description' => $data->immagine_azienda['description'] ?? null,
     ])
-    
+
 @stop

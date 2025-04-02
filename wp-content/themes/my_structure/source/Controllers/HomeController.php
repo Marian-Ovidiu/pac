@@ -4,7 +4,7 @@ namespace Controllers;
 
 use Core\Bases\BaseController;
 use Models\HomeFields;
-use Models\MonoFields;
+use Models\DuoFields;
 
 class HomeController extends BaseController {
     public function index() {
@@ -20,6 +20,6 @@ class HomeController extends BaseController {
         $this->addCss('overlap', 'overlap.css');
         
         /*$this->addVarJs('testAjax', 'var_test', ['foo' => 'bar'], true);*/
-        $this->render('home', ['data'=> $data, 'mono_fields' => MonoFields::get(get_the_ID()) ?? null]);
+        $this->render('home', ['data'=> $data, 'duo_fields' => DuoFields::get(get_the_ID()) ?? null]);
     }
 }
