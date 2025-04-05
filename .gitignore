@@ -1,5 +1,5 @@
 # Config locali e file sensibili
-!wp-config.php
+wp-config.php
 
 # Ignora tutta la cartella wp-content
 wp-content/*
