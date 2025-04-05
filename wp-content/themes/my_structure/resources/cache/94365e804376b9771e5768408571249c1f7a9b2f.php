@@ -56,14 +56,9 @@
             ],
         ],
     ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('components.linear-slider', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    <?php echo $__env->make('components.duo-logo', [
-        'titolo_duo_logo_1' => $duo_fields->titolo_duo_logo_1,
-        'immagine_duo_logo_1' => $duo_fields->immagine_duo_logo_1['url'] ?? null,
-        'titolo_duo_logo_2' => $duo_fields->titolo_duo_logo_2,
-        'immagine_duo_logo_2' => $duo_fields->immagine_duo_logo_2['url'] ?? null,
-        'sottotitolo_comune' => $duo_fields->sottotitolo_duo_logo_2
-    ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
 
 
 
@@ -84,7 +79,6 @@
         'cta_missione_galleria_titolo' => $data->cta_missione_galleria['title'] ?? null,
     ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    
     <?php echo $__env->make('components.testo-sottotesto', [
         'titolo' => $data->titolo_progetti,
         'sottotitolo' => $data->descrizione_progetti,

@@ -6,7 +6,6 @@ wp-content/*
 
 # Ma tieni il tuo plugin personalizzato
 !wp-content/plugins/
-!wp-content/plugins/mioplugin-custom/**
 # E il tuo tema custom
 !wp-content/themes/
 !wp-content/themes/my_structure/**

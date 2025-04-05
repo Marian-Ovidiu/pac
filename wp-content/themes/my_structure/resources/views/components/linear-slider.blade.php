@@ -1,4 +1,4 @@
-<div class="swiper-container logo-carousel mb-4">
+<div class="swiper-container logo-carousel  w-full mb-4">
     <div class="swiper-wrapper sw-wrapper-linear">
         <div class="swiper-slide flex items-center justify-center">
             @include('svg.logo-placeholder-1')
@@ -20,3 +20,11 @@
         </div>
     </div>
 </div>
+
+<style scoped>
+.logo-carousel {
+     height: 100px !important;
+     background-color: red;
+     position: relative;
+}
+</style>

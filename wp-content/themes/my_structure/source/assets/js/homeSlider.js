@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
             spaceBetween: 0,
             loop: true,
             autoplay: {
-                delay: 40000, // 4 secondi prima di passare alla prossima
+                delay: 0, // Nessun ritardo tra le transizioni
                 disableOnInteraction: false,
             },
-            speed: 600, // velocità della transizione (in ms)
+            speed: 10000, // Rendi la velocità più lenta per un effetto continuo
             pagination: {
                 el: el.querySelector('.swiper-pagination'),
                 clickable: true,
