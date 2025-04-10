@@ -1,33 +1,25 @@
-# Config locali e file sensibili
-!wp-config.php
-
-# Ignora tutta la cartella wp-content
+# Ignora tutto dentro wp-content
 wp-content/*
 
-# Ma tieni il tuo plugin personalizzato
+# Ma tieni solo i tuoi plugin e il tuo tema custom
 !wp-content/plugins/
-# E il tuo tema custom
+!wp-content/plugins/*/
+!wp-content/plugins/*/src/
+!wp-content/plugins/*/assets/
+!wp-content/plugins/*/*.php
+wp-content/plugins/*/vendor/
+!wp-content/plugins/*/node_modules/
+
 !wp-content/themes/
 !wp-content/themes/my_structure/**
 
-# Cache e log (già dentro wp-content, ma lasciamo per chiarezza)
+# Cache, backup e roba inutile
 wp-content/cache/
 wp-content/uploads/
 wp-content/debug.log
-wp-content/upgrade/
-wp-content/upgrade-temp-backup/
-wp-content/wc-logs/
 *.log
-
-# File di sistema
-.DS_Store
-Thumbs.db
+*.zip
+*.sql
 node_modules/
 vendor/
-
-# Backup o export
-*.sql
-*.zip
-*.tar.gz
-*.bak
-*.bk
+.DS_Store

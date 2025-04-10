@@ -1,5 +1,4 @@
 export default function donationFormData(progettoId, thankYouUrl) {
-    console.log(progettoId, thankYouUrl);
     return {
         progettoId: null,
         thankYouUrl: null,
@@ -30,7 +29,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
         },
         async createIntent() {
             this.loading = true;
-            let amount = (this.customAmount || this.selectedAmount) * 100;
+            const amount = (this.customAmount || this.selectedAmount) * 100;
             const call = new window.ApiService();
 
             try {
@@ -43,23 +42,54 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
                 this.elements = this.stripe.elements({ clientSecret: this.clientSecret });
 
-                // Prima cambia lo step, così Alpine renderizza il DOM giusto
+                // STEP 3 → Alpine render → mount elementi
                 this.step = 3;
 
-                // Aspetta che Alpine abbia inserito #payment-element nel DOM
                 await this.$nextTick(() => {
+                    // Stripe
                     const paymentElement = this.elements.create('payment');
                     paymentElement.mount(`#payment-element-${this.progettoId}`);
+
+                    // Google Pay
+                    const gpayEl = document.getElementById(`google-pay-button-${this.progettoId}`);
+                    if (gpayEl) gpayEl.innerHTML = '';
+                    this.setupGooglePay(amount);
+
+                    // PayPal
+                    const paypalEl = document.getElementById(`paypal-button-container-${this.progettoId}`);
+                    if (paypalEl && window.paypal) {
+                        paypal.Buttons({
+                            createOrder: (data, actions) => {
+                                return actions.order.create({
+                                    purchase_units: [{
+                                        amount: {
+                                            value: ((this.customAmount || this.selectedAmount)).toString()
+                                        }
+                                    }]
+                                });
+                            },
+                            onApprove: (data, actions) => {
+                                return actions.order.capture().then(details => {
+                                    alert(`Pagamento completato da ${details.payer.name.given_name}`);
+                                    window.location.href = this.thankYouUrl;
+                                });
+                            },
+                            onError: (err) => {
+                                console.error('Errore PayPal:', err);
+                                alert("Errore PayPal: " + err.message);
+                            }
+                        }).render(`#paypal-button-container-${this.progettoId}`);
+                    }
                 });
 
-                this.setupGooglePay(amount, this.progettoId);
             } catch (err) {
-                console.error('Errore nella creazione dell\'intent:', err);
+                console.error("Errore nella creazione dell'intent:", err);
+                alert("Errore: " + err.message);
             } finally {
                 this.loading = false;
             }
         },
-        async setupGooglePay(amount, progettoId) {
+        async setupGooglePay(amount) {
             const paymentRequest = this.stripe.paymentRequest({
                 country: 'IT',
                 currency: 'eur',
@@ -68,11 +98,23 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 requestPayerEmail: true
             });
 
-            const result = await paymentRequest.canMakePayment();
-            if (result) {
-                const prButton = this.elements.create("paymentRequestButton", { paymentRequest });
-                prButton.mount(`#google-pay-button-${progettoId}`);
-                document.getElementById(`google-pay-button-${progettoId}`).style.display = 'block';
+            try {
+                const result = await paymentRequest.canMakePayment();
+
+                const googlePayButton = document.getElementById(`google-pay-button-${this.progettoId}`);
+                if (result && googlePayButton) {
+                    googlePayButton.style.display = "block";
+
+                    const prButton = this.elements.create("paymentRequestButton", {
+                        paymentRequest
+                    });
+
+                    prButton.mount(`#google-pay-button-${this.progettoId}`);
+                } else {
+                    console.warn("Google Pay non disponibile o elemento non trovato.");
+                }
+            } catch (error) {
+                console.error("Errore nel controllo di Google Pay:", error);
             }
         },
         async submitForm() {
@@ -81,7 +123,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 const { error } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: thankYouUrl,
+                        return_url: this.thankYouUrl,
                         payment_method_data: {
                             billing_details: {
                                 name: `${this.formData.name} ${this.formData.surname}`,
@@ -95,14 +137,14 @@ export default function donationFormData(progettoId, thankYouUrl) {
 
                 await new window.ApiService().post('/complete-donation', {
                     ...this.formData,
-                    progettoId,
+                    progettoId: this.progettoId,
                     amount: this.customAmount || this.selectedAmount
                 });
 
-                window.location.href = thankYouUrl;
+                window.location.href = this.thankYouUrl;
             } catch (err) {
+                console.error("Errore nel pagamento:", err);
                 alert("Errore: " + err.message);
-                console.error(err);
             } finally {
                 this.loading = false;
             }

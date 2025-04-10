@@ -265,15 +265,21 @@
                     <template x-if="step === 3">
                         <div>
                             <p class="text-xl font-bold text-custom-dark-green mb-4">
-                                {{ load_static_strings('Metodo di pagamento') }}</p>
+                                {{ load_static_strings('Metodo di pagamento') }}
+                            </p>
 
-                            <div class="mb-6" :id="'google-pay-button-' + progettoId" style="display: none;">
+                            <!-- Google Pay / Apple Pay Button -->
+                            <div class="mb-6">
+                                <div :id="'google-pay-button-' + progettoId" style="display: none;"></div>
                             </div>
-                            <div :id="'card-element-container-' + progettoId">
-                                <form :id="'payment-form-' + progettoId">
-                                    <div :id="'payment-element-' + progettoId"></div>
-                                </form>
-                            </div>
+
+                            <!-- Stripe Payment Element -->
+                            <form :id="'payment-form-' + progettoId" @submit.prevent="submitForm">
+                                <div :id="'payment-element-' + progettoId" class="mb-4"></div>
+                            </form>
+
+                            <!-- PayPal Button -->
+                            <div :id="'paypal-button-container-' + progettoId" class="mb-6"></div>
 
                             <div class="mt-6 flex justify-between">
                                 <button @click="step = 2"
@@ -287,6 +293,7 @@
                             </div>
                         </div>
                     </template>
+
                 </div>
             </div>
         </div>
