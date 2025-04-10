@@ -10,6 +10,7 @@
 @extends('layouts.mainLayout')
 @section('content')
     {{-- Hero --}}
+    <input type="hidden" id="thank-you-url" value="{{ $thankYouUrl }}">
     <section class="relative">
         <div class="absolute inset-0 -z-10">
             <img src="{!! $img['url'] !!}" alt="{{ $img['alt'] ?? $progetto->titolo_hero }}"
