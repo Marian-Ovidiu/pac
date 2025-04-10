@@ -4,7 +4,9 @@
  */
 ?>
 @php
-    $thankYouUrl = get_permalink(pll_get_post(412, pll_current_language()));
+    $thankYouPage = pll_get_post(412, pll_current_language());
+    $thankYouUrl = $thankYouPage ? get_permalink($thankYouPage) : home_url('/grazie');
+
     $img = $progetto->immagine_hero ?? [];
 @endphp
 @extends('layouts.mainLayout')
@@ -101,7 +103,7 @@
                     </div>
                 </figure>
 
-
+                
                 {{-- Form Donazione --}}
                 <div x-data="donationFormData" x-init="init({{ $progetto->id }}, '{{ $thankYouUrl }}')"
                     class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">

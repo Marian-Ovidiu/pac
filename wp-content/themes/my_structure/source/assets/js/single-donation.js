@@ -1,11 +1,13 @@
 function donationFormData(progettoId, thankYouUrl) {
     return {
         step: 1,
-        thankYouUrl: thankYouUrl,
+        thankYouUrl: thankYouUrl || window.location.origin + '/grazie', // fallback nel caso
         selectedAmount: null,
         customAmount: '',
         loading: false,
         stripe: null,
+        elements: null,
+        clientSecret: null,
         formData: {
             name: '',
             surname: '',
@@ -15,26 +17,20 @@ function donationFormData(progettoId, thankYouUrl) {
         },
         createIntent() {
             this.loading = true;
-            let selectedDonationAmount = this.customAmount || this.selectedAmount;
-            selectedDonationAmount = selectedDonationAmount * 100;
+            const selectedDonationAmount = (this.customAmount || this.selectedAmount) * 100;
 
-            let call = new window.ApiService();
+            const call = new window.ApiService();
             call.post('/create-payment-intent', {
-                'amount': selectedDonationAmount,
-                'progetto_id': progettoId
+                amount: selectedDonationAmount,
+                progetto_id: progettoId
             }).then(response => {
                 this.clientSecret = response.clientSecret;
-                this.stripe = Stripe('pk_live_xxxxx'); // Usa la tua chiave pubblica Stripe
-
-                this.elements = this.stripe.elements({
-                    clientSecret: this.clientSecret,
-                    paymentMethodCreation: 'manual'
-                });
+                this.stripe = Stripe('pk_live_xxxxx'); // 🔐 la tua public key
+                this.elements = this.stripe.elements({ clientSecret: this.clientSecret });
 
                 const paymentElement = this.elements.create('payment');
-                paymentElement.mount('#payment-element-' + progettoId);
+                paymentElement.mount(`#payment-element-${progettoId}`);
 
-                // ✅ Configura il pulsante Google Pay
                 this.setupGooglePay(selectedDonationAmount);
 
                 this.loading = false;
@@ -58,38 +54,37 @@ function donationFormData(progettoId, thankYouUrl) {
             paymentRequest.canMakePayment().then(result => {
                 if (result) {
                     document.getElementById("google-pay-button").style.display = "block";
-                    const elements = this.stripe.elements();
-                    const prButton = elements.create("paymentRequestButton", {
-                        paymentRequest: paymentRequest,
-                    });
+                    const prButton = this.elements.create("paymentRequestButton", { paymentRequest });
                     prButton.mount("#google-pay-button");
                 }
             });
         },
         async submitForm() {
             this.loading = true;
-            const thankYouUrl = document.querySelector(`#thank-you-url`).value;
-            console.log(thankYouUrl);
-            const { error } = await this.stripe.confirmPayment({
-                elements: this.elements,
-                confirmParams: {
-                    return_url: this.thankYouUrl,
-                    payment_method_data: {
-                        billing_details: {
-                            name: `${this.formData.name} ${this.formData.surname}`,
-                            email: this.formData.email,
+
+            try {
+                const { error } = await this.stripe.confirmPayment({
+                    elements: this.elements,
+                    confirmParams: {
+                        return_url: this.thankYouUrl,
+                        payment_method_data: {
+                            billing_details: {
+                                name: `${this.formData.name} ${this.formData.surname}`,
+                                email: this.formData.email,
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            if (error) {
-                console.error('Errore durante il pagamento:', error.message);
-                alert("Errore durante il pagamento: " + error.message);
-                this.loading = false;
-                return;
+                if (error) {
+                    console.error('Errore durante il pagamento:', error.message);
+                    alert("Errore durante il pagamento: " + error.message);
+                    this.loading = false;
+                    return;
+                }
+            } catch (err) {
+                console.error('Errore Stripe:', err.message);
             }
-            window.location.href = thankYouUrl;
         }
     };
 }
