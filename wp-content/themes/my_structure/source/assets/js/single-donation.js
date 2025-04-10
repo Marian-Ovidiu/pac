@@ -68,6 +68,7 @@ function donationFormData(progettoId) {
         async submitForm() {
             this.loading = true;
             const thankYouUrl = document.querySelector(`#thank-you-url`).value;
+            console.log(thankYouUrl);
             const { error } = await this.stripe.confirmPayment({
                 elements: this.elements,
                 confirmParams: {
