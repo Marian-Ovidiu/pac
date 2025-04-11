@@ -1,14 +1,13 @@
-function donationFormData(progettoId, thankYouUrl = false) {
+function donationFormData(progettoId) {
     return {
+        progettoId, // 👈 Salvo progettoId nello state
         step: 1,
-        thankYouUrl: thankYouUrl || window.location.origin + '/grazie',
         selectedAmount: null,
         customAmount: '',
-        recaptchaToken: '',
         loading: false,
+        clientSecret: null,
         stripe: null,
         elements: null,
-        clientSecret: null,
         formData: {
             name: '',
             surname: '',
@@ -16,139 +15,127 @@ function donationFormData(progettoId, thankYouUrl = false) {
             email: '',
             codiceFiscale: '',
         },
+
         createIntent() {
-            console.log('ciao0');
             this.loading = true;
-            const selectedDonationAmount = (this.customAmount || this.selectedAmount) * 100;
+
+            let selectedDonationAmount = (this.customAmount || this.selectedAmount) * 100;
+
+            if (!selectedDonationAmount || selectedDonationAmount < 100) {
+                alert("Inserisci un importo valido (minimo 1€).");
+                this.loading = false;
+                return;
+            }
 
             const call = new window.ApiService();
-            console.log('ciao1');
             call.post('/create-payment-intent', {
                 amount: selectedDonationAmount,
                 progetto_id: this.progettoId
             }).then(response => {
-                console.log("🎯 Risposta completa:", response);
+                this.clientSecret = response.data.clientSecret;
 
-                const clientSecret = response.clientSecret || response?.data?.clientSecret;
-
-                if (!clientSecret) {
-                    console.error("💥 clientSecret è undefined!");
+                if (!this.clientSecret) {
+                    console.error("❌ clientSecret mancante");
                     this.loading = false;
-                    alert('Errore nel pagamento. Riprova più tardi.');
+                    alert("Errore interno. Riprova più tardi.");
                     return;
                 }
 
-                this.clientSecret = clientSecret;
-                this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8'); // <-- metti la tua chiave pubblica vera
+                this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8'); // 🔐 chiave pubblica reale
 
                 this.elements = this.stripe.elements({
-                    clientSecret: this.clientSecret
+                    clientSecret: this.clientSecret,
+                    paymentMethodCreation: 'manual'
                 });
 
                 const paymentElement = this.elements.create('payment');
-                paymentElement.mount(`#payment-element-${progettoId}`);
+                paymentElement.mount(`#payment-element-${this.progettoId}`);
 
-                this.setupGooglePay(selectedDonationAmount, progettoId);
-                console.log('ciao2');
                 this.loading = false;
                 this.step = 3;
-            }).catch(err => {
-                console.log('ciao4');
-                console.error("❌ Errore chiamata API Stripe:", err);
+            }).catch(error => {
+                console.error('❌ Errore nella richiesta:', error);
                 this.loading = false;
-                alert('Errore durante la connessione. Riprova più tardi.');
-            });
-        },
-
-        setupGooglePay(amount, progettoId) {
-            console.log('ciao5');
-
-            const paymentRequest = this.stripe.paymentRequest({
-                country: 'IT',
-                currency: 'eur',
-                total: {
-                    label: 'Donazione',
-                    amount: amount
-                },
-                requestPayerName: true,
-                requestPayerEmail: true
-            });
-            console.log('ciao6');
-            paymentRequest.canMakePayment().then(result => {
-                const id = `google-pay-button-${progettoId}`;
-                const button = document.getElementById(id);
-                if (result && button) {
-                    button.style.display = "block";
-                    const prButton = this.elements.create("paymentRequestButton", { paymentRequest });
-                    prButton.mount(`#${id}`);
-                }
             });
         },
 
         async submitForm() {
             this.loading = true;
 
-            try {
-                const { error } = await this.stripe.confirmPayment({
-                    elements: this.elements,
-                    confirmParams: {
-                        return_url: this.thankYouUrl,
-                        payment_method_data: {
-                            billing_details: {
-                                name: `${this.formData.name} ${this.formData.surname}`,
-                                email: this.formData.email,
-                            }
+            const thankYouUrl = document.querySelector(`#thank-you-url`)?.value || '/grazie';
+
+            const { error, paymentIntent } = await this.stripe.confirmPayment({
+                elements: this.elements,
+                confirmParams: {
+                    return_url: thankYouUrl,
+                    payment_method_data: {
+                        billing_details: {
+                            name: `${this.formData.name} ${this.formData.surname}`,
+                            email: this.formData.email,
+                        }
+                    }
+                }
+            });
+
+            if (error) {
+                console.error('❌ Errore Stripe:', error.message);
+                alert("Errore durante il pagamento: " + error.message);
+                this.loading = false;
+                return;
+            }
+
+            const paymentMethodType = paymentIntent.payment_method_types[0];
+
+            if (paymentMethodType === 'card') {
+                const elements = this.elements;
+
+                elements.submit();
+
+                const { error: pmError, paymentMethod } = await this.stripe.createPaymentMethod({
+                    elements,
+                    params: {
+                        billing_details: {
+                            name: `${this.formData.name} ${this.formData.surname}`,
+                            email: this.formData.email
                         }
                     }
                 });
 
-                if (error) {
-                    console.error('❌ Errore durante il pagamento:', error.message);
-                    alert("Errore durante il pagamento: " + error.message);
+                if (pmError) {
+                    console.error('❌ Errore PaymentMethod:', pmError.message);
+                    alert("Errore durante il pagamento: " + pmError.message);
                     this.loading = false;
                     return;
                 }
-            } catch (err) {
-                console.error('❌ Errore Stripe:', err.message);
-                this.loading = false;
-                alert('Errore interno. Riprova.');
+
+                const amount = this.customAmount || this.selectedAmount;
+
+                const call = new window.ApiService();
+                call.post('/complete-donation', {
+                    name: this.formData.name,
+                    surname: this.formData.surname,
+                    phone: this.formData.phone,
+                    email: this.formData.email,
+                    codiceFiscale: this.formData.codiceFiscale,
+                    paymentMethodId: paymentMethod.id,
+                    progettoId: this.progettoId,
+                    amount: amount
+                }).then(response => {
+                    if (response.success) {
+                        window.location.href = thankYouUrl;
+                    } else {
+                        alert("Errore nella creazione dell'ordine");
+                    }
+                    this.loading = false;
+                }).catch(err => {
+                    console.error('❌ Errore creazione ordine:', err);
+                    this.loading = false;
+                });
+
+            } else {
+                console.log('➡️ Redirect a:', paymentIntent.next_action?.redirect_to_url?.url);
+                // lasciato il codice commentato, se vuoi usare redirect automatico.
             }
         }
     };
-}
-
-function typingEffect() {
-    if (typeof highlights !== 'undefined') {
-        return {
-            texts: highlights,
-            currentText: 0,
-            displayText: "",
-            speed: 100,
-            pauseBetweenTexts: 1000,
-            startTyping() {
-                this.displayText = "";
-                let fullText = this.texts[this.currentText];
-                let i = 0;
-
-                let typingInterval = setInterval(() => {
-                    if (i < fullText.length) {
-                        this.displayText += fullText[i];
-                        i++;
-                    } else {
-                        clearInterval(typingInterval);
-                        setTimeout(() => {
-                            this.currentText++;
-                            if (this.currentText >= this.texts.length) {
-                                this.currentText = 0;
-                            }
-                            this.startTyping();
-                        }, this.pauseBetweenTexts);
-                    }
-                }, this.speed);
-            },
-            init() {
-                this.startTyping();
-            }
-        };
-    }
 }

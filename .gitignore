@@ -1,21 +1,18 @@
-# ❌ Config locali e file sensibili
+# 🔒 File di configurazione sensibili
 !wp-config.php
 
-# ❌ Ignora tutta la wp-content (ma solo se non serve)
-# wp-content/* ← LO RIMUOVIAMO perché vogliamo plugin e tema custom
-
-# ✅ Mantieni TUTTI i plugin installati (anche WP Mail SMTP ecc.)
-!wp-content/plugins/
+# ✅ Plugin e tema custom
+wp-content/plugins/
 wp-content/plugins/*/node_modules/
-wp-content/plugins/*/vendor/ # se non vuoi vendor nei plugin
+wp-content/plugins/*/vendor/
+wp-content/plugins/wp-mail-smtp/
 
-# ✅ Mantieni SOLO il tuo tema custom
 !wp-content/themes/
 !wp-content/themes/my_structure/**
 wp-content/themes/*/node_modules/
 wp-content/themes/*/vendor/
 
-# ❌ Ignora le robe runtime
+# ❌ Runtime e cache
 wp-content/cache/
 wp-content/uploads/
 wp-content/debug.log
@@ -24,15 +21,21 @@ wp-content/upgrade-temp-backup/
 wp-content/wc-logs/
 *.log
 
-# ❌ File di sistema e dipendenze
+# ❌ Roba di sistema
 .DS_Store
 Thumbs.db
 node_modules/
 vendor/
 
-# ❌ Backup o export
+# ❌ Backup ed esportazioni
 *.sql
 *.zip
 *.tar.gz
 *.bak
 *.bk
+
+# ✅ Vite manifest e output
+!public/.vite/manifest.json
+!public/css/
+!public/js/
+!public/assets/
