@@ -26,12 +26,17 @@ export default class ApiService {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-            .then(response => response.data)
-            .catch(error => {
-                console.error('POST Error:', error);
-                throw error;
-            });
+        .then((response) => {
+            console.log('wewee');
+            console.log(response);
+            return response.data;
+        })
+        .catch(error => {
+            console.error('POST Error:', error);
+            throw error;
+        });
     }
+    
 
     setDefaultHeader(header, value) {
         axios.defaults.headers.common[header] = value;
