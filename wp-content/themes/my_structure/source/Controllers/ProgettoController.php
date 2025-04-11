@@ -30,7 +30,7 @@ class ProgettoController extends BaseController
     public function single()
     {
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        $this->addJs('single-donation', 'single-donation.js', ['stripe'], true, '2.1');
+        $this->addJs('single-donation', 'single-donation.js', ['stripe'], true, '2.2');
         $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
         $this->addJs('swiper-js', 'https://unpkg.com/swiper/swiper-bundle.min.js', [], true);
         $this->addCss('swiper-css', 'https://unpkg.com/swiper/swiper-bundle.min.css');
