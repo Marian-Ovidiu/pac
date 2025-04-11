@@ -12,7 +12,7 @@ class ProgettoController extends BaseController
         $progetti           = Progetto::all();
         $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        $this->addJs('stripe', 'donation.js', ['stripe'], true);
+        $this->addJs('stripe', 'donation.js', ['stripe'], true, '1.1');
         $opzioniArchivio = OpzioniArchivioProgettoFields::get('option');
         $this->addVarJs('texts', 'texts', [
             $opzioniArchivio->highlights_frase_1 ?? '',

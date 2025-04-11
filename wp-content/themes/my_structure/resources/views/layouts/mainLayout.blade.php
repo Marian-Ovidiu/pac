@@ -20,17 +20,8 @@
           ]
         }
     </script>
-    {{-- @php
-        $hreflangs = function_exists('pll_get_the_languages') ? pll_get_the_languages(['raw' => 1]) : [];
-    @endphp
-    @if(isset($hreflangs))
-    @foreach($hreflangs as $lang)
-        <link rel="alternate" hreflang="{{ $lang['locale'] }}" href="{{ $lang['url'] }}" />
-    @endforeach
-    @endif --}}
     <link rel="canonical" href="{{ get_permalink() }}">
-
-    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
@@ -82,6 +73,21 @@
         @endswitch
     </footer>
     @yield('scripts')
+    <script>
+        window.setRecaptchaToken = function(token) {
+            document.querySelectorAll('[x-data]').forEach(el => {
+                if (el.__x && el.__x.$data && 'recaptchaToken' in el.__x.$data) {
+                    el.__x.$data.recaptchaToken = token;
+                }
+            });
+        }
+    
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_', { action: 'donazione' }).then(function (token) {
+                window.setRecaptchaToken(token);
+            });
+        });
+    </script>
    <?php wp_footer(); ?>
 </body>
 </html>

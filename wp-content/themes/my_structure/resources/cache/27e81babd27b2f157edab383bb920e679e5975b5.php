@@ -4,13 +4,15 @@
  */
 ?>
 <?php
-    $thankYouUrl = get_permalink(pll_get_post(412, pll_current_language()));
+    $thankYouPage = pll_get_post(412, pll_current_language());
+    $thankYouUrl = $thankYouPage ? get_permalink($thankYouPage) : home_url('/grazie');
+
     $img = $progetto->immagine_hero ?? [];
 ?>
 
 <?php $__env->startSection('content'); ?>
     
-    <input type="hidden" id="thank-you-url" value="<?php echo e($thankYouUrl); ?>">
+
     <section class="relative">
         <div class="absolute inset-0 -z-10">
             <img src="<?php echo $img['url']; ?>" alt="<?php echo e($img['alt'] ?? $progetto->titolo_hero); ?>"
@@ -108,8 +110,7 @@
 
 
                 
-                <div x-data="donationFormData" x-init="init(<?php echo e($progetto->id); ?>, '<?php echo e($thankYouUrl); ?>')"
-                    class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">
+                <div x-data="donationFormData(<?php echo e($progetto->id); ?>, '<?php echo e($thankYouUrl); ?>')" class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">
                     
                     <div class="flex justify-between mb-6 text-sm font-semibold text-custom-dark-green">
                         <template x-for="(label, i) in ['Importo', 'Dati', 'Pagamento']" :key="i">
@@ -186,7 +187,6 @@
                                 <?php echo e(load_static_strings('I tuoi dati')); ?>
 
                             </p>
-
                             <div class="grid gap-4 text-left" @submit.prevent>
                                 
                                 <div>

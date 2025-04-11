@@ -1,37 +1,45 @@
 <?php $__env->startSection('content'); ?>
-    <section class="py-10 sm:py-16 lg:py-24">
-        <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:items-stretch md:grid-cols-2 gap-y-5">
-                <div class="h-full flex flex-col justify-center">
-                    <div class="relative h-full py-10">
-                        <div class="absolute inset-0">
-                            <img class="object-cover w-full h-full md:object-left md:origin-top-left" src="<?php echo e($fields->immagine['url']); ?>" alt="<?php echo e($fields->immagine['alt']); ?>" />
-                        </div>
-                        <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-                            <div class="text-center md:text-left">
-                                <h3 class="font-bold leading-tight text-white text-4xl lg:text-5xl"><?php echo e($fields->titolo); ?></h3>
-                                <p class="mt-4 text-base text-gray-200"><?php echo $fields->testo; ?></p>
-                            </div>
-                        </div>
-                    </div>
+<section class="py-10 sm:py-16 lg:py-24">
+    <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            
+            <!-- Immagine -->
+            <div class="relative w-full h-full rounded-lg overflow-hidden shadow-lg">
+                <img 
+                    src="<?php echo e($fields->immagine['url']); ?>" 
+                    alt="<?php echo e($fields->immagine['alt'] ?? $fields->titolo); ?>" 
+                    loading="lazy" 
+                    decoding="async" 
+                    class="w-full h-full object-cover object-center"
+                    width="800" 
+                    height="600"
+                >
+            </div>
+
+            <!-- Contenuto -->
+            <div class="text-center md:text-left space-y-6">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-custom-dark-green leading-tight">
+                    <?php echo e($fields->titolo); ?>
+
+                </h2>
+                
+                <div class="prose prose-lg text-gray-700 max-w-none">
+                    <?php echo $fields->testo; ?>
+
                 </div>
 
-                <div class="h-full">
-                    <div class="container mx-auto">
-                        <div class="mx-auto flex justify-center flex-col items-center max-w-screen-lg px-6">
-                            <a href="<?php echo e($fields->cta['url']); ?>">
-                                <button class="mt-4 min-w-32 rounded-full border-emerald-500 bg-custom-dark-green px-5 py-4 text-lg font-bold text-white transition hover:translate-y-1">
-                                    <?php echo e($fields->cta['title']); ?>
+                <div>
+                    <a href="<?php echo e($fields->cta['url']); ?>" aria-label="Vai alla sezione: <?php echo e($fields->cta['title']); ?>">
+                        <button class="mt-4 rounded-full bg-custom-dark-green px-6 py-3 text-lg font-bold text-white transition-all hover:-translate-y-1 hover:shadow-xl">
+                            <?php echo e($fields->cta['title']); ?>
 
-                                </button>
-                            </a>
-                        </div>
-                    </div>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.mainLayout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/views/grazie.blade.php ENDPATH**/ ?>

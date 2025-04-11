@@ -1,6 +1,6 @@
 export default function donationFormData(progettoId, thankYouUrl) {
     return {
-        progettoId: null,
+        progettoId,
         thankYouUrl: null,
         step: 1,
         selectedAmount: null,
@@ -119,7 +119,11 @@ export default function donationFormData(progettoId, thankYouUrl) {
         },
         async submitForm() {
             this.loading = true;
+        
             try {
+                const token = await grecaptcha.execute('6LeD2BIrAAAAAMW5YdtryPjvrOPPA_ScO2ZWYUUV', { action: 'donazione' });
+                this.recaptchaToken = token;
+        
                 const { error } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
@@ -132,23 +136,18 @@ export default function donationFormData(progettoId, thankYouUrl) {
                         }
                     }
                 });
-
-                if (error) throw error;
-
-                await new window.ApiService().post('/complete-donation', {
-                    ...this.formData,
-                    progettoId: this.progettoId,
-                    amount: this.customAmount || this.selectedAmount
-                });
-
-                window.location.href = this.thankYouUrl;
+        
+                if (error) {
+                    console.error('Errore durante il pagamento:', error.message);
+                    alert("Errore durante il pagamento: " + error.message);
+                    this.loading = false;
+                    return;
+                }
             } catch (err) {
-                console.error("Errore nel pagamento:", err);
-                alert("Errore: " + err.message);
-            } finally {
+                console.error('Errore Stripe o ReCaptcha:', err.message);
                 this.loading = false;
             }
-        },
+        },        
         isAmountValid() {
             return this.selectedAmount || (this.customAmount && this.customAmount > 0);
         },

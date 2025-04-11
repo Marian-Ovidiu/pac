@@ -55,3 +55,24 @@ if (!function_exists('exclude_page_from_sitemap')) {
         }
     }
 }
+if (!function_exists('create_payment_intent')) {
+    function create_payment_intent()
+    {
+        if (empty($_POST['g-recaptcha-response'])) {
+            wp_send_json_error(['message' => 'Captcha mancante.']);
+        }
+        
+        $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+            'body' => [
+                'secret'   => '6LeD2BIrAAAAAMW5YdtryPjvrOPPA_ScO2ZWYUUV',
+                'response' => sanitize_text_field($_POST['g-recaptcha-response']),
+            ]
+        ]);
+        
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        
+        if (empty($body['success']) || $body['score'] < 0.5) {
+            wp_send_json_error(['message' => 'Captcha non superato o sospetto.']);
+        }
+    }
+}

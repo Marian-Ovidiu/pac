@@ -12,7 +12,7 @@
 @extends('layouts.mainLayout')
 @section('content')
     {{-- Hero --}}
-    
+
     <section class="relative">
         <div class="absolute inset-0 -z-10">
             <img src="{!! $img['url'] !!}" alt="{{ $img['alt'] ?? $progetto->titolo_hero }}"
@@ -103,10 +103,9 @@
                     </div>
                 </figure>
 
-                
+
                 {{-- Form Donazione --}}
-                <div x-data="donationFormData" x-init="init({{ $progetto->id }}, '{{ $thankYouUrl }}')"
-                    class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">
+                <div x-data="donationFormData({{ $progetto->id }}, '{{ $thankYouUrl }}')" class="w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl py-3 px-6">
                     {{-- Stepper header --}}
                     <div class="flex justify-between mb-6 text-sm font-semibold text-custom-dark-green">
                         <template x-for="(label, i) in ['Importo', 'Dati', 'Pagamento']" :key="i">
@@ -180,7 +179,6 @@
                             <p class="text-xl font-bold text-custom-dark-green mb-4">
                                 {{ load_static_strings('I tuoi dati') }}
                             </p>
-
                             <div class="grid gap-4 text-left" @submit.prevent>
                                 {{-- Nome --}}
                                 <div>
