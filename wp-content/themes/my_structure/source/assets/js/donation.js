@@ -38,7 +38,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
                     progetto_id: this.progettoId,
                 });
 
-                this.clientSecret = res.clientSecret;
+                this.clientSecret = res.data.clientSecret;
                 this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
                 this.elements = this.stripe.elements({ clientSecret: this.clientSecret });
 
