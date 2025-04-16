@@ -30,14 +30,14 @@ if (!function_exists('camelToKebab')) {
 
 if (!function_exists('my_env')) {
     function my_env($key, $default = null) {
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-        $my_envs = $dotenv->load();
+        static $envs = null;
 
-        if (!isset($my_envs[$key])) {
-            return $default;
+        if ($envs === null) {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+            $envs = $dotenv->load();
         }
 
-        return $my_envs[$key];
+        return $envs[$key] ?? $default;
     }
 }
 

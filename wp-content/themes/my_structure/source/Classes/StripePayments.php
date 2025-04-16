@@ -13,6 +13,32 @@ class StripePayments
         Stripe::setApiKey(my_env('SECRET_KEY'));
         $data = json_decode(file_get_contents("php://input"), true);
 
+        // 🔐 Verifica ReCAPTCHA
+        $recaptchaToken = $data['recaptchaToken'] ?? null;
+        if (! $recaptchaToken) {
+            wp_send_json_error(['message' => 'Token reCAPTCHA mancante.']);
+            return;
+        }
+
+        // Chiamata al servizio di verifica di Google
+        $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+            'body' => [
+                'secret'   => my_env('RECAPTCHA_SECRET_KEY'),
+                'response' => $recaptchaToken,
+            ],
+        ]);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(['message' => 'Errore di comunicazione con reCAPTCHA.']);
+            return;
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (! $body['success'] || $body['score'] < 0.5) {
+            wp_send_json_error(['message' => 'Verifica reCAPTCHA fallita.']);
+            return;
+        }
+
         $amount       = isset($data['amount']) ? (int) $data['amount'] : 0;
         $progetto_id  = $data['progetto_id'] ?? null;
         $progetto     = Progetto::find($progetto_id);
@@ -35,6 +61,31 @@ class StripePayments
 
     public static function completePayment()
     {
+        // 🔐 Verifica ReCAPTCHA
+        $recaptchaToken = $data['recaptchaToken'] ?? null;
+        if (! $recaptchaToken) {
+            wp_send_json_error(['message' => 'Token reCAPTCHA mancante.']);
+            return;
+        }
+
+        $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+            'body' => [
+                'secret'   => my_env('RECAPTCHA_SECRET_KEY'),
+                'response' => $recaptchaToken,
+            ],
+        ]);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error(['message' => 'Errore di comunicazione con reCAPTCHA.']);
+            return;
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (! $body['success'] || $body['score'] < 0.5) {
+            wp_send_json_error(['message' => 'Verifica reCAPTCHA fallita.']);
+            return;
+        }
+
         $data = json_decode(file_get_contents("php://input"), true);
 
         $paymentMethodId = $data['paymentMethodId'];
@@ -86,7 +137,7 @@ class StripePayments
     public static function createUser($data)
     {
         $email = $data['email'];
-    
+
         $user_id = email_exists($email);
         if (! $user_id) {
             $user_id = wp_insert_user([
@@ -98,7 +149,7 @@ class StripePayments
                 'role'       => 'donator',
             ]);
         }
-    
+
         // Aggiorna i meta sempre, anche se l'utente già esiste
         update_user_meta($user_id, 'telefono', $data['phone'] ?? '');
         update_user_meta($user_id, 'codice_fiscale', $data['codiceFiscale'] ?? '');
@@ -106,5 +157,5 @@ class StripePayments
         update_user_meta($user_id, 'title', $data['progettoId']);
         update_user_meta($user_id, 'name', $data['name']);
     }
-    
+
 }

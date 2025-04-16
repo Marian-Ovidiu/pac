@@ -21,7 +21,7 @@
         }
     </script>
     <link rel="canonical" href="{{ get_permalink() }}">
-    <script src="https://www.google.com/recaptcha/api.js?render=6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeD2BIrAAAAAMW5YdtryPjvrOPPA_ScO2ZWYUUV" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
@@ -83,7 +83,7 @@
         }
     
         grecaptcha.ready(function () {
-            grecaptcha.execute('6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_', { action: 'donazione' }).then(function (token) {
+            grecaptcha.execute('6LeD2BIrAAAAAMW5YdtryPjvrOPPA_ScO2ZWYUUV', { action: 'donazione' }).then(function (token) {
                 window.setRecaptchaToken(token);
             });
         });
