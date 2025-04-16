@@ -31,31 +31,31 @@ export default function donationFormData(progettoId, thankYouUrl) {
             this.loading = true;
             const amount = (this.customAmount || this.selectedAmount) * 100;
             const call = new window.ApiService();
-
+        
             try {
+                const token = await grecaptcha.execute('6LfB3I0qAAAAAHF7ordjbfV1Vom7mybdBgPV0_N1', { action: 'donazione' });
+        
                 const res = await call.post('/create-payment-intent', {
                     amount,
                     progetto_id: this.progettoId,
+                    recaptchaToken: token // <-- ⚠️ fondamentale
                 });
-
+        
                 this.clientSecret = res.data.clientSecret;
                 this.stripe = Stripe('pk_live_51QQqzmP9ji9EUZt5LkB8kShCP2rhsd195h5SlYAzUb3gGabZ8R8Uinp0TiDGKXqFsBu7oCPVL7of79NbNSGrAr3u00xFyOm6u8');
                 this.elements = this.stripe.elements({ clientSecret: this.clientSecret });
-
+        
                 // STEP 3 → Alpine render → mount elementi
                 this.step = 3;
-
+        
                 await this.$nextTick(() => {
-                    // Stripe
                     const paymentElement = this.elements.create('payment');
                     paymentElement.mount(`#payment-element-${this.progettoId}`);
-
-                    // Google Pay
+        
                     const gpayEl = document.getElementById(`google-pay-button-${this.progettoId}`);
                     if (gpayEl) gpayEl.innerHTML = '';
                     this.setupGooglePay(amount);
-
-                    // PayPal
+        
                     const paypalEl = document.getElementById(`paypal-button-container-${this.progettoId}`);
                     if (paypalEl && window.paypal) {
                         paypal.Buttons({
@@ -81,14 +81,15 @@ export default function donationFormData(progettoId, thankYouUrl) {
                         }).render(`#paypal-button-container-${this.progettoId}`);
                     }
                 });
-
+        
             } catch (err) {
                 console.error("Errore nella creazione dell'intent:", err);
                 alert("Errore: " + err.message);
             } finally {
                 this.loading = false;
             }
-        },
+        }
+        ,
         async setupGooglePay(amount) {
             const paymentRequest = this.stripe.paymentRequest({
                 country: 'IT',

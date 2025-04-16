@@ -21,7 +21,7 @@
         }
     </script>
     <link rel="canonical" href="<?php echo e(get_permalink()); ?>">
-    <script src="https://www.google.com/recaptcha/api.js?render=6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?php echo e(my_env('RECAPTCHA_SITE_KEY')); ?>" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
@@ -29,24 +29,14 @@
     <?php echo $__env->yieldContent('head'); ?>
 </head>
 <body class="flex flex-col min-h-screen font-nunitoSansRegular">
-   <?php wp_head(); ?>
+    <?php wp_head(); ?>
     <?php the_widget('Widget\MenuWidget', ['menu_name' => 'LanguageMenu']); ?>
     <?php switch(pll_current_language()):
-        case ('it'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>
-            <?php break; ?>
-        <?php case ('en'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuEnglish']); ?>
-            <?php break; ?>
-        <?php case ('fr'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuFrancais']); ?>
-            <?php break; ?>
-        <?php case ('de'): ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuDeutsch']); ?>
-            <?php break; ?>
-        <?php default: ?>
-            <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>
-            <?php break; ?>
+        case ('it'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>         <?php break; ?>
+        <?php case ('en'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuEnglish']); ?>  <?php break; ?>
+        <?php case ('fr'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuFrancais']); ?> <?php break; ?>
+        <?php case ('de'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenuDeutsch']); ?>  <?php break; ?>
+        <?php default: ?>      <?php the_widget('Widget\MenuWidget', ['menu_name' => 'HeaderMenu']); ?>         <?php break; ?>
     <?php endswitch; ?>
 
     <main class="flex-grow main">
@@ -55,21 +45,11 @@
 
     <footer class="text-white">
         <?php switch(pll_current_language()):
-            case ('it'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>
-                <?php break; ?>
-            <?php case ('en'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuEnglish']); ?>
-                <?php break; ?>
-            <?php case ('fr'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuFrancais']); ?>
-                <?php break; ?>
-            <?php case ('de'): ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuDeutsch']); ?>
-                <?php break; ?>
-            <?php default: ?>
-                <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>
-                <?php break; ?>
+            case ('it'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>         <?php break; ?>
+            <?php case ('en'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuEnglish']); ?>  <?php break; ?>
+            <?php case ('fr'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuFrancais']); ?> <?php break; ?>
+            <?php case ('de'): ?>   <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenuDeutsch']); ?>  <?php break; ?>
+            <?php default: ?>      <?php the_widget('Widget\MenuWidget', ['menu_name' => 'FooterMenu']); ?>         <?php break; ?>
         <?php endswitch; ?>
     </footer>
     <?php echo $__env->yieldContent('scripts'); ?>
@@ -81,14 +61,14 @@
                 }
             });
         }
-    
+
         grecaptcha.ready(function () {
-            grecaptcha.execute('6LeD2BIrAAAAAOLSXPkSgh2pt6Io1tECFvKL0ey_', { action: 'donazione' }).then(function (token) {
+            grecaptcha.execute('<?php echo e(my_env('RECAPTCHA_SITE_KEY')); ?>', { action: 'donazione' }).then(function (token) {
                 window.setRecaptchaToken(token);
             });
         });
     </script>
-   <?php wp_footer(); ?>
+    <?php wp_footer(); ?>
 </body>
 </html>
 <?php /**PATH /Users/editweb2/Sites/01progetti-test/pac/wp-content/themes/my_structure/resources/views/layouts/mainLayout.blade.php ENDPATH**/ ?>
