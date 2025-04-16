@@ -137,8 +137,9 @@ export default function donationFormData(progettoId, thankYouUrl) {
         
             try {
                 const token = await grecaptcha.execute(window.RECAPTCHA_SITE_KEY, { action: 'donazione' });
+                console.log(token);
                 this.recaptchaToken = token;
-        
+                console.log(token);
                 const { error } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
