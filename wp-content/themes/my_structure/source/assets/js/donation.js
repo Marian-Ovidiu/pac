@@ -113,7 +113,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 const { error } = await this.stripe.confirmPayment({
                     elements: this.elements,
                     confirmParams: {
-                        return_url: this.thankYouUrl,
+                        return_url: this.thankYouUrl || window.location.href,
                         payment_method_data: {
                             billing_details: {
                                 name: `${this.formData.name} ${this.formData.surname}`,
