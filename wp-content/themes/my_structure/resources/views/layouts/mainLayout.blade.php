@@ -29,14 +29,15 @@
 </head>
 <body class="flex flex-col min-h-screen font-nunitoSansRegular">
     <?php wp_head(); ?>
-    @widget('LanguageMenu')
+    @widget('HeaderMenu')
+    {{-- @widget('LanguageMenu')
     @switch(pll_current_language())
         @case('it')   @widget('HeaderMenu')         @break
         @case('en')   @widget('HeaderMenuEnglish')  @break
         @case('fr')   @widget('HeaderMenuFrancais') @break
         @case('de')   @widget('HeaderMenuDeutsch')  @break
         @default      @widget('HeaderMenu')         @break
-    @endswitch
+    @endswitch --}}
 
     <main class="flex-grow main">
         @yield('content')
@@ -45,9 +46,9 @@
     <footer class="text-white">
         @switch(pll_current_language())
             @case('it')   @widget('FooterMenu')         @break
-            @case('en')   @widget('FooterMenuEnglish')  @break
+            {{-- @case('en')   @widget('FooterMenuEnglish')  @break
             @case('fr')   @widget('FooterMenuFrancais') @break
-            @case('de')   @widget('FooterMenuDeutsch')  @break
+            @case('de')   @widget('FooterMenuDeutsch')  @break --}}
             @default      @widget('FooterMenu')         @break
         @endswitch
     </footer>
