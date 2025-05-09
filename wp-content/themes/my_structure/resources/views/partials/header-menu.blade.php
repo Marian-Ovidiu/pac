@@ -71,7 +71,7 @@
                                     @foreach ($item->children as $subitem)
                                         <a href="{{ get_permalink($subitem->ID) }}"
                                             class="block text-base font-medium text-black hover:text-custom-green">
-                                            {{ $subitem->post_title }}
+                                            {{ $subitem->title }}
                                         </a>
                                     @endforeach
                                 </div>
