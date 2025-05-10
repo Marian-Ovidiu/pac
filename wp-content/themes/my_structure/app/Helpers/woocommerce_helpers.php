@@ -44,7 +44,7 @@ if (! function_exists('disable_woocommerce_assets')) {
         }, 99);
     }
 }
-if (!function_exists('tp_redirect')) {
+if (! function_exists('tp_redirect')) {
     function tp_redirect()
     {
         if (
