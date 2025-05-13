@@ -1,4 +1,4 @@
-<section class="bg-white pt-12">
+<section class="bg-white pb-6 pt-0">
     <div class="container flex flex-col items-center px-4 mx-auto text-center">
         @if($titolo_monologo)
             <h2 class="font-nunitoBold text-2xl font-bold tracking-tight text-custom-dark-green xl:text-3xl">
@@ -7,7 +7,7 @@
         @endif
         @if($immagine_monologo)
             <div class="mt-6 w-48 h-auto">
-                <img src="{{$immagine_monologo}}" alt="Logo" class="w-full h-auto">
+                <img src="{{$immagine_monologo['url']}}" alt="Bonfante-e-Chiarle-2019" class="w-full h-auto">
             </div>
         @endif
         @if($sottotitolo_monologo)

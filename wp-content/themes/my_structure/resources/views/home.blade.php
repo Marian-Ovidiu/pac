@@ -59,7 +59,12 @@
     {{-- @include('components.linear-slider', [
         'linearSlider' => $linearSlider,
     ]) --}}
-     
+    @include('components.mono-logo', [
+        'titolo_monologo' => $titolo_monologo,
+        'immagine_monologo' => $immagine_monologo,
+        'sottotitolo_monologo' => $sottotitolo_monologo,
+    ])
+
     @include('components.missione', [
         'titolo_missione' => $data->titolo_missione ?? null,
         'testo_missione' => $data->testo_missione ?? null,
