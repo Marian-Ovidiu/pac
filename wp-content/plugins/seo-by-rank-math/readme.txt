@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, WordPress SEO, google search console, schema, redirection, 
-Tested up to: 6.7
+Tested up to: 6.8
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag: 1.0.241
+Stable tag: 1.0.244
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -339,10 +339,12 @@ Please drop us an email at support@rankmath.com, and we will be more than happy 
 
 == Changelog ==
 
-= 1.0.241 [Mar 26, 2025] =
-- Fixed: [Updating SEO Score using Database Tools](https://rankmath.com/kb/seo-score-not-available/#database-tools) was not working after the last update
-- Fixed: [Fix with AI tool](https://rankmath.com/kb/fix-seo-tests-with-content-ai/) was not working properly when a `<script>` tag was added to the content
-- Fixed: [Exclude User Roles](https://rankmath.com/kb/exclude-content-from-sitemap/#exclude-user-roles) option was not working on sites that do not use the default table prefix `wp_`
-- Fixed: Incompatibility with the Discount PRO plugin, which caused a PHP error on the site when the [WooCommerce module](https://rankmath.com/kb/advanced-mode/#woocommerce) was active
+= 1.0.244 [May 07, 2025] =
+- Improved: Moved [Rank Math Dashboard page](https://rankmath.com/kb/managing-modules/) code to React to load blazing fast. We will gradually enhance the performance of other modules
+- Improved: [Bulk Meta Tags Generation using Content AI](https://rankmath.com/kb/bulk-generate-seo-meta-tags/) by sending more specific content to the AI
+- Fixed: [Database tool to update the SEO score](https://rankmath.com/kb/seo-score-not-available/#update-seo-scores) was not working on some setups due to a missing script dependency
+- Fixed: [Deleting Custom prompt](https://rankmath.com/kb/how-to-use-rankbot-ai/#how-to-delete-a-custom-prompt) was not working
+- Fixed: Missing Knowledge Base links for some fields in the [AI Tools](https://rankmath.com/kb/how-to-use-content-ai/#ai-tools)
+- Fixed: Diacritics content added on the user's profile page was being stored in the wrong format
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**
