@@ -7,6 +7,8 @@ wp-content/plugins/*/node_modules/
 wp-content/plugins/*/vendor/
 wp-content/plugins/wp-mail-smtp/
 
+!wp-content/plugins/woocommerce/
+!wp-content/plugins/woocommerce/**
 !wp-content/themes/
 !wp-content/themes/my_structure/**
 wp-content/themes/*/node_modules/
