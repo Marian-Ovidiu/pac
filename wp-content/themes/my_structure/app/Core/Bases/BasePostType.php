@@ -1,5 +1,4 @@
 <?php
-
 namespace Core\Bases;
 
 use WP_Query;
@@ -19,7 +18,7 @@ abstract class BasePostType
     {
         if ($post) {
             if (is_array($post)) {
-                $post = (object)$post;
+                $post = (object) $post;
             }
             $this->setAttribute($post);
             $this->post = $post;
@@ -28,11 +27,11 @@ abstract class BasePostType
 
     protected function setAttribute($post)
     {
-        $this->id = $post->ID ?? '';
-        $this->title = $post->post_title ?? '';
-        $this->content = $post->post_content ?? '';
+        $this->id             = $post->ID ?? '';
+        $this->title          = $post->post_title ?? '';
+        $this->content        = $post->post_content ?? '';
         $this->featured_image = has_post_thumbnail($post) ? get_the_post_thumbnail_url($post) : $this->getDefaultImage();
-        $this->url = get_permalink($post);
+        $this->url            = get_permalink($post);
 
         $this->defineOtherAttributes($post);
     }
@@ -42,7 +41,7 @@ abstract class BasePostType
     public static function all($args = [])
     {
         $defaults = [
-            'post_type' => static::$postType,
+            'post_type'      => static::$postType,
             'posts_per_page' => -1,
         ];
 
@@ -57,12 +56,18 @@ abstract class BasePostType
     public static function where($args = [])
     {
         $defaults = [
-            'post_type' => static::$postType,
+            'post_type'   => static::$postType,
             'post_status' => 'publish',
         ];
 
+        if (function_exists('pll_current_language')) {
+            $defaults['lang'] = pll_current_language();
+        } else {
+            $defaults['lang'] = 'it';
+        }
+
         $queryArgs = wp_parse_args($args, $defaults);
-        $query = new WP_Query($queryArgs);
+        $query     = new WP_Query($queryArgs);
 
         return static::mapPosts($query);
     }
