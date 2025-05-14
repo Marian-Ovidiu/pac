@@ -121,7 +121,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
                             }
                         }
                     },
-                    redirect: 'if_required'
+                    redirect: 'always'
                 });
 
                 if (error) {

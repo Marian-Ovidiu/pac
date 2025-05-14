@@ -289,7 +289,7 @@
                                 <div class="mb-6" :id="'google-pay-button-' + progettoId" style="display: none;">
                                 </div>
                                 <div :id="'card-element-container-' + progettoId">
-                                    <form :id="'payment-form-' + progettoId">
+                                    <form :id="'payment-form-' + progettoId" @submit.prevent="submitForm">
                                         <div :id="'payment-element-' + progettoId"></div>
                                     </form>
                                 </div>

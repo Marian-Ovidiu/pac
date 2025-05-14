@@ -57,38 +57,32 @@
         </nav>
 
         <!-- Mobile menu -->
-        <nav x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-400"
+        <nav x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-95"
             x-transition:enter-end="opacity-100 transform scale-100"
-            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 transform scale-100"
             x-transition:leave-end="opacity-0 transform scale-95"
             class="absolute inset-x-0 mt-6 pt-4 pb-6 bg-white border border-gray-200 rounded-md shadow-md lg:hidden z-50">
             <div class="flow-root pl-4">
-                <div class="flex flex-col flex-start px-3 space-y-4 pt-2">
+                <div class="flex flex-col px-3 space-y-4 pt-2">
                     @foreach ($menu as $item)
-                        <div class="flex flex-col flex-start justify-between w-full">
-
+                        <div class="flex flex-col justify-between w-full">
                             <a href="{{ $item->url }}"
-                                class="text-lg font-medium text-black transition-all duration-200 hover:text-custom-green focus:text-custom-green font-nunitoSans">
-                                <!-- Increased font size -->
+                                class="text-lg font-medium text-black hover:text-custom-green focus:text-custom-green font-nunitoSans">
                                 {{ $item->title }}
                             </a>
-
-                            <!-- Submenu for mobile -->
                             @if (!empty($item->children))
-                                <!-- Dropdown Menu -->
-                                <div
-                                    class="absolute left-0 hidden mt-2 px-2 py-4 bg-white border border-gray-200 rounded-lg shadow-md group-hover:block z-50">
-                                    <!-- Ridotto space-y a 1 e aggiunto p-2 al contenitore -->
-                                    @foreach ($item->children as $subkey => $subitem)
+                                <div class="mt-2 space-y-1 pl-4 border-l border-gray-200">
+                                    @foreach ($item->children as $subitem)
                                         <a href="{{ $subitem->url }}"
-                                            class="block px-4 py-2 text-lg font-medium text-black transition-all duration-200 hover:text-custom-green focus:text-custom-green">
+                                            class="block px-2 py-1 text-base font-medium text-black hover:text-custom-green focus:text-custom-green">
                                             {{ $subitem->title }}
                                         </a>
                                     @endforeach
                                 </div>
                             @endif
+                        </div>
                     @endforeach
                 </div>
             </div>
