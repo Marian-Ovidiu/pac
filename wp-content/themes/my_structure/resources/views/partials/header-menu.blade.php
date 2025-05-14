@@ -69,7 +69,7 @@
                             @if (!empty($item->children))
                                 <div class="pl-4 mt-2 space-y-2 border-l border-gray-200 ml-2">
                                     @foreach ($item->children as $subitem)
-                                        <a href="{{ get_permalink($subitem->ID) }}"
+                                        <a href="{{ $subitem->url }}"
                                             class="block text-base font-medium text-black hover:text-custom-green">
                                             {{ $subitem->title }}
                                         </a>
