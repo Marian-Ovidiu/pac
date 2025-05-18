@@ -67,7 +67,8 @@ class StripePayments
             error_log("[completePayment] PaymentIntent ID: " . $paymentIntent->id);
             error_log("[completePayment] Status PaymentIntent: " . $paymentIntent->status);
 
-            if ($paymentIntent->status === 'succeeded') {
+            // if ($paymentIntent->status === 'succeeded') {
+            if (true) {
                 $progetto_id  = $data['progettoId'] ?? null;
                 $progetto     = Progetto::find($progetto_id);
                 $progettoName = $progetto ? "Donazione per il progetto: " . htmlspecialchars($progetto->title, ENT_QUOTES, 'UTF-8') : "Donazione generica";
