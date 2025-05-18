@@ -26,6 +26,7 @@ class StripePayments
                 'automatic_payment_methods' => ['enabled' => true],
                 'description'               => $progettoName,
             ]);
+            error_log("🔍 Status PaymentIntent: " . $paymentIntent->status);
 
             error_log("[createIntent] PaymentIntent creato con ID: " . $paymentIntent->id);
             wp_send_json_success(['clientSecret' => $paymentIntent->client_secret]);
@@ -37,9 +38,9 @@ class StripePayments
 
     public static function completePayment()
     {
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data   = json_decode(file_get_contents("php://input"), true);
         $amount = isset($data['amount']) ? (int) $data['amount'] : 0;
-        $email = $data['email'] ?? null;
+        $email  = $data['email'] ?? null;
 
         error_log("[completePayment] Email ricevuta: " . print_r($email, true));
         error_log("[completePayment] Dati ricevuti: " . print_r($data, true));
@@ -61,6 +62,7 @@ class StripePayments
                 'confirm'             => true,
                 'return_url'          => 'https://project-africa-conservation.org',
             ]);
+            error_log("🔍 Status PaymentIntent: " . $paymentIntent->status);
 
             error_log("[completePayment] PaymentIntent ID: " . $paymentIntent->id);
             error_log("[completePayment] Status PaymentIntent: " . $paymentIntent->status);
@@ -95,7 +97,7 @@ class StripePayments
 
     public static function createUser($data)
     {
-        $email = $data['email'];
+        $email   = $data['email'];
         $user_id = email_exists($email);
 
         if (! $user_id) {
