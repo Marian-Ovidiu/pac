@@ -24,12 +24,13 @@ class GrazieEmail
             'Reply-To: info@project-africa-conservation.org',
         ];
 
+        error_log("[GrazieEmail] Invio email a {$email} con subject: {$subject}");
         $sent = wp_mail($email, $subject, $message, $headers);
 
-        if (!$sent) {
-            error_log("❌ Errore invio email a {$email}");
+        if (! $sent) {
+            error_log("❌ [GrazieEmail] Errore invio email a {$email}");
         } else {
-            error_log("✅ Email inviata a {$email}");
+            error_log("✅ [GrazieEmail] Email inviata a {$email}");
         }
 
         return $sent;
