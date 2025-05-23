@@ -17,7 +17,7 @@ wp-content/themes/*/vendor/
 # ❌ Runtime e cache
 wp-content/cache/
 wp-content/uploads/
-wp-content/debug.log
+#wp-content/debug.log
 wp-content/upgrade/
 wp-content/upgrade-temp-backup/
 wp-content/wc-logs/

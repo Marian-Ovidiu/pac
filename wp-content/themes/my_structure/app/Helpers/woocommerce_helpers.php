@@ -3,12 +3,20 @@
 if (! function_exists('disable_woocommerce_features')) {
     function disable_woocommerce_features()
     {
+        // Disattiva funzionalità WooCommerce
         remove_post_type_support('product', 'title');
         remove_post_type_support('product', 'editor');
         unregister_post_type('product');
         remove_action('woocommerce_after_register_post_type', 'woocommerce_register_taxonomy');
+
+        // Carica le traduzioni solo se il file esiste
+        $mo = get_template_directory() . '/languages/woocommerce-gateway-stripe-it_IT.mo';
+        if (file_exists($mo)) {
+            load_textdomain('woocommerce-gateway-stripe', $mo);
+        }
     }
 }
+
 
 if (! function_exists('custom_load_textdomain')) {
     function custom_load_textdomain()

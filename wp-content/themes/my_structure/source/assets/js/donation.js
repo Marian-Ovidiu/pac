@@ -23,6 +23,10 @@ export default function donationFormData(progettoId, thankYouUrl) {
             email: '',
             codiceFiscale: '',
         },
+        init(id, thankYouUrl) {
+            this.progettoId = id;
+            this.thankYouUrl = thankYouUrl;
+        },
         async createIntent() {
             this.loading = true;
             const amount = (this.customAmount || this.selectedAmount) * 100;
