@@ -19,13 +19,13 @@
  */
 
 // ** Database settings - You can get this info from your web host ** //
-define( 'DB_NAME', 'u597020236_yj8DQ' );
-define( 'DB_USER', 'u597020236_783vB' );
-define( 'DB_PASSWORD', 'projectAfricaC2024');
+// define( 'DB_NAME', 'u597020236_yj8DQ' );
+// define( 'DB_USER', 'u597020236_783vB' );
+// define( 'DB_PASSWORD', 'projectAfricaC2024');
 
-// define('DB_NAME', 'pac');
-// define('DB_USER', 'root');
-// define('DB_PASSWORD', '');
+define('DB_NAME', 'pac');
+define('DB_USER', 'root');
+define('DB_PASSWORD', '');
 
 // define('WP_HOME', 'https://project-africa-conservation.org');
 // define('WP_SITEURL', 'https://project-africa-conservation.org');
@@ -81,10 +81,10 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define('WP_DEBUG', true);
+define('WP_DEBUG', false);
 define('WP_CACHE', false);
 define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', true);
+define('WP_DEBUG_DISPLAY', false);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
