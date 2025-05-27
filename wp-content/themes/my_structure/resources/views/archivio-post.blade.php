@@ -23,11 +23,11 @@
             <div class="mt-5 mx-auto w-20 h-1 bg-custom-green rounded-full"></div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-10 mt-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-10 mt-16">
             @foreach ($posts as $post)
                 <article
                     class="bg-white border border-[#e1f5d8] rounded-2xl shadow-sm hover:shadow-xl transition duration-300 ease-in-out overflow-hidden animate-fadeInUp">
-                    <a href="{{ $post->url }}" class="block w-full bg-gray-100 overflow-hidden">
+                    <a href="{{ get_permalink($post->ID) }}" class="block w-full bg-gray-100 overflow-hidden">
                         <img src="{{ get_the_post_thumbnail_url($post->ID, 'medium') }}" alt="{{ $post->title }}"
                              class="object-cover w-full h-auto max-h-64 rounded-t-2xl" />
                     </a>
@@ -36,7 +36,7 @@
                             class="inline-block px-3 py-1 text-[10px] font-medium text-custom-dark-green bg-custom-green bg-opacity-20 rounded-full uppercase tracking-wide font-nunitoSansLight">Ghana</span>
                         <h2
                             class="mt-2 text-base font-semibold text-custom-dark-green hover:text-custom-green transition font-nunitoBold leading-snug">
-                            <a href="{{ $post->url }}">{{ $post->post_title }}</a>
+                            <a href=""{{ get_permalink($post->ID) }}">{{ $post->post_title }}</a>
                         </h2>
                         <p class="mt-2 text-[13px] text-[#5c4433] leading-snug font-nunitoRegular">
                             {!! the_excerpt() !!}
