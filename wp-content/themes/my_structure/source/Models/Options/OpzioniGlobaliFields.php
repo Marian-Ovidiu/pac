@@ -17,5 +17,7 @@ class OpzioniGlobaliFields extends BaseGroupAcf
     public function defineAttributes()
     {
         $this->addField('logo');
+        $this->addField('title_blog');
+        $this->addField('subtitle_blog');
     }
 }

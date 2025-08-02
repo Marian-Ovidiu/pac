@@ -2,17 +2,18 @@
 !wp-config.php
 
 # ✅ Plugin e tema custom
-wp-content/plugins/
-wp-content/plugins/*/node_modules/
+#wp-content/plugins/
+#wp-content/plugins/*/node_modules/
 wp-content/plugins/*/vendor/
 wp-content/plugins/wp-mail-smtp/
 
 !wp-content/plugins/woocommerce/
 !wp-content/plugins/woocommerce/**
 !wp-content/themes/
+# ✅ Plugin e tema custom
 !wp-content/themes/my_structure/**
-wp-content/themes/*/node_modules/
-wp-content/themes/*/vendor/
+wp-content/themes/my_structure/node_modules/
+wp-content/themes/my_structure/vendor/
 
 # ❌ Runtime e cache
 wp-content/cache/
