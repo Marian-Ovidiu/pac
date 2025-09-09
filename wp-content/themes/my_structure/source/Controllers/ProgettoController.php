@@ -2,7 +2,7 @@
 namespace Controllers;
 
 use Core\Bases\BaseController;
-use Models\Options\OpzioniArchivioProgettoFields';
+use Models\Options\OpzioniArchivioProgettoFields;
 use Models\Progetto;
 
 class ProgettoController extends BaseController

@@ -36,10 +36,10 @@
                     </a>
 
                     <div class="p-6">
-                        {{-- <span
+                        <span
                             class="inline-block px-3 py-1 text-[10px] font-medium text-custom-dark-green bg-custom-green bg-opacity-20 rounded-full uppercase tracking-wide font-nunitoSansLight">
                             Ghana
-                        </span> --}}
+                        </span>
 
                         {{-- Titolo cliccabile (href fixato) --}}
                         <h2

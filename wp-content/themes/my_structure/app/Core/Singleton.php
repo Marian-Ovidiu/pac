@@ -20,7 +20,7 @@ class Singleton
     private function __clone() {
         throw new \Exception("Cloning of this object is not allowed.");
     }
-    private function __wakeup() {
+    public function __wakeup() {
         throw new \Exception("Deserializing of this object is not allowed.");
     }
 }

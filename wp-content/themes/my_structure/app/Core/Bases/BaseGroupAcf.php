@@ -10,54 +10,65 @@ class BaseGroupAcf
     protected $groupKey;
     protected $fields = [];
     protected $postId;
+    protected $attributes = [];
 
-    public function __construct($groupName, $postId = null) {
+    public function __construct($groupName, $postId = null)
+    {
         $this->groupName = $groupName;
         $this->postId = $postId ?? 'option';
     }
 
-    public function addField($key_field) {
+    public function addField($key_field)
+    {
         $this->fields[$key_field] = new FieldAcf($key_field);
         return $this->fields[$key_field];
     }
 
-    public function getFields() {
+    public function getFields()
+    {
         return $this->fields;
     }
 
-    public function getGroupName() {
+    public function getGroupName()
+    {
         return $this->groupName;
     }
 
-    public function getGroupKey() {
+    public function getGroupKey()
+    {
         return $this->groupKey;
     }
 
-    public function getPostId() {
+    public function getPostId()
+    {
         return $this->postId;
     }
 
-    public function setPostId($postId) {
+    public function setPostId($postId)
+    {
         $this->postId = $postId;
     }
 
-    public function setGroupKey($key) {
+    public function setGroupKey($key)
+    {
         $this->groupKey = $key;
     }
 
-    public function setFields() {
-        foreach ($this->fields as $key => &$field) {
+    public function setFields()
+    {
+        foreach ($this->fields as $key => $field) {
             if ($this->postId) {
                 $value = get_field($field->getKey(), $this->postId, true);
                 if ($value !== false) {
                     $field->setValue($value);
-                    $this->$key = $field->getValue();
+                    $this->attributes[$key] = $field->getValue(); // niente proprietà dinamiche
                 }
             }
         }
     }
 
-    public static function get($postId = null) {
+    public static function get($postId = null)
+    {
         $instance = new static($postId);
         $instance->setFields();
         return $instance;
@@ -65,16 +76,21 @@ class BaseGroupAcf
 
     public function __get($name)
     {
-        $parts = explode('_', $name);
-        $parts = array_map('ucfirst', $parts);
+        $parts = array_map('ucfirst', explode('_', $name));
         $method = 'get' . implode('', $parts) . 'Attribute';
         if (method_exists($this, $method)) {
             return $this->$method();
         }
-
-        return null;
+        return $this->attributes[$name] ?? null;
     }
-    public static function getByLanguage($postType, $acfField = 'lingua', $language = null) {
+
+    public function __isset($name): bool
+    {
+        return array_key_exists($name, $this->attributes);
+    }
+
+    public static function getByLanguage($postType, $acfField = 'lingua', $language = null)
+    {
         // $language = $language ?? pll_current_language();
         $language = $language ?? 'it';
 
