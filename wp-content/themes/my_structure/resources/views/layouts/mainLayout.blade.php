@@ -20,7 +20,7 @@
           ]
         }
     </script>
-    <link rel="canonical" href="{{ get_permalink() }}">
+    <link rel="canonical" href="{{ $canonical }}">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">

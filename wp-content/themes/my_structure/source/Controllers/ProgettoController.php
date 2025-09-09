@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Bases\BaseController;
@@ -25,11 +26,12 @@ class ProgettoController extends BaseController
             $opzioniArchivio->highlights_frase_2 ?? '',
             $opzioniArchivio->highlights_frase_3 ?? '',
         ], true, 1.0);
-
+        $canonical = get_permalink(get_queried_object_id());
         $this->render('archivio-progetto', [
             'progetti'              => $progetti,
             'pagamenti_disponibili' => $available_gateways,
             'opzioniArchivio'       => $opzioniArchivio,
+            'canonical' => $canonical
         ]);
     }
 
@@ -57,9 +59,11 @@ class ProgettoController extends BaseController
             include get_404_template();
             exit;
         }
+        $canonical = get_permalink(get_queried_object_id());
         $this->render('single-progetto', [
             'progetto'              => Progetto::find(get_the_ID()),
             'pagamenti_disponibili' => $available_gateways,
+            'canonical' => $canonical
         ]);
     }
 }

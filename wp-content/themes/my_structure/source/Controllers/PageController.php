@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Bases\BaseController;
@@ -14,13 +15,21 @@ class PageController extends BaseController
     {
         $this->addJs('highlight', 'highlight.js', [], true);
         $this->addVarJs('highlight', 'highlights', GalleriaFields::get()->highlights);
-        $this->render('galleria', ['galleria' => GalleriaFields::get()]);
+        $canonical = get_permalink(get_queried_object_id());
+        $this->render('galleria', [
+            'galleria' => GalleriaFields::get(),
+            'canonical' => $canonical
+        ]);
     }
 
     public function aziende()
     {
         $fields = AziendeFields::get();
-        $this->render('aziende', ['fields' => $fields]);
+        $canonical = get_permalink(get_queried_object_id());
+        $this->render('aziende', [
+            'fields' => $fields,
+            'canonical' => $canonical
+        ]);
     }
     public function grazie()
     {
@@ -52,9 +61,13 @@ class PageController extends BaseController
             $fields->highlights_frase_2 ?? '',
             $fields->highlights_frase_3 ?? '',
         ]);
+
+        $canonical = get_permalink(get_queried_object_id());
+
         $this->render('archivio-progetto', [
             'fields'                => $fields,
             'pagamenti_disponibili' => $available_gateways,
+            'canonical' => $canonical
         ]);
     }
 }
