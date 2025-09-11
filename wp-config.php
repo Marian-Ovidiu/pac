@@ -20,20 +20,20 @@
  */
 
 // ** Database settings - You can get this info from your web host ** //
-// define('DB_NAME', 'u597020236_yj8DQ');
-// define('DB_USER', 'u597020236_783vB');
-// define('DB_PASSWORD', 'projectAfricaC2024');
+define('DB_NAME', 'u597020236_yj8DQ');
+define('DB_USER', 'u597020236_783vB');
+define('DB_PASSWORD', 'projectAfricaC2024');
 
-// define('WP_HOME', 'https://project-africa-conservation.org');
-// define('WP_SITEURL', 'https://project-africa-conservation.org');
+define('WP_HOME', 'https://project-africa-conservation.org');
+define('WP_SITEURL', 'https://project-africa-conservation.org');
 
-define('DB_NAME', 'pac');
-define('DB_USER', 'root');
-define('DB_PASSWORD', 'root');
+// define('DB_NAME', 'pac');
+// define('DB_USER', 'root');
+// define('DB_PASSWORD', 'root');
 
-define('WP_HOME', 'http://pac.local');
-define('WP_SITEURL', 'http://pac.local');
-define('DB_HOST', 'localhost');
+// define('WP_HOME', 'http://pac.local');
+// define('WP_SITEURL', 'http://pac.local');
+// define('DB_HOST', 'localhost');
 
 /** Database charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8mb4');
