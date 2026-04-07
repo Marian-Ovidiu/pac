@@ -12,8 +12,7 @@ class PageController extends BaseController
 {
     public function galleria()
     {
-        $this->addJs('highlight', 'highlight.js', [], true);
-        $this->addVarJs('highlight', 'highlights', GalleriaFields::get()->highlights);
+        $this->addVarJs('main', 'highlights', GalleriaFields::get()->highlights);
         $this->render('galleria', ['galleria' => GalleriaFields::get()]);
     }
 
@@ -45,9 +44,7 @@ class PageController extends BaseController
         }
 
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        $this->addJs('donation', 'donation.js', ['stripe'], true);
-
-        $this->addVarJs('donation', 'highlights', [
+        $this->addVarJs('main', 'highlights', [
             $fields->highlights_frase_1 ?? '',
             $fields->highlights_frase_2 ?? '',
             $fields->highlights_frase_3 ?? '',

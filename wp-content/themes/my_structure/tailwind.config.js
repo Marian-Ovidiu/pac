@@ -17,6 +17,18 @@ module.exports = {
         'custom-green': '#84CE59',
         'custom-dark-green': '#45752c',
         'custom-light-green': '#E8FCCF',
+        'custom-ink': '#122018',
+        'custom-sand': '#F5F1E8',
+        'custom-clay': '#D8C8AE',
+        'custom-stone': '#697261',
+        'custom-forest': '#2F4A2D',
+      },
+      boxShadow: {
+        soft: '0 18px 45px rgba(18, 32, 24, 0.08)',
+        card: '0 22px 60px rgba(18, 32, 24, 0.12)',
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
       animation: {
         blink: 'blink 1s step-end infinite',

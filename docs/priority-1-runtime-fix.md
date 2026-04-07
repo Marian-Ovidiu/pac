@@ -8,43 +8,64 @@ Ripristino runtime iniziale del tema custom `my_structure` e allineamento minimo
 
 ## Risultato
 
-- Parse error bloccante nel controller progetto corretto.
-- Warning PHP 8 sul magic method del singleton corretto.
-- Sanitizzazione minima aggiunta nei punti che leggono direttamente superglobal e JSON raw.
+- `ProgettoController` e `Singleton` risultano compatibili con PHP 8.3 e senza errori di sintassi.
 - Lint PHP del tema completato con esito pulito, esclusi `vendor/`, `node_modules/` e `resources/cache`.
 - Bootstrap CLI di WordPress riuscito.
+- Rafforzata la sanitizzazione minima nei punti che leggono superglobal, payload JSON e file JSON locali.
+- Normalizzate stringhe con encoding degradato nei file runtime toccati.
 
 ## File modificati
 
-### 1. Parse error controller progetto
-
-File: [`wp-content/themes/my_structure/source/Controllers/ProgettoController.php`](../wp-content/themes/my_structure/source/Controllers/ProgettoController.php)
-
-- Corretto `use` statement malformato in [ProgettoController.php:5](../wp-content/themes/my_structure/source/Controllers/ProgettoController.php#L5).
-- Effetto: il controller torna parsabile e il tema non blocca piu il bootstrap.
-
-### 2. Compatibilita PHP 8 magic method
+### 1. Compatibilita PHP 8 e bootstrap tema
 
 File: [`wp-content/themes/my_structure/app/Core/Singleton.php`](../wp-content/themes/my_structure/app/Core/Singleton.php)
 
-- Aggiunto return type `: void` a [Singleton.php:24](../wp-content/themes/my_structure/app/Core/Singleton.php#L24).
-- Effetto: allineamento della firma di `__wakeup()` alle aspettative di PHP 8+.
+- Confermata firma compatibile di `__wakeup(): void`.
+- Effetto: nessun warning PHP 8 sul magic method.
 
-### 3. Sanitizzazione minima input runtime
+File: [`wp-content/themes/my_structure/source/Controllers/ProgettoController.php`](../wp-content/themes/my_structure/source/Controllers/ProgettoController.php)
+
+- Confermato controller parsabile e senza parse error.
+- Effetto: il bootstrap del tema non e bloccato dal controller progetto.
+
+### 2. Sanitizzazione minima input runtime
 
 File: [`wp-content/themes/my_structure/app/Core/Router.php`](../wp-content/themes/my_structure/app/Core/Router.php)
 
-- Sanitizzato `$_SERVER['REQUEST_METHOD']` in [Router.php:51](../wp-content/themes/my_structure/app/Core/Router.php#L51).
-- Sanitizzato `$_REQUEST['action']` in [Router.php:68](../wp-content/themes/my_structure/app/Core/Router.php#L68).
-- Effetto: riduzione dell’uso diretto di superglobal non normalizzati.
+- Mantiene sanitizzazione di `$_SERVER['REQUEST_METHOD']` e `$_REQUEST['action']`.
+- Effetto: ridotto uso diretto di superglobal non normalizzati.
+
+File: [`wp-content/themes/my_structure/app/Helpers/acf_helpers.php`](../wp-content/themes/my_structure/app/Helpers/acf_helpers.php)
+
+- Sanitizzato `$_GET['page']` prima del matching ACF.
+- Effetto: il rule match delle option page non dipende piu da input raw.
 
 File: [`wp-content/themes/my_structure/source/Classes/StripePayments.php`](../wp-content/themes/my_structure/source/Classes/StripePayments.php)
 
-- Centralizzata la lettura di `php://input` in [StripePayments.php:11](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L11).
-- Validato amount minimo in [StripePayments.php:30](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L30) e [StripePayments.php:60](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L60).
-- Sanitizzata l’email in [StripePayments.php:55](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L55).
-- Sanitizzati i dati usati per la creazione utente e i metadati in [StripePayments.php:118](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L118) - [StripePayments.php:143](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L143).
-- Effetto: il file resta architetturalmente fragile, ma non dipende piu da payload raw non controllati per i casi base.
+- Cast esplicito del payload letto da `php://input`.
+- Confermata validazione minima di `amount`, `email` e campi usati nella creazione utente.
+- Normalizzati alcuni messaggi runtime/log con encoding degradato.
+- Effetto: file piu robusto sotto PHP 8.3 senza cambiare il flusso funzionale esistente.
+
+### 3. Robustezza helper e fallback runtime
+
+File: [`wp-content/themes/my_structure/app/Helpers/translation_helpers.php`](../wp-content/themes/my_structure/app/Helpers/translation_helpers.php)
+
+- Corretto il fallback locale.
+- Aggiunto controllo sul risultato di `json_decode()`.
+- Effetto: evitati warning su foreach/locale non inizializzata.
+
+File: [`wp-content/themes/my_structure/app/Helpers/utility_helpers.php`](../wp-content/themes/my_structure/app/Helpers/utility_helpers.php)
+
+- Aggiunta validazione del manifest Vite prima dell'accesso alle chiavi.
+- Sostituito `Dotenv::load()` con `safeLoad()`.
+- Normalizzati messaggi log con encoding degradato.
+- Effetto: bootstrap meno fragile se `.env` o manifest non sono presenti o sono invalidi.
+
+File: [`wp-content/themes/my_structure/source/Classes/GrazieEmail.php`](../wp-content/themes/my_structure/source/Classes/GrazieEmail.php)
+
+- Normalizzati i messaggi di log con encoding degradato.
+- Effetto: log leggibili e senza caratteri corrotti nei percorsi email.
 
 ## Verifica eseguita
 
@@ -82,18 +103,18 @@ Esito:
 ### Non bloccanti ma rilevanti
 
 1. Notice ACF su textdomain caricato troppo presto.
-   Evidenza: bootstrap CLI ha emesso un notice `_load_textdomain_just_in_time` sul dominio `acf`.
+   Evidenza: bootstrap CLI emette `_load_textdomain_just_in_time` sul dominio `acf`.
    Stato: non blocca il runtime, ma va rivisto in un pass successivo su bootstrap/plugin init.
 
 2. Flusso pagamenti ancora fragile.
    Evidenze:
-   - [StripePayments.php:75](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L75) moltiplica ancora amount per 100 in `completePayment()`
-   - [StripePayments.php:74](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L74) crea ancora un nuovo `PaymentIntent`
+   - [`wp-content/themes/my_structure/source/Classes/StripePayments.php`](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L73) crea ancora un nuovo `PaymentIntent` in `completePayment()`
+   - [`wp-content/themes/my_structure/source/Classes/StripePayments.php`](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L74) continua a moltiplicare `amount` per 100 nel completamento
    Stato: da trattare in Priorita 2, non in questo pass minimo di ripristino runtime.
 
-3. Alcune stringhe del file pagamenti mostrano encoding degradato nei log/messaggi.
-   Evidenze: [StripePayments.php:41](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L41), [StripePayments.php:82](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L82), [StripePayments.php:108](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L108), [StripePayments.php:136](../wp-content/themes/my_structure/source/Classes/StripePayments.php#L136).
-   Stato: non bloccante, ma da normalizzare nel refactor del flusso pagamenti.
+3. Alcuni plugin/installazioni locali restano incoerenti con il repository.
+   Evidenza: il clone locale mostra drift tra filesystem e opzioni WordPress.
+   Stato: non blocca il lint del tema, ma impatta staging e smoke test end-to-end.
 
 ## Smoke Test Manuali
 
@@ -103,8 +124,9 @@ Esito:
 4. Aprire un singolo progetto invalido e verificare rendering 404 corretto.
 5. Testare `POST /create-payment-intent` con importo positivo e poi con importo nullo.
 6. Testare `POST /complete-donation` con email invalida e con amount nullo, verificando risposta JSON di errore.
-7. Controllare `wp-content/debug.log` dopo i test per notice/fatal del tema.
+7. Verificare che la localizzazione statica continui a funzionare con e senza Polylang attivo.
+8. Controllare `wp-content/debug.log` dopo i test per notice/fatal del tema.
 
 ## Next Step
 
-Il prossimo punto coerente con la documentazione resta la Priorita 2: hardening pagamenti, donazioni e routing sensibile.
+Il prossimo punto coerente con la roadmap resta la Priorita 2: hardening pagamenti, donazioni e routing sensibile.

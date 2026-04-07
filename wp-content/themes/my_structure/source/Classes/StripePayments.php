@@ -1,145 +1,343 @@
 <?php
+
 namespace Classes;
 
-use Classes\GrazieEmail;
 use Models\Progetto;
+use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use WP_Error;
 
 class StripePayments
 {
-    protected static function getJsonPayload()
-    {
-        $rawPayload = file_get_contents('php://input');
-        $data = json_decode($rawPayload ?: '', true);
+    private const NONCE_ACTION = 'pac_stripe_donation';
+    private const CREATE_ACTION = 'pac_create_payment_intent';
+    private const COMPLETE_ACTION = 'pac_complete_donation';
+    private const MIN_AMOUNT_CENTS = 100;
+    private const OPTION_PROCESSED_PREFIX = 'pac_stripe_processed_';
+    private const OPTION_LOCK_PREFIX = 'pac_stripe_processing_';
 
-        return is_array($data) ? $data : [];
+    public static function registerHooks()
+    {
+        add_action('wp_ajax_' . self::CREATE_ACTION, [self::class, 'createIntent']);
+        add_action('wp_ajax_nopriv_' . self::CREATE_ACTION, [self::class, 'createIntent']);
+        add_action('wp_ajax_' . self::COMPLETE_ACTION, [self::class, 'completePayment']);
+        add_action('wp_ajax_nopriv_' . self::COMPLETE_ACTION, [self::class, 'completePayment']);
     }
 
     public static function createIntent()
     {
-        Stripe::setApiKey(my_env('SECRET_KEY'));
-        $data         = self::getJsonPayload();
-        $amount       = isset($data['amount']) ? (int) $data['amount'] : 0;
-        $progetto_id  = isset($data['progetto_id']) ? (int) $data['progetto_id'] : null;
-        $progetto     = Progetto::find($progetto_id);
-        $progettoName = $progetto ? "Donazione per il progetto: " . $progetto->title : "Donazione generica";
+        self::verifyNonce();
+        self::setApiKey();
 
-        error_log("[createIntent] Ricevuto importo: {$amount}, progetto_id: {$progetto_id}");
+        $amountCents = self::getIntRequestValue('amount_cents');
+        $progettoId = self::getIntRequestValue('progetto_id');
+        $progetto = self::getValidatedProject($progettoId);
 
-        if ($amount <= 0) {
-            wp_send_json_error(['message' => 'Importo non valido.'], 400);
+        if (is_wp_error($progetto)) {
+            self::sendError($progetto, 404);
         }
+
+        if ($amountCents < self::MIN_AMOUNT_CENTS) {
+            self::sendError('Importo non valido.', 400);
+        }
+
+        $description = $progetto
+            ? 'Donazione per il progetto: ' . sanitize_text_field($progetto->title)
+            : 'Donazione generica';
 
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount'                    => $amount,
+                'amount'                    => $amountCents,
                 'currency'                  => 'eur',
                 'automatic_payment_methods' => ['enabled' => true],
-                'description'               => $progettoName,
+                'description'               => $description,
+                'metadata'                  => [
+                    'integration' => 'pac_custom_donation',
+                    'progetto_id' => (string) $progettoId,
+                ],
             ]);
-            error_log("🔍 Status PaymentIntent: " . $paymentIntent->status);
 
-            error_log("[createIntent] PaymentIntent creato con ID: " . $paymentIntent->id);
-            wp_send_json_success(['clientSecret' => $paymentIntent->client_secret]);
-        } catch (\Exception $e) {
-            error_log("[createIntent] Stripe error: " . $e->getMessage());
-            wp_send_json_error(['message' => 'Errore nella creazione del pagamento']);
+            error_log('[StripePayments] PaymentIntent creato: ' . $paymentIntent->id);
+
+            wp_send_json_success([
+                'clientSecret'    => $paymentIntent->client_secret,
+                'paymentIntentId' => $paymentIntent->id,
+            ]);
+        } catch (ApiErrorException $exception) {
+            error_log('[StripePayments] Errore createIntent: ' . $exception->getMessage());
+            self::sendError('Errore nella creazione del pagamento.', 502);
         }
     }
 
     public static function completePayment()
     {
-        $data   = self::getJsonPayload();
-        $amount = isset($data['amount']) ? (int) $data['amount'] : 0;
-        $email  = isset($data['email']) ? sanitize_email($data['email']) : null;
+        self::verifyNonce();
+        self::setApiKey();
 
-        error_log("[completePayment] Email ricevuta: " . print_r($email, true));
-        error_log("[completePayment] Dati ricevuti: " . print_r($data, true));
+        $paymentIntentId = self::getRequestValue('payment_intent_id');
+        $expectedAmountCents = self::getIntRequestValue('expected_amount_cents');
+        $progettoId = self::getIntRequestValue('progetto_id');
+        $progetto = self::getValidatedProject($progettoId);
+        $donorData = self::sanitizeDonorData();
 
-        if ($amount <= 0) {
-            wp_send_json_error(['message' => 'Importo non valido.'], 400);
-            return;
+        if ($paymentIntentId === '') {
+            self::sendError('Payment intent mancante.', 400);
         }
 
-        if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            error_log("[completePayment] Email non valida: {$email}");
-            wp_send_json_error(['message' => 'Indirizzo email non valido.']);
-            return;
+        if ($expectedAmountCents < self::MIN_AMOUNT_CENTS) {
+            self::sendError('Importo non valido.', 400);
         }
 
-        Stripe::setApiKey(my_env('SECRET_KEY'));
+        if (is_wp_error($progetto)) {
+            self::sendError($progetto, 404);
+        }
+
+        $validationError = self::validateDonorData($donorData);
+        if ($validationError instanceof WP_Error) {
+            self::sendError($validationError, 400);
+        }
 
         try {
-            $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount'              => $amount * 100,
-                'currency'            => 'eur',
-                'payment_method'      => ['card', 'paypal'],
-                'confirmation_method' => 'manual',
-                'confirm'             => true,
-                'return_url'          => 'https://project-africa-conservation.org',
+            $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+        } catch (ApiErrorException $exception) {
+            error_log('[StripePayments] Errore retrieve PaymentIntent: ' . $exception->getMessage());
+            self::sendError('Impossibile verificare il pagamento.', 502);
+            return;
+        }
+
+        $paymentValidationError = self::validatePaymentIntent($paymentIntent, $expectedAmountCents, $progettoId);
+        if ($paymentValidationError instanceof WP_Error) {
+            self::sendError($paymentValidationError, 409);
+        }
+
+        if (self::isProcessed($paymentIntentId)) {
+            wp_send_json_success([
+                'processed' => true,
+                'message'   => 'Donazione gia registrata.',
             ]);
-            error_log("🔍 Status PaymentIntent: " . $paymentIntent->status);
+        }
 
-            error_log("[completePayment] PaymentIntent ID: " . $paymentIntent->id);
-            error_log("[completePayment] Status PaymentIntent: " . $paymentIntent->status);
+        if (!self::acquireProcessingLock($paymentIntentId)) {
+            wp_send_json_success([
+                'processed' => true,
+                'message'   => 'Donazione in elaborazione o gia registrata.',
+            ]);
+        }
 
-            if ($paymentIntent->status === 'succeeded') {
-            // if (true) {
-                $progetto_id  = $data['progettoId'] ?? null;
-                $progetto     = Progetto::find($progetto_id);
-                $progettoName = $progetto ? "Donazione per il progetto: " . htmlspecialchars($progetto->title, ENT_QUOTES, 'UTF-8') : "Donazione generica";
+        try {
+            $userId = self::createOrUpdateDonor($donorData, $paymentIntent, $progettoId);
+            GrazieEmail::sendThankYouEmail(
+                $donorData['email'],
+                'Donazione per il progetto: ' . sanitize_text_field($progetto->title),
+                $paymentIntent->amount / 100
+            );
 
-                error_log("[completePayment] Invio email a: {$email}");
-                GrazieEmail::sendThankYouEmail($email, $progettoName, $amount);
+            self::markProcessed($paymentIntentId);
 
-                if (! email_exists($email)) {
-                    error_log("[completePayment] Creazione nuovo utente: {$email}");
-                    self::createUser($data);
-                }
-
-                wp_send_json_success([
-                    'success'  => true,
-                    'redirect' => 'progetto/',
-                    'message'  => 'Ordine completato con successo.',
-                ]);
-            } else {
-                error_log("[completePayment] Pagamento non riuscito. Status: " . $paymentIntent->status);
-                wp_send_json_error(['message' => 'Il pagamento non è riuscito.']);
-            }
-        } catch (\Stripe\Exception\ApiErrorException $e) {
-            error_log("[completePayment] Errore di pagamento: " . $e->getMessage());
-            wp_send_json_error(['message' => 'Errore di pagamento: ' . $e->getMessage()]);
+            wp_send_json_success([
+                'processed'       => true,
+                'paymentIntentId' => $paymentIntent->id,
+                'userId'          => $userId,
+            ]);
+        } catch (\Throwable $throwable) {
+            error_log('[StripePayments] Errore completePayment: ' . $throwable->getMessage());
+            self::releaseProcessingLock($paymentIntentId);
+            self::sendError('Errore durante la finalizzazione della donazione.', 500);
         }
     }
 
-    public static function createUser($data)
+    private static function createOrUpdateDonor(array $donorData, PaymentIntent $paymentIntent, int $progettoId)
     {
-        $email   = isset($data['email']) ? sanitize_email($data['email']) : '';
-        $user_id = email_exists($email);
+        $email = $donorData['email'];
+        $userId = email_exists($email);
 
-        if (! $email) {
-            return;
-        }
-
-        if (! $user_id) {
-            $user_id = wp_insert_user([
+        if (!$userId) {
+            $userId = wp_insert_user([
                 'user_login' => $email,
                 'user_pass'  => wp_generate_password(),
                 'user_email' => $email,
-                'first_name' => isset($data['name']) ? sanitize_text_field($data['name']) : '',
-                'last_name'  => isset($data['surname']) ? sanitize_text_field($data['surname']) : '',
+                'first_name' => $donorData['name'],
+                'last_name'  => $donorData['surname'],
                 'role'       => 'donator',
             ]);
-            error_log("[createUser] Utente creato con ID: {$user_id}");
+
+            if (is_wp_error($userId)) {
+                throw new \RuntimeException($userId->get_error_message());
+            }
         } else {
-            error_log("[createUser] L'utente esiste già con ID: {$user_id}");
+            wp_update_user([
+                'ID'         => $userId,
+                'first_name' => $donorData['name'],
+                'last_name'  => $donorData['surname'],
+            ]);
         }
 
-        update_user_meta($user_id, 'telefono', isset($data['phone']) ? sanitize_text_field($data['phone']) : '');
-        update_user_meta($user_id, 'codice_fiscale', isset($data['codiceFiscale']) ? sanitize_text_field($data['codiceFiscale']) : '');
-        update_user_meta($user_id, 'importo_donato', isset($data['amount']) ? (int) $data['amount'] : 0);
-        update_user_meta($user_id, 'title', isset($data['progettoId']) ? (int) $data['progettoId'] : 0);
-        update_user_meta($user_id, 'name', isset($data['name']) ? sanitize_text_field($data['name']) : '');
+        $amountMajor = round(((int) $paymentIntent->amount) / 100, 2);
+
+        update_user_meta($userId, 'telefono', $donorData['phone']);
+        update_user_meta($userId, 'codice_fiscale', $donorData['codiceFiscale']);
+        update_user_meta($userId, 'importo_donato', $amountMajor);
+        update_user_meta($userId, 'title', $progettoId);
+        update_user_meta($userId, 'name', $donorData['name']);
+        update_user_meta($userId, 'stripe_payment_intent_id', $paymentIntent->id);
+        update_user_meta($userId, 'stripe_payment_status', $paymentIntent->status);
+
+        return $userId;
+    }
+
+    private static function validatePaymentIntent(PaymentIntent $paymentIntent, int $expectedAmountCents, int $progettoId)
+    {
+        if (self::getPaymentIntentMetadataValue($paymentIntent, 'integration') !== 'pac_custom_donation') {
+            return new WP_Error('invalid_intent_origin', 'Payment intent non riconosciuto.');
+        }
+
+        if ((int) $paymentIntent->amount !== $expectedAmountCents) {
+            return new WP_Error('invalid_amount', 'Importo del pagamento incoerente.');
+        }
+
+        if (($paymentIntent->currency ?? '') !== 'eur') {
+            return new WP_Error('invalid_currency', 'Valuta non supportata.');
+        }
+
+        if ((int) self::getPaymentIntentMetadataValue($paymentIntent, 'progetto_id') !== $progettoId) {
+            return new WP_Error('invalid_project', 'Progetto del pagamento incoerente.');
+        }
+
+        if (($paymentIntent->status ?? '') !== 'succeeded') {
+            return new WP_Error('payment_not_completed', 'Pagamento non completato.');
+        }
+
+        return null;
+    }
+
+    private static function getPaymentIntentMetadataValue(PaymentIntent $paymentIntent, $key)
+    {
+        if (!isset($paymentIntent->metadata)) {
+            return '';
+        }
+
+        if (is_array($paymentIntent->metadata)) {
+            return isset($paymentIntent->metadata[$key]) ? (string) $paymentIntent->metadata[$key] : '';
+        }
+
+        return isset($paymentIntent->metadata->{$key}) ? (string) $paymentIntent->metadata->{$key} : '';
+    }
+
+    private static function validateDonorData(array $donorData)
+    {
+        if ($donorData['name'] === '' || $donorData['surname'] === '') {
+            return new WP_Error('invalid_name', 'Nome e cognome sono obbligatori.');
+        }
+
+        if (!is_email($donorData['email'])) {
+            return new WP_Error('invalid_email', 'Indirizzo email non valido.');
+        }
+
+        if ($donorData['phone'] === '') {
+            return new WP_Error('invalid_phone', 'Telefono obbligatorio.');
+        }
+
+        return null;
+    }
+
+    private static function sanitizeDonorData()
+    {
+        return [
+            'name'          => sanitize_text_field(self::getRequestValue('name')),
+            'surname'       => sanitize_text_field(self::getRequestValue('surname')),
+            'phone'         => sanitize_text_field(self::getRequestValue('phone')),
+            'email'         => sanitize_email(self::getRequestValue('email')),
+            'codiceFiscale' => sanitize_text_field(self::getRequestValue('codice_fiscale')),
+        ];
+    }
+
+    private static function getValidatedProject(int $progettoId)
+    {
+        if ($progettoId <= 0) {
+            return new WP_Error('missing_project', 'Progetto non valido.');
+        }
+
+        $progetto = Progetto::find($progettoId);
+
+        if (!$progetto) {
+            return new WP_Error('project_not_found', 'Progetto non trovato.');
+        }
+
+        return $progetto;
+    }
+
+    private static function setApiKey()
+    {
+        $secretKey = my_env('SECRET_KEY') ?: my_env('TEST_SECRET_KEY', '');
+
+        if ($secretKey === '') {
+            self::sendError('Configurazione Stripe mancante.', 500);
+        }
+
+        Stripe::setApiKey($secretKey);
+    }
+
+    private static function verifyNonce()
+    {
+        if (!check_ajax_referer(self::NONCE_ACTION, 'nonce', false)) {
+            self::sendError('Richiesta non autorizzata.', 403);
+        }
+    }
+
+    private static function getRequestValue($key)
+    {
+        return isset($_POST[$key])
+            ? trim((string) wp_unslash($_POST[$key]))
+            : '';
+    }
+
+    private static function getIntRequestValue($key)
+    {
+        return (int) self::getRequestValue($key);
+    }
+
+    private static function getProcessedOptionKey($paymentIntentId)
+    {
+        return self::OPTION_PROCESSED_PREFIX . sanitize_key($paymentIntentId);
+    }
+
+    private static function getLockOptionKey($paymentIntentId)
+    {
+        return self::OPTION_LOCK_PREFIX . sanitize_key($paymentIntentId);
+    }
+
+    private static function isProcessed($paymentIntentId)
+    {
+        return (bool) get_option(self::getProcessedOptionKey($paymentIntentId), false);
+    }
+
+    private static function acquireProcessingLock($paymentIntentId)
+    {
+        if (self::isProcessed($paymentIntentId)) {
+            return false;
+        }
+
+        return add_option(self::getLockOptionKey($paymentIntentId), time(), '', false);
+    }
+
+    private static function markProcessed($paymentIntentId)
+    {
+        update_option(self::getProcessedOptionKey($paymentIntentId), time(), false);
+        self::releaseProcessingLock($paymentIntentId);
+    }
+
+    private static function releaseProcessingLock($paymentIntentId)
+    {
+        delete_option(self::getLockOptionKey($paymentIntentId));
+    }
+
+    private static function sendError($message, $status = 400)
+    {
+        $errorMessage = $message instanceof WP_Error
+            ? $message->get_error_message()
+            : (string) $message;
+
+        wp_send_json_error(['message' => $errorMessage], $status);
     }
 }

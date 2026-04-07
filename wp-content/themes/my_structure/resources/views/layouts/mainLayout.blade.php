@@ -1,58 +1,46 @@
+@php
+    $seoPluginActive = theme_seo_plugin_active();
+    $metaDescription = theme_meta_description();
+    $schemaGraph = $seoPluginActive ? null : theme_schema_graph();
+    $bodyClasses = implode(' ', get_body_class('flex flex-col min-h-screen font-nunitoSansRegular'));
+@endphp
 <!DOCTYPE html>
-<html lang="it">
+<html {!! function_exists('language_attributes') ? language_attributes() : 'lang="it"' !!}>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="{{ get_bloginfo('charset') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Sito ufficiale PAC - Project Africa Conservation, dedicato alla protezione della fauna e allo sviluppo sociale.')">
-    <title>@yield('title', 'PAC - Project Africa Conservation')</title>
-
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "Project Africa Conservation",
-          "url": "https://project-africa-conservation.org",
-          "logo": "https://project-africa-conservation.org/wp-content/uploads/2024/12/cropped-pittogramma-1.png",
-          "sameAs": [
-            "https://www.facebook.com/15kZKmU4gr/",
-            "https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==",
-            "https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/"
-          ]
-        }
-    </script>
-    <link rel="canonical" href="{{ get_permalink() }}">
+    <title>{{ wp_get_document_title() }}</title>
+    @if (!$seoPluginActive && $metaDescription)
+        <meta name="description" content="{{ esc_attr($metaDescription) }}">
+    @endif
+    @if (!$seoPluginActive && $schemaGraph)
+        <script type="application/ld+json">{!! wp_json_encode($schemaGraph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
+    @endif
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&display=swap" rel="stylesheet">
     @yield('head')
-</head>
-<body class="flex flex-col min-h-screen font-nunitoSansRegular">
     <?php wp_head(); ?>
-    @widget('HeaderMenu')
-    {{-- @widget('LanguageMenu')
-    @switch(pll_current_language())
-        @case('it')   @widget('HeaderMenu')         @break
-        @case('en')   @widget('HeaderMenuEnglish')  @break
-        @case('fr')   @widget('HeaderMenuFrancais') @break
-        @case('de')   @widget('HeaderMenuDeutsch')  @break
-        @default      @widget('HeaderMenu')         @break
-    @endswitch --}}
+</head>
+<body class="{{ $bodyClasses }}">
+    <?php if (function_exists('wp_body_open')) { wp_body_open(); } ?>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-lg">
+        Salta al contenuto principale
+    </a>
 
-    <main class="flex-grow main">
+    <div class="site-header">
+        @widget('HeaderMenu')
+    </div>
+
+    <main id="main-content" class="main flex-grow" tabindex="-1">
         @yield('content')
     </main>
 
-    <footer class="text-white">
-         @widget('FooterMenu')
-        {{-- @switch(pll_current_language())
-            @case('it')   @widget('FooterMenu')         @break
-            {{-- @case('en')   @widget('FooterMenuEnglish')  @break
-            @case('fr')   @widget('FooterMenuFrancais') @break
-            @case('de')   @widget('FooterMenuDeutsch')  @break
-            @default      @widget('FooterMenu')         @break
-        @endswitch --}}
-    </footer>
+    <div class="site-footer text-white">
+        @widget('FooterMenu')
+    </div>
+
     @yield('scripts')
     <?php wp_footer(); ?>
 </body>

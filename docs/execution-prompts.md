@@ -4,7 +4,12 @@
 
 Questi prompt sono pensati per essere passati a un coding agent sul repository corrente. Ogni prompt include contesto, obiettivo, vincoli e output attesi.
 
-## Prompt 1: Stabilizzazione e security baseline
+## Prompt 1: Stabilizzazione e security baseline `[DONE 2026-04-07]`
+
+Esito:
+- report aggiornato in [`docs/priority-0-initial-audit.md`](./priority-0-initial-audit.md)
+- findings ordinati per severita, checklist staging e lista file da de-versionare prodotti
+- stato reale verificato su repository e DB locale `pac`
 
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
@@ -37,7 +42,12 @@ Output atteso:
 - elenco file da togliere dal versionamento o da gestire diversamente
 ```
 
-## Prompt 2: Compatibilita PHP 8.3 e fix runtime
+## Prompt 2: Compatibilita PHP 8.3 e fix runtime `[DONE 2026-04-07]`
+
+Esito:
+- fix runtime consolidati in [`docs/priority-1-runtime-fix.md`](./priority-1-runtime-fix.md)
+- lint completo del tema con esito pulito
+- bootstrap CLI WordPress riuscito con solo notice ACF non bloccante
 
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
@@ -71,7 +81,12 @@ Output atteso:
 - rischi residui o aree non verificate
 ```
 
-## Prompt 3: Hardening pagamenti e routing
+## Prompt 3: Hardening pagamenti e routing `[DONE 2026-04-07]`
+
+Esito:
+- refactor del flusso Stripe documentato in [`docs/priority-2-payments-hardening.md`](./priority-2-payments-hardening.md)
+- migrazione da route custom `template_redirect` a `admin-ajax` con nonce
+- eliminato il doppio `PaymentIntent`, introdotta finalizzazione idempotente e rimosse chiavi live hardcoded dal sorgente attivo
 
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
@@ -105,8 +120,12 @@ Output atteso:
 - check di sicurezza sui nuovi endpoint
 ```
 
-## Prompt 4: Pipeline frontend e build/deploy
+## Prompt 4: Pipeline frontend e build/deploy `[DONE 2026-04-07]`
 
+Esito:
+- pipeline asset unificata e documentata in [`docs/priority-3-frontend-pipeline.md`](./priority-3-frontend-pipeline.md)
+- enqueue locali allineati al manifest Vite in produzione
+- build `npm run build`, lint PHP tema e bootstrap CLI verificati
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
 
@@ -138,8 +157,12 @@ Output atteso:
 - note su eventuali decisioni ancora aperte
 ```
 
-## Prompt 5: Audit plugin, ACF e multilanguage
+## Prompt 5: Audit plugin, ACF e multilanguage `[DONE 2026-04-07]`
 
+Esito:
+- audit plugin/modello contenuti documentato in [`docs/priority-4-plugin-content-audit.md`](./priority-4-plugin-content-audit.md)
+- prodotte matrice plugin/use case, matrice ACF/template e piano di semplificazione con precedenze
+- evidenziati mismatch ACF (`Aziende`, `Grazie`), stato ibrido Polylang e duplicazioni plugin/form/payment
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
 
@@ -168,8 +191,12 @@ Output atteso:
 - piano di semplificazione con precedenze
 ```
 
-## Prompt 6: SEO tecnico e accessibilita
+## Prompt 6: SEO tecnico e accessibilita `[DONE 2026-04-07]`
 
+Esito:
+- fix SEO/a11y ad alto impatto documentati in [`docs/priority-5-seo-a11y.md`](./priority-5-seo-a11y.md)
+- layout base riallineato a WordPress moderno con fallback SEO compatibile con plugin futuri
+- corretti header/footer, immagini placeholder e alcuni componenti/template ad alto traffico
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
 
@@ -201,8 +228,12 @@ Output atteso:
 - elenco pagine/template ancora da rivedere
 ```
 
-## Prompt 7: Refactor UI e design system
+## Prompt 7: Refactor UI e design system `[DONE 2026-04-07]`
 
+Esito:
+- design system minimo introdotto e documentato in [`docs/priority-6-ui-refactor.md`](./priority-6-ui-refactor.md)
+- refactor completato su home, archivio progetti e singolo progetto
+- partial e componenti orfani o duplicati rimossi; build Vite e smoke test core eseguiti
 ```text
 Lavora sul repository WordPress in C:\projects\privati\pac.
 
@@ -231,4 +262,46 @@ Output atteso:
 - UI aggiornata
 - componenti riusabili
 - note per editor/content team su eventuali cambi contenutistici
+```
+
+## Prompt 8: Release readiness, staging UAT e go-live `[PARTIAL 2026-04-07]`
+
+Esito:
+- report di release readiness prodotto in [`docs/priority-7-release-readiness.md`](./priority-7-release-readiness.md)
+- classificati blocker, high e medium residui
+- preparate checklist UAT, piano deploy e rollback
+- fase non chiudibile completamente senza staging/browser/accessi funzionali
+
+```text
+Lavora sul repository WordPress in C:\projects\privati\pac.
+
+Obiettivo:
+- eseguire la priorita 7 della roadmap
+- portare il progetto a uno stato rilasciabile con validazione staging e checklist di deploy
+
+Contesto noto:
+- le priorita 0-6 risultano gia documentate come completate
+- il tema custom passa lint PHP e build Vite
+- il bootstrap WordPress mostra ancora un notice ACF non bloccante da chiudere
+- il flusso donazioni custom Stripe e stato hardenizzato ma il webhook server-to-server resta una decisione aperta
+
+Task richiesti:
+1. Chiudi i residui tecnici minimi pre-release.
+2. Allinea worktree, artefatti buildati e policy finale di versionamento/deploy.
+3. Prepara ed esegui una checklist UAT staging sui flussi core.
+4. Esegui regressione tecnica su console, network, debug.log, mobile e multilanguage se attivo.
+5. Definisci se introdurre subito il webhook Stripe oppure formalizza il rischio residuo.
+6. Produci checklist di go-live, rollback plan e smoke test post-deploy.
+
+Vincoli:
+- non fare deploy in produzione
+- non ruotare segreti o toccare sistemi esterni senza richiesta esplicita
+- se alcuni test richiedono browser o accessi mancanti, documenta esattamente cosa manca
+- usa riferimenti file e documenti precisi
+
+Output atteso:
+- report finale di release readiness
+- lista blocker/high/medium ancora aperti
+- checklist UAT compilabile
+- piano deploy/rollback
 ```

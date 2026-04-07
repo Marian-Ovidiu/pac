@@ -18,9 +18,8 @@ class ProgettoController extends BaseController
             }
         }
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        $this->addJs('stripe', 'donation.js', ['stripe'], true, '1.1');
         $opzioniArchivio = OpzioniArchivioProgettoFields::get('option');
-        $this->addVarJs('texts', 'texts', [
+        $this->addVarJs('main', 'texts', [
             $opzioniArchivio->highlights_frase_1 ?? '',
             $opzioniArchivio->highlights_frase_2 ?? '',
             $opzioniArchivio->highlights_frase_3 ?? '',
@@ -36,7 +35,6 @@ class ProgettoController extends BaseController
     public function single()
     {
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        // $this->addJs('single-donation', 'single-donation.js', ['stripe'], true, '2.3');
         $available_gateways = [];
         if (function_exists('WC') && class_exists('\WC_Payment_Gateways')) {
             $wc = \WC();
@@ -44,9 +42,7 @@ class ProgettoController extends BaseController
                 $available_gateways = $wc->payment_gateways->get_available_payment_gateways();
             }
         }
-        $this->addJs('swiper-js', 'https://unpkg.com/swiper/swiper-bundle.min.js', [], true);
-        $this->addCss('swiper-css', 'https://unpkg.com/swiper/swiper-bundle.min.css');
-        $this->addJs('progetto', 'progettoSlider.js', ['swiper-js'], true, '6.8.2');
+        $this->addJs('progetto-slider', 'progettoSlider.js', ['main'], true);
         $progetto = Progetto::find(get_the_ID());
 
         if (! $progetto) {

@@ -1,68 +1,60 @@
-<section class="py-12 md:py-20 bg-white">
-    <div class="container mx-auto px-4 sm:px-6">
+<section class="ui-section">
+    <div class="ui-container">
         @if ($titolo)
-            <h2 class="text-3xl font-nunitoBold text-custom-dark-green text-center mb-12 md:mb-20 lg:text-4xl">
-                {{ $titolo }}
-            </h2>
+            <div class="mx-auto mb-12 max-w-3xl text-center">
+                <span class="ui-kicker mb-5">Approfondimento</span>
+                <h2 class="ui-title">{{ $titolo }}</h2>
+            </div>
         @endif
 
-        <div class="space-y-12 md:space-y-16 max-w-7xl mx-auto">
+        <div class="space-y-8">
             @foreach ($items as $index => $item)
                 @php
                     $hasImage = isset($item['immagini']) && count($item['immagini']) > 0;
                 @endphp
-        
-                <article class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-                    <div class="flex flex-col {{ $hasImage ? 'md:flex-row' : 'items-center text-center' }} {{ $hasImage && $index % 2 === 1 ? 'md:flex-row-reverse' : '' }}">
-                        
-                        {{-- Sezione immagine (solo se presente) --}}
+
+                <article class="ui-card overflow-hidden">
+                    <div class="grid {{ $hasImage ? 'lg:grid-cols-[0.92fr_1.08fr]' : '' }}">
                         @if($hasImage)
-                            <div class="md:w-1/2 p-6 md:p-8">
-                                <div class="overflow-hidden rounded-xl">
-                                    <div class="h-[150px] sm:h-[250px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px] swiper swiper-progetto w-full" role="group" aria-label="Image slider">
-                                        <div class="swiper-wrapper">
-                                            @foreach ($item['immagini'] as $img)
-                                                <figure class="swiper-slide h-[150px] sm:h-[250px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px]">
-                                                    <img 
-                                                        src="{{ $img['url'] }}" 
-                                                        alt="{{ $img['alt'] ?? ($item['sottoTitolo'] ?? 'Project image') }}" 
-                                                        title="{{ $img['title'] ?? ($item['sottoTitolo'] ?? '') }}"
-                                                        class="w-full object-cover"
-                                                        loading="lazy"
-                                                    >
-                                                    @if(isset($img['caption']) && $img['caption'])
-                                                        <figcaption class="sr-only">{{ $img['caption'] }}</figcaption>
-                                                    @endif
-                                                </figure>
-                                            @endforeach
-                                        </div>
-                                        <div class="swiper-pagination mt-4" aria-hidden="true"></div>
+                            <div class="{{ $index % 2 === 1 ? 'lg:order-2' : '' }} border-b border-custom-clay/40 lg:border-b-0">
+                                <div class="swiper swiper-progetto h-[18rem] w-full sm:h-[24rem]" role="group" aria-roledescription="carousel" aria-label="Galleria immagini del progetto">
+                                    <div class="swiper-wrapper">
+                                        @foreach ($item['immagini'] as $img)
+                                            <figure class="swiper-slide h-[18rem] sm:h-[24rem]">
+                                                <img
+                                                    src="{{ $img['url'] }}"
+                                                    alt="{{ $img['alt'] ?? ($item['sottoTitolo'] ?? 'Immagine progetto') }}"
+                                                    title="{{ $img['title'] ?? ($item['sottoTitolo'] ?? '') }}"
+                                                    class="h-full w-full object-cover"
+                                                    loading="lazy">
+                                                @if(!empty($img['caption']))
+                                                    <figcaption class="sr-only">{{ $img['caption'] }}</figcaption>
+                                                @endif
+                                            </figure>
+                                        @endforeach
                                     </div>
+                                    <div class="swiper-pagination !bottom-4" aria-hidden="true"></div>
                                 </div>
                             </div>
                         @endif
-        
-                        {{-- Sezione testo --}}
-                        <div class="{{ $hasImage ? 'md:w-1/2 p-6 md:p-8 flex flex-col justify-center border-t md:border-t-0 md:border-l border-gray-100' : 'p-6 sm:p-10' }}">
-                            <div class="{{ $hasImage ? '' : 'max-w-xl mx-auto' }}">
-                                @if (!empty($item['sottoTitolo']))
-                                    <h3 class="text-xl md:text-2xl font-nunitoSansRegular text-custom-dark-green mb-3 md:mb-4">
-                                        {{ $item['sottoTitolo'] }}
-                                    </h3>
-                                @endif
-        
-                                @if (!empty($item['testo']))
-                                    <div class="prose text-gray-600 font-nunitoSansLight">
-                                        {!! $item['testo'] !!}
-                                    </div>
-                                @endif
-                            </div>
+
+                        <div class="flex flex-col justify-center p-6 sm:p-8 lg:p-10 {{ $hasImage && $index % 2 === 1 ? 'lg:order-1' : '' }}">
+                            @if (!empty($item['sottoTitolo']))
+                                <span class="ui-kicker mb-4">Sul campo</span>
+                                <h3 class="font-nunitoBold text-2xl text-custom-ink sm:text-3xl">
+                                    {{ $item['sottoTitolo'] }}
+                                </h3>
+                            @endif
+
+                            @if (!empty($item['testo']))
+                                <div class="ui-richtext mt-4">
+                                    {!! $item['testo'] !!}
+                                </div>
+                            @endif
                         </div>
-        
                     </div>
                 </article>
             @endforeach
         </div>
-        
     </div>
 </section>

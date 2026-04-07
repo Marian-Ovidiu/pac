@@ -61,8 +61,12 @@ if (!function_exists('acf_location_rule_values_page')) {
 
 if (!function_exists('my_acf_location_options_page')) {
     function my_acf_location_options_page($match, $rule, $options) {
-        if (isset($_GET['page'])) {
-            switch ($_GET['page']) {
+        $page = isset($_GET['page'])
+            ? sanitize_key(wp_unslash($_GET['page']))
+            : '';
+
+        if ($page !== '') {
+            switch ($page) {
                 case 'opzioni-generali':
                 case 'opzioni-archivio-progetto':
                     $match = true;

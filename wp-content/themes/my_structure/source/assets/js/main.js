@@ -5,7 +5,7 @@ import ApiService from './Classes/ApiService.js';
 import Swiper from 'swiper';
 import 'swiper/css';
 import typingEffect from './highlight.js';
-import donationFormData from './donation.js';
+import donationFormData, { resumePendingDonation } from './donation.js';
 
 window.donationFormData = donationFormData;
 window.typingEffect = typingEffect;
@@ -16,3 +16,4 @@ window.Swiper = Swiper;
 
 Alpine.plugin(intersect);
 Alpine.start();
+resumePendingDonation();

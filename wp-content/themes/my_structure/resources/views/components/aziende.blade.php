@@ -1,45 +1,40 @@
-<section class="relative py-10 overflow-hidden bg-black sm:py-16 lg:py-24 xl:py-32">
-    <figure class="absolute inset-0">
-        <img class="object-cover w-full h-full md:object-left md:scale-150 md:origin-top-left"
-             src="{{ $immagine_url }}"
-             alt="{{ $immagine_alt ?? $titolo }}"
-             title="{{ $immagine_title ?? '' }}"
-             loading="lazy"
-             decoding="async">
-        @if($immagine_caption)
-            <figcaption class="sr-only">{{ $immagine_caption }}</figcaption>
-        @endif
-    </figure>
+<section class="ui-section-tight">
+    <div class="ui-container">
+        <div class="ui-panel overflow-hidden rounded-[2.5rem]">
+            <div class="grid items-stretch md:grid-cols-[1.05fr_0.95fr]">
+                @if(!empty($immagine_url))
+                    <figure class="relative min-h-[20rem] overflow-hidden">
+                        <img
+                            class="h-full w-full object-cover"
+                            src="{{ $immagine_url }}"
+                            alt="{{ $immagine_alt ?? $titolo }}"
+                            title="{{ $immagine_title ?? '' }}"
+                            loading="lazy"
+                            decoding="async">
+                        @if($immagine_caption)
+                            <figcaption class="absolute bottom-0 left-0 right-0 bg-black/35 px-5 py-4 text-sm text-white/85">{{ $immagine_caption }}</figcaption>
+                        @endif
+                        @if($immagine_description)
+                            <div class="sr-only">{{ $immagine_description }}</div>
+                        @endif
+                    </figure>
+                @endif
 
-    <div class="absolute inset-0 hidden bg-gradient-to-r md:block from-black to-transparent"></div>
-    <div class="absolute inset-0 block bg-black/60 md:hidden"></div>
+                <div class="flex flex-col justify-center p-7 sm:p-10">
+                    <span class="ui-kicker border-white/15 bg-white/10 text-white">Aziende</span>
+                    <h2 class="mt-5 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">{{ $titolo }}</h2>
+                    <div class="mt-5 max-w-2xl text-base leading-7 text-white/80">{!! $descrizione !!}</div>
 
-    <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div class="text-center {{  $class ?? 'md:w-2/3 lg:w-1/2 xl:w-1/3' }} md:text-left">
-            <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">{{ $titolo }}</h2>
-            <p class="mt-4 text-base text-gray-200">{!! $descrizione !!}</p>
-
-            @if($immagine_caption)
-                <p class="text-sm text-white/80 italic mt-2">{{ $immagine_caption }}</p>
-            @endif
-
-            @if($immagine_description)
-                <div class="sr-only">{{ $immagine_description }}</div>
-            @endif
-
-            @if(isset($cta))
-                <div class="flex items-center justify-center px-3 py-2">
-                    <a href="{{ $cta['url'] }}"
-                       aria-label="{{ $cta['title'] }}"
-                       class="inline-flex items-center justify-center w-full px-4 py-2.5 overflow-hidden text-sm
-                              text-custom-dark-green transition-colors duration-300 bg-custom-light-green rounded-lg
-                              shadow sm:w-auto sm:mx-2 sm:mt-0 hover:bg-custom-green hover:text-white focus:ring
-                              focus:bg-custom-light-green focus:ring-opacity-80">
-                        @include('svg.gallery')
-                        <span class="mx-2">{{ $cta['title'] }}</span>
-                    </a>
+                    @if(isset($cta) && !empty($cta['url']) && !empty($cta['title']))
+                        <div class="mt-8">
+                            <a href="{{ $cta['url'] }}" aria-label="{{ $cta['title'] }}" class="ui-button-ghost">
+                                @include('svg.gallery')
+                                <span>{{ $cta['title'] }}</span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 </section>

@@ -10,6 +10,7 @@ class BaseGroupAcf
     protected $groupKey;
     protected $fields = [];
     protected $postId;
+    protected $attributes = [];
 
     public function __construct($groupName, $postId = null) {
         $this->groupName = $groupName;
@@ -51,7 +52,11 @@ class BaseGroupAcf
                 $value = get_field($field->getKey(), $this->postId, true);
                 if ($value !== false) {
                     $field->setValue($value);
-                    $this->$key = $field->getValue();
+                    $this->attributes[$key] = $field->getValue();
+
+                    if (property_exists($this, $key)) {
+                        $this->{$key} = $field->getValue();
+                    }
                 }
             }
         }
@@ -65,6 +70,10 @@ class BaseGroupAcf
 
     public function __get($name)
     {
+        if (array_key_exists($name, $this->attributes)) {
+            return $this->attributes[$name];
+        }
+
         $parts = explode('_', $name);
         $parts = array_map('ucfirst', $parts);
         $method = 'get' . implode('', $parts) . 'Attribute';
@@ -74,6 +83,12 @@ class BaseGroupAcf
 
         return null;
     }
+
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->attributes);
+    }
+
     public static function getByLanguage($postType, $acfField = 'lingua', $language = null) {
         // $language = $language ?? pll_current_language();
         $language = $language ?? 'it';

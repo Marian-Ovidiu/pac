@@ -144,6 +144,65 @@ Rifare il frontend senza ereditare la complessita attuale.
 4. Allineare ACF al nuovo design.
 5. Fare performance pass finale.
 
+## Priorita 7: Release readiness, staging UAT e go-live
+
+### Obiettivo
+
+Chiudere i residui operativi e validare il progetto in condizioni reali prima del rilascio.
+
+### Task
+
+1. Chiudere i residui tecnici minimi pre-release.
+   Controlli:
+   - notice ACF su textdomain caricato troppo presto
+   - eventuali warning/debug residui
+   - pulizia worktree e allineamento artefatti buildati
+   Done when: bootstrap e build non generano rumore inatteso oltre ai residui accettati.
+
+2. Definire la policy finale di repository e deploy.
+   Controlli:
+   - `public/` versionato o artefatto CI/CD
+   - `vendor/` versionato o installato in deploy
+   - `.env` fuori dal repo
+   - checklist di build/deploy ripetibile
+   Done when: esiste una sola procedura di rilascio approvata.
+
+3. Eseguire UAT end-to-end su staging.
+   Flussi minimi:
+   - home
+   - archivio progetti
+   - singolo progetto
+   - galleria
+   - aziende
+   - grazie
+   - donazione completa
+   - mail post-donazione
+   Done when: ogni flusso ha esito registrato e screenshot/log utili.
+
+4. Eseguire regressione tecnica trasversale.
+   Controlli:
+   - console browser
+   - network 404/500
+   - debug.log
+   - mobile baseline
+   - multilanguage se attivo
+   Done when: i bug critici e high sono a zero.
+
+5. Decidere e implementare i fix finali di affidabilita pagamento.
+   Focus:
+   - webhook Stripe server-to-server
+   - idempotenza finale
+   - gestione redirect persi
+   Done when: il rischio operativo del flusso donazioni e accettabile per produzione.
+
+6. Preparare pacchetto di go-live.
+   Deliverable:
+   - checklist release
+   - rollback plan
+   - smoke test post-deploy
+   - owner e tempi
+   Done when: il deploy puo essere eseguito da un altro tecnico senza conoscenza implicita.
+
 ## Sequenza consigliata
 
 1. Priorita 0
@@ -153,6 +212,7 @@ Rifare il frontend senza ereditare la complessita attuale.
 5. Priorita 4
 6. Priorita 5
 7. Priorita 6
+8. Priorita 7
 
 ## Criteri di uscita progetto
 
@@ -162,3 +222,5 @@ Rifare il frontend senza ereditare la complessita attuale.
 - plugin e dipendenze ridotti e giustificati
 - layout base conforme a SEO tecnico e accessibilita
 - UI rifatta con componenti riusabili e contenuti gestibili
+- staging UAT superata con checklist firmata
+- piano di deploy e rollback pronto

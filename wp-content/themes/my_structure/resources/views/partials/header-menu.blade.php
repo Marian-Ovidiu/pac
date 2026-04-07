@@ -1,86 +1,77 @@
 @php
     $options = \Models\Options\OpzioniGlobaliFields::get();
+    $logoUrl = $options->logo['url'] ?? null;
 @endphp
-<header x-data="{ open: false }" class="p-6 bg-white lg:pb-0">
-    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <!-- Desktop and above -->
-        <nav class="flex items-center justify-between h-16 lg:h-20">
-            <a href="{{ get_home_url(null, '/', 'https') }}" title="{{ __('Home', 'text_domain') }}" class="flex">
-                <div class="text-center flex flex-col items-center justify-between">
-                    <img class="w-auto h-12 lg:h-12" src="{{ $options->logo['url'] }}"
-                        alt="Project Africa Conservation logo" />
-                    <div class="text-custom-dark-green font-bold text-lg">Project Africa Conservation</div>
-                    <!-- Increased font size -->
-                </div>
-            </a>
-
-            <!-- Mobile menu button -->
-            <button @click="open = !open" type="button"
-                class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
-                <svg x-show="!open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                </svg>
-                <svg x-show="open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <!-- Desktop menu -->
-            <div class="hidden lg:flex lg:items-center lg:ml-auto lg:space-x-10 py-6">
-                @foreach ($menu as $key => $item)
-                    <div class="relative group">
-                        <a href="{{ $item->url }}"
-                            class="text-lg font-medium text-black transition-all duration-200 hover:text-custom-green focus:text-custom-green font-nunitoSans">
-                            <!-- Increased font size -->
-                            {{ $item->title }}
-                        </a>
-                        @if (!empty($item->children))
-                            <!-- Dropdown Menu -->
-                            <div
-                                class="absolute left-0 hidden p-2 bg-white border border-gray-200 rounded-lg shadow-md group-hover:block z-50">
-                                <!-- Ho aggiunto z-index qui -->
-                                @foreach ($item->children as $subkey => $subitem)
-                                    <a href="{{ $subitem->url }}"
-                                        class="block px-4 py-1 text-lg font-medium text-black transition-all duration-200 hover:text-custom-green focus:text-custom-green">
-                                        <!-- Increased font size -->
-                                        {{ $subitem->title }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
-
+<header x-data="{ open: false }" class="ui-section-tight pb-4">
+    <div class="ui-container">
+        <div class="ui-card-soft px-4 py-4 sm:px-6">
+            <nav class="flex items-center justify-between gap-6" aria-label="Navigazione principale">
+                <a href="{{ home_url('/') }}" title="{{ __('Home', 'text_domain') }}" class="flex items-center gap-4">
+                    @if ($logoUrl)
+                        <div class="ui-image-frame h-14 w-14 overflow-hidden rounded-full border-white/70 shadow-soft">
+                            <img class="h-full w-full object-cover" src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />
+                        </div>
+                    @endif
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-custom-stone">PAC</p>
+                        <p class="font-nunitoBold text-lg leading-tight text-custom-ink sm:text-xl">Project Africa Conservation</p>
                     </div>
-                @endforeach
-            </div>
-        </nav>
+                </a>
 
-        <!-- Mobile menu -->
-        <nav x-show="open" @click.away="open = false" ...>
-            <div class="flow-root pl-4">
-                <div class="flex flex-col flex-start px-3 space-y-4 pt-2">
+                <button
+                    @click="open = !open"
+                    type="button"
+                    class="ui-button-secondary !px-4 !py-2 lg:hidden"
+                    aria-controls="mobile-primary-menu"
+                    :aria-expanded="open ? 'true' : 'false'"
+                    :aria-label="open ? 'Chiudi menu principale' : 'Apri menu principale'">
+                    Menu
+                </button>
+
+                <ul class="ml-auto hidden items-center gap-3 lg:flex">
                     @foreach ($menu as $item)
-                        <div class="flex flex-col justify-between w-full relative">
-                            <a href="{{ $item->url }}"
-                                class="text-lg font-medium text-black transition-all duration-200 hover:text-custom-green focus:text-custom-green font-nunitoSans">
+                        <li class="group relative">
+                            <a href="{{ $item->url }}" class="ui-button-secondary !rounded-full !border-none !bg-transparent !px-4 !py-2 !shadow-none">
                                 {{ $item->title }}
                             </a>
                             @if (!empty($item->children))
-                                <div class="pl-4 mt-2 space-y-2 border-l border-gray-200 ml-2">
+                                <ul class="absolute right-0 top-full z-50 hidden min-w-[14rem] rounded-3xl border border-custom-clay/60 bg-white p-3 shadow-card group-hover:block group-focus-within:block">
                                     @foreach ($item->children as $subitem)
-                                        <a href="{{ $subitem->url }}"
-                                            class="block text-base font-medium text-black hover:text-custom-green">
-                                            {{ $subitem->title }}
-                                        </a>
+                                        <li>
+                                            <a href="{{ $subitem->url }}" class="block rounded-2xl px-4 py-3 text-sm font-medium text-custom-ink hover:bg-custom-sand">
+                                                {{ $subitem->title }}
+                                            </a>
+                                        </li>
                                     @endforeach
-                                </div>
+                                </ul>
                             @endif
-                        </div>
+                        </li>
                     @endforeach
-                </div>
-            </div>
-        </nav>
+                </ul>
+            </nav>
 
+            <nav id="mobile-primary-menu" x-show="open" @click.away="open = false" class="mt-5 border-t border-custom-clay/50 pt-4 lg:hidden" aria-label="Navigazione mobile">
+                <ul class="space-y-3">
+                    @foreach ($menu as $item)
+                        <li class="rounded-3xl bg-white/60 p-3">
+                            <a href="{{ $item->url }}" class="block text-base font-semibold text-custom-ink">
+                                {{ $item->title }}
+                            </a>
+                            @if (!empty($item->children))
+                                <ul class="mt-3 space-y-2 border-l border-custom-clay pl-4">
+                                    @foreach ($item->children as $subitem)
+                                        <li>
+                                            <a href="{{ $subitem->url }}" class="block text-sm text-custom-stone">
+                                                {{ $subitem->title }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            </nav>
+        </div>
     </div>
 </header>

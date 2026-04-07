@@ -3,6 +3,168 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --pac-ink: #122018;
+    --pac-forest: #2f4a2d;
+    --pac-moss: #84ce59;
+    --pac-sand: #f5f1e8;
+    --pac-clay: #d8c8ae;
+    --pac-stone: #697261;
+    --pac-white: #fffdf8;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-custom-sand text-custom-ink antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(132, 206, 89, 0.16), transparent 34%),
+      linear-gradient(180deg, rgba(255, 253, 248, 0.9), rgba(245, 241, 232, 0.96));
+  }
+
+  ::selection {
+    background: rgba(132, 206, 89, 0.35);
+    color: var(--pac-ink);
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+
+  .prose a {
+    @apply text-custom-dark-green underline decoration-custom-green/70 underline-offset-4;
+  }
+}
+
+@layer components {
+  .ui-shell {
+    @apply relative overflow-hidden bg-custom-sand;
+  }
+
+  .ui-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .ui-section {
+    @apply py-14 sm:py-16 lg:py-24;
+  }
+
+  .ui-section-tight {
+    @apply py-10 sm:py-14 lg:py-16;
+  }
+
+  .ui-grid {
+    @apply grid gap-6 lg:gap-8;
+  }
+
+  .ui-card {
+    @apply rounded-4xl border border-white/60 bg-white/80 shadow-card backdrop-blur-sm;
+  }
+
+  .ui-card-soft {
+    @apply rounded-4xl border border-custom-clay/60 bg-white/75 shadow-soft backdrop-blur-sm;
+  }
+
+  .ui-panel {
+    @apply rounded-4xl border border-custom-clay/50 bg-custom-ink text-white shadow-card;
+  }
+
+  .ui-kicker {
+    @apply inline-flex items-center gap-2 rounded-full border border-custom-dark-green/15 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-custom-dark-green;
+  }
+
+  .ui-display {
+    @apply font-nunitoBold text-4xl leading-[1.05] text-custom-ink sm:text-5xl lg:text-6xl;
+  }
+
+  .ui-title {
+    @apply font-nunitoBold text-3xl leading-tight text-custom-ink sm:text-4xl;
+  }
+
+  .ui-subtitle {
+    @apply max-w-3xl text-base leading-7 text-custom-stone sm:text-lg;
+  }
+
+  .ui-richtext {
+    @apply max-w-none text-base leading-7 text-custom-stone sm:text-lg;
+  }
+
+  .ui-richtext p,
+  .ui-richtext ul,
+  .ui-richtext ol {
+    @apply mb-4;
+  }
+
+  .ui-richtext h2,
+  .ui-richtext h3,
+  .ui-richtext h4,
+  .ui-richtext strong {
+    color: var(--pac-ink);
+  }
+
+  .ui-richtext ul,
+  .ui-richtext ol {
+    @apply pl-5;
+  }
+
+  .ui-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-custom-dark-green px-5 py-3 text-sm font-semibold text-white shadow-soft transition duration-200 hover:-translate-y-0.5 hover:bg-custom-forest focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2;
+  }
+
+  .ui-button-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-custom-dark-green/15 bg-white px-5 py-3 text-sm font-semibold text-custom-dark-green shadow-soft transition duration-200 hover:-translate-y-0.5 hover:border-custom-green hover:text-custom-forest focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2;
+  }
+
+  .ui-button-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-custom-light-green px-5 py-3 text-sm font-semibold text-custom-dark-green transition duration-200 hover:bg-custom-green hover:text-white focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2;
+  }
+
+  .ui-pill {
+    @apply inline-flex rounded-full border border-custom-dark-green/10 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-custom-dark-green;
+  }
+
+  .ui-stat {
+    @apply rounded-3xl border border-white/50 bg-white/75 p-4 text-center shadow-soft backdrop-blur-sm;
+  }
+
+  .ui-input {
+    @apply w-full rounded-2xl border border-custom-clay bg-white px-4 py-3 text-custom-ink placeholder:text-custom-stone/70 focus:border-custom-green focus:outline-none focus:ring-2 focus:ring-custom-green/40;
+  }
+
+  .ui-donation-card {
+    @apply ui-card p-5 sm:p-6;
+  }
+
+  .ui-step {
+    @apply rounded-full border border-custom-dark-green/10 bg-custom-sand px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-custom-stone;
+  }
+
+  .ui-step-active {
+    @apply border-custom-dark-green bg-custom-dark-green text-white;
+  }
+
+  .ui-image-frame {
+    @apply overflow-hidden rounded-4xl border border-white/50 shadow-card;
+  }
+
+  .ui-project-copy {
+    @apply ui-richtext text-sm sm:text-base;
+  }
+
+  .ui-noise {
+    background-image:
+      linear-gradient(135deg, rgba(132, 206, 89, 0.16), rgba(255, 255, 255, 0) 45%),
+      radial-gradient(circle at bottom right, rgba(69, 117, 44, 0.14), transparent 35%);
+  }
+}
+
 .loader {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #3498db;
@@ -23,9 +185,10 @@
   100% { transform: rotate(360deg); }
 }
 
-.wpcf7-response-output {
-  @apply text-sm text-green-600 mt-4;
-}
 .wpcf7-validation-errors {
   @apply text-sm text-red-600 mt-4;
+}
+
+.wpcf7-response-output {
+  @apply text-sm text-green-600 mt-4;
 }

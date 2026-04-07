@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".logo-carousel").forEach(e=>{new Swiper(e,{slidesPerView:1,spaceBetween:0,loop:!0,autoplay:{delay:0,disableOnInteraction:!1},speed:1e4,pagination:{el:e.querySelector(".swiper-pagination"),clickable:!0},breakpoints:{640:{slidesPerView:1},768:{slidesPerView:1},1024:{slidesPerView:1}}})})});

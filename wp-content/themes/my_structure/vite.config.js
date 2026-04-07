@@ -10,7 +10,9 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: path.resolve(__dirname, 'source/assets/js/main.js'),
-                style: path.resolve(__dirname, 'source/assets/scss/style.scss')
+                style: path.resolve(__dirname, 'source/assets/scss/style.scss'),
+                homeSlider: path.resolve(__dirname, 'source/assets/js/homeSlider.js'),
+                progettoSlider: path.resolve(__dirname, 'source/assets/js/progettoSlider.js')
             },
             output: {
                 entryFileNames: 'js/[name]-[hash].js',

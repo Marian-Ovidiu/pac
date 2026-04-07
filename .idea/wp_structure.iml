@@ -8,6 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/wp-includes" isTestSource="false" packagePrefix="PHPMailer" />
       <excludeFolder url="file://$MODULE_DIR$/wp-content/themes/my_structure/vendor/_laravel_idea" />
       <excludeFolder url="file://$MODULE_DIR$/wp-content/uploads" />
+      <excludeFolder url="file://$MODULE_DIR$/wp-content/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/wp-content/upgrade" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

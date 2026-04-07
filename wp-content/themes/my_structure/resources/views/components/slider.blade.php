@@ -1,47 +1,52 @@
-<div class="w-full relative h-[75vh] overflow-hidden mb-12">
-    <div class="swiper-container logo-carousel h-full opacity-0 transition-opacity duration-300" x-init="$nextTick(() => setTimeout(() => $el.classList.remove('opacity-0'), 100))">
-        <div class="swiper-wrapper sw-wrapper-linear-custom h-full" aria-live="polite">
-            @foreach($slides as $slide)
-                @if($slide['url'] && $slide['titolo'] && $slide['testo'])
-                    <div class="swiper-slide !h-full w-full">
-                        <section x-data="{ loaded: false }"
-                                 x-intersect="loaded = true"
-                                 :style="loaded
-                                 ? `background-image: url('{{ $slide['url'] }}'); background-size: cover; background-position: center;`
-                                 : 'background-color: #ccc;'"
-                                 class="overflow-hidden bg-cover bg-center bg-no-repeat transition-all w-full h-full flex justify-center items-center"
-                                 aria-label="{{ $slide['alt'] ?? $slide['titolo'] }}"
-                                 role="region">
-                            <div class="bg-black/25 h-full w-full p-6 sm:p-8 md:p-12 lg:p-16 flex justify-center items-center">
-                                <div class="text-center flex flex-col items-center justify-center w-full max-w-screen-md px-4">
-                                    <h3 class="text-2xl sm:text-3xl md:text-5xl font-bold text-white font-nunitoBold">
-                                        {{ $slide['titolo'] }}
-                                    </h3>
-                                    <p class="text-white/90 mt-4 md:mt-6 md:text-lg md:leading-relaxed font-nunitoSansRegular">
-                                        {{ $slide['testo'] }}
-                                    </p>
-                                    @if($slide['caption'])
-                                        <p class="text-sm text-white/80 italic mt-2">{{ $slide['caption'] }}</p>
-                                    @endif
-                                    @if($slide['cta_url'] && $slide['cta_title'])
-                                        <div class="mt-4 sm:mt-8">
-                                            <a href="{{ $slide['cta_url'] }}" aria-label="{{ $slide['cta_title'] }}" role="button"
-                                               class="inline-block rounded-full px-8 py-3 bg-custom-green text-sm font-medium text-white transition focus:outline-none focus:ring focus:ring-yellow-400 font-nunitoSansRegular">
-                                                {{ $slide['cta_title'] }}
-                                            </a>
+<section class="ui-section-tight">
+    <div class="ui-container">
+        <div class="ui-image-frame overflow-hidden rounded-[2.5rem]" role="region" aria-roledescription="carousel" aria-label="Contenuti in evidenza">
+            <div class="swiper-container logo-carousel h-[72vh] min-h-[32rem] opacity-0 transition-opacity duration-300" x-init="$nextTick(() => setTimeout(() => $el.classList.remove('opacity-0'), 100))">
+                <div class="swiper-wrapper h-full" aria-live="polite">
+                    @foreach($slides as $slide)
+                        @if($slide['url'] && $slide['titolo'] && $slide['testo'])
+                            <div class="swiper-slide h-full w-full" role="group" aria-label="{{ $slide['titolo'] }}">
+                                <section
+                                    x-data="{ loaded: false }"
+                                    x-intersect="loaded = true"
+                                    :style="loaded
+                                        ? `background-image: url('{{ $slide['url'] }}'); background-size: cover; background-position: center;`
+                                        : 'background-color: #d8c8ae;'"
+                                    class="flex h-full w-full items-end bg-cover bg-center bg-no-repeat">
+                                    <div class="ui-noise flex h-full w-full items-end bg-gradient-to-t from-[rgba(18,32,24,0.88)] via-[rgba(18,32,24,0.35)] to-transparent p-6 sm:p-8 lg:p-12">
+                                        <div class="w-full">
+                                            <div class="ui-panel max-w-3xl p-6 sm:p-8">
+                                                <span class="ui-kicker border-white/15 bg-white/10 text-white">Project Africa Conservation</span>
+                                                <h2 class="mt-5 font-nunitoBold text-3xl leading-tight text-white sm:text-4xl lg:text-5xl">
+                                                    {{ $slide['titolo'] }}
+                                                </h2>
+                                                <p class="mt-4 max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
+                                                    {{ $slide['testo'] }}
+                                                </p>
+                                                <div class="mt-8 flex flex-wrap items-center gap-3">
+                                                    @if($slide['cta_url'] && $slide['cta_title'])
+                                                        <a href="{{ $slide['cta_url'] }}" aria-label="{{ $slide['cta_title'] }}" class="ui-button">
+                                                            {{ $slide['cta_title'] }}
+                                                        </a>
+                                                    @endif
+                                                    @if($slide['caption'])
+                                                        <span class="ui-pill border-white/20 bg-white/10 text-white/85">{{ $slide['caption'] }}</span>
+                                                    @endif
+                                                </div>
+                                                @if($slide['description'])
+                                                    <div class="sr-only">{{ $slide['description'] }}</div>
+                                                @endif
+                                            </div>
                                         </div>
-                                    @endif
-                                    @if($slide['description'])
-                                        <div class="sr-only">{{ $slide['description'] }}</div>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <x-img :acf="$slide" class="sr-only" />
+                                </section>
                             </div>
-                            <x-img :acf="$slide" class="sr-only" />
-                        </section>
-                    </div>
-                @endif
-            @endforeach
+                        @endif
+                    @endforeach
+                </div>
+                <div class="swiper-pagination !bottom-6"></div>
+            </div>
         </div>
-        <div class="swiper-pagination"></div>
     </div>
-</div>
+</section>
