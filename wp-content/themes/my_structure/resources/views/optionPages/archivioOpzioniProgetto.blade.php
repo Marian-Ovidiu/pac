@@ -10,7 +10,7 @@ do_action('acf/input/admin_head');
         acf_form([
             'post_id'    => 'options',
             'field_groups' => [$options->getGroupKey()],
-            'submit_value' => __('Salva le impostazioni', 'acf'),
+            'submit_value' => 'Salva le impostazioni',
             'return' => false,
         ]);
         ?>

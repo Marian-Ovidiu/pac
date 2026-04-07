@@ -74,7 +74,7 @@ class Shortcodes {
 	}
 
 	/**
-	 * Contact info shortcode, displays nicely formatted contact informations.
+	 * Contact info shortcode, displays nicely formatted contact information.
 	 *
 	 * @param  array $args Optional. Shortcode arguments - currently only 'show'
 	 *                     parameter, which is a comma-separated list of elements to show.
@@ -228,7 +228,7 @@ class Shortcodes {
 				continue;
 			}
 
-			$combined[ trim( $hour['time'] ) ][] = $this->get_localized_day( $hour['day'] );
+			$combined[ trim( $hour['time'] ) ][] = $this->get_localized_day( $hour['day'] ?? 'Monday' );
 		}
 
 		return $combined;
@@ -273,11 +273,12 @@ class Shortcodes {
 			}
 
 			$number = esc_html( $phone['number'] );
-			$label  = isset( $choices[ $phone['type'] ] ) ? $choices[ $phone['type'] ] : ''
+			$type   = $phone['type'] ?? 'customer support';
+			$label  = isset( $choices[ $type ] ) ? $choices[ $type ] : ''
 			?>
-			<div class="rank-math-phone-number type-<?php echo sanitize_html_class( $phone['type'] ); ?>">
+			<div class="rank-math-phone-number type-<?php echo sanitize_html_class( $type ); ?>">
 				<label><?php echo esc_html( $label ); ?>:</label>
-				<span><?php echo isset( $phone['number'] ) ? '<a href="tel://' . esc_attr( $number ) . '">' . esc_html( $number ) . '</a>' : ''; ?></span>
+				<span><?php echo isset( $phone['number'] ) ? '<a href="tel:' . esc_attr( $number ) . '">' . esc_html( $number ) . '</a>' : ''; ?></span>
 			</div>
 			<?php
 		endforeach;
@@ -292,9 +293,9 @@ class Shortcodes {
 			return;
 		}
 		?>
-			<div class="rank-math-phone-numberx">
+			<div class="rank-math-phone-numbers">
 				<label><?php echo esc_html__( 'Telephone', 'rank-math' ); ?>:</label>
-				<span><a href="tel://<?php echo esc_attr( $phone ); ?>"><?php echo esc_html( $phone ); ?></a></span>
+				<span><a href="tel:<?php echo esc_attr( $phone ); ?>"><?php echo esc_html( $phone ); ?></a></span>
 			</div>
 		<?php
 	}
@@ -389,9 +390,11 @@ class Shortcodes {
 			if ( empty( $property['value'] ) ) {
 				continue;
 			}
+
+			$type = $property['type'] ?? 'legalName';
 			?>
 			<div class="rank-math-organization-additional-details">
-				<label><?php echo esc_html( $choices[ $property['type'] ] ); ?>:</label>
+				<label><?php echo esc_html( $choices[ $type ] ); ?>:</label>
 				<span><?php echo esc_html( $property['value'] ); ?></span>
 			</div>
 			<?php

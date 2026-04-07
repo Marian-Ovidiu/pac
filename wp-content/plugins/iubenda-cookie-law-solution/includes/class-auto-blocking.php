@@ -58,6 +58,36 @@ class Auto_Blocking {
 	}
 
 	/**
+	 * Parses the configuration from the provided script and returns the Google URL Passthrough setting.
+	 *
+	 * @param   string $script  The script to parse.
+	 *
+	 * @return bool|null The Google URL Passthrough setting, or null if not found.
+	 */
+	public function get_google_url_passthrough_from_cs_code( $script ) {
+		$value = iubenda()->configuration_parser->retrieve_info_from_script_by_key( $script, 'googleUrlPassthrough' );
+		if ( null === $value || '' === $value ) {
+			return null;
+		}
+		return (bool) $value;
+	}
+
+	/**
+	 * Parses the configuration from the provided script and returns the Google Ads Data Redaction setting.
+	 *
+	 * @param   string $script  The script to parse.
+	 *
+	 * @return bool|null The Google Ads Data Redaction setting, or null if not found.
+	 */
+	public function get_google_ads_data_redaction_from_cs_code( $script ) {
+		$value = iubenda()->configuration_parser->retrieve_info_from_script_by_key( $script, 'googleAdsDataRedaction' );
+		if ( null === $value || '' === $value ) {
+			return null;
+		}
+		return (bool) $value;
+	}
+
+	/**
 	 * Checks if the autoblocking feature is available for the given site ID and updates the status.
 	 *
 	 * @param   string $site_id  The site ID to check.
@@ -199,6 +229,12 @@ class Auto_Blocking {
 			wp_send_json( false );
 		}
 
+		// Check if the code uses the new unified format (embeds.iubenda.com/widgets/).
+		if ( $this->is_unified_embed_format( $code ) ) {
+			// Verify if autoblocking is actually enabled for this unified embed.
+			wp_send_json( $this->is_unified_autoblocking_enabled( $code ) );
+		}
+
 		// Check if the configuration_type is simplified.
 		if ( 'simplified' === $configuration_type ) {
 			$site_id = iub_array_get( iubenda()->options['global_options'], 'site_id' );
@@ -212,5 +248,77 @@ class Auto_Blocking {
 		}
 
 		wp_send_json( $this->is_autoblocking_feature_available( $site_id ) );
+	}
+
+	/**
+	 * Check if autoblocking is enabled for a unified embed URL.
+	 * Extracts the site_id from the embed URL and checks autoblocking availability.
+	 *
+	 * @param   string $code  embed code containing unified embed URL.
+	 *
+	 * @return bool True if autoblocking is enabled for this embed URL, false otherwise.
+	 */
+	public function is_unified_autoblocking_enabled( $code ) {
+		// Strip slashes to handle escaped quotes.
+		$code = stripslashes( $code );
+
+		// Reuse existing URL extraction methods from configuration_parser.
+		$embed_url = iubenda()->configuration_parser->extract_embed_url_with_dom( $code );
+
+		if ( false === $embed_url ) {
+			// Fallback to string parsing.
+			$embed_url = iubenda()->configuration_parser->extract_embed_url_with_fallback( $code );
+		}
+
+		if ( false === $embed_url ) {
+			return false;
+		}
+
+		// Fetch the JavaScript content from embed URL.
+		$response = wp_remote_get( $embed_url, array( 'timeout' => 10 ) );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
+
+		$js_content = wp_remote_retrieve_body( $response );
+
+		// Extract _iub.csSiteConf from the JavaScript.
+		if ( ! preg_match( '/_iub\.csSiteConf\s*=\s*({[^;]+});/', $js_content, $config_matches ) ) {
+			return false;
+		}
+
+		$config_json = $config_matches[1];
+		$decoded     = json_decode( $config_json, true );
+
+		if ( empty( $decoded ) || ! is_array( $decoded ) ) {
+			return false;
+		}
+
+		// Extract siteId from the configuration.
+		$site_id = isset( $decoded['siteId'] ) ? $decoded['siteId'] : null;
+
+		if ( empty( $site_id ) ) {
+			return false;
+		}
+
+		// Use existing function to check if autoblocking is available for this site_id.
+		return $this->is_autoblocking_feature_available( $site_id );
+	}
+
+	/**
+	 * Check if the embed code uses the new unified format (embeds.iubenda.com/widgets/).
+	 * Supports both production and staging environments.
+	 *
+	 * @param   string $code  embed code.
+	 *
+	 * @return bool True if the code uses the unified embed format, false otherwise.
+	 */
+	public function is_unified_embed_format( $code ) {
+		return false !== stripos( $code, 'embeds.iubenda.com/widgets/' );
 	}
 }

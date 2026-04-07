@@ -41,6 +41,10 @@ class Auto_Blocking_Script_Appender {
 	 * Handle the script for auto-blocking functionality.
 	 */
 	public function handle() {
+		if ( $this->code_extractor->is_unified_embed_format() ) {
+			return;
+		}
+
 		if ( $this->code_extractor->is_auto_blocking_enabled() ) {
 			// phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedScript
 			?>
@@ -49,8 +53,24 @@ class Auto_Blocking_Script_Appender {
 				_iub.csConfiguration = _iub.csConfiguration || {};
 				_iub.csConfiguration.siteId = "<?php echo esc_attr( $this->code_extractor->get_site_id() ); ?>";
 				_iub.csConfiguration.cookiePolicyId = "<?php echo esc_attr( $this->code_extractor->get_cookie_policy_id() ); ?>";
+				<?php
+				// Output Google consent properties if they are explicitly set in configuration.
+				$google_url_passthrough = $this->code_extractor->get_google_url_passthrough();
+				if ( null !== $google_url_passthrough ) {
+					?>
+					_iub.csConfiguration.googleUrlPassthrough = <?php echo $google_url_passthrough ? 'true' : 'false'; ?>;
+					<?php
+				}
+
+				$google_ads_data_redaction = $this->code_extractor->get_google_ads_data_redaction();
+				if ( null !== $google_ads_data_redaction ) {
+					?>
+					_iub.csConfiguration.googleAdsDataRedaction = <?php echo $google_ads_data_redaction ? 'true' : 'false'; ?>;
+					<?php
+				}
+				?>
 			</script>
-			<script class="_iub_cs_skip" src="<?php echo esc_url( $this->url() ); ?>"></script>
+			<script class="_iub_cs_skip" src="<?php echo esc_url( $this->url() ); ?>" fetchpriority="low"></script>
 			<?php
 			// phpcs:enable WordPress.WP.EnqueuedResources.NonEnqueuedScript
 		}

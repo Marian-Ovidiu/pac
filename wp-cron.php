@@ -26,6 +26,8 @@ if ( ! headers_sent() ) {
 // Don't run cron until the request finishes, if possible.
 if ( function_exists( 'fastcgi_finish_request' ) ) {
 	fastcgi_finish_request();
+} elseif ( function_exists( 'litespeed_finish_request' ) ) {
+	litespeed_finish_request();
 }
 
 if ( ! empty( $_POST ) || defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) ) {

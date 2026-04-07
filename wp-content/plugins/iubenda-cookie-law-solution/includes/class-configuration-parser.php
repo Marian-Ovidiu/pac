@@ -12,6 +12,48 @@
 class Configuration_Parser {
 
 	/**
+	 * Request-level cache for unified embed configurations, keyed by embed code hash.
+	 * Prevents multiple HTTP fetches for the same embed URL within one request.
+	 *
+	 * @var array<string, array<string, mixed>>
+	 */
+	private $unified_embed_cache = array();
+
+	/**
+	 * Extract balanced braces from a string starting at a given position.
+	 *
+	 * @param   string $str  The string to search in.
+	 * @param   int    $start The starting position (after opening brace).
+	 *
+	 * @return string The content between balanced braces, or empty string if not found.
+	 */
+	private function extract_balanced_braces( $str, $start ) {
+		$depth  = 1; // Start at depth 1 since we're after the opening brace.
+		$result = '';
+		$len    = strlen( $str );
+
+		for ( $i = $start; $i < $len; $i++ ) {
+			$char = $str[ $i ];
+
+			if ( '{' === $char ) {
+				++$depth;
+				$result .= $char; // Always include opening braces.
+			} elseif ( '}' === $char ) {
+				--$depth;
+				if ( 0 === $depth ) {
+					// We've closed the outer brace, return without including this closing brace.
+					return $result;
+				}
+				$result .= $char; // Include closing braces for nested objects.
+			} else {
+				$result .= $char;
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Extracts configuration data from an Iubenda CS code.
 	 *
 	 * Parses the code to extract configuration, specifically tailored for non-AMP (normal) web pages.
@@ -68,6 +110,121 @@ class Configuration_Parser {
 
 		if ( ! empty( $matches[1] ) ) {
 			$parsed_code = '{' . $matches[1] . '}';
+		}
+
+		// decode.
+		$decoded = json_decode( $parsed_code, true );
+
+		if ( ! empty( $decoded ) && is_array( $decoded ) ) {
+
+			$decoded['script'] = $parsed_script;
+
+			// basic mode.
+			if ( 'basic' === $args['mode'] ) {
+				if ( isset( $decoded['banner'] ) ) {
+					unset( $decoded['banner'] );
+				}
+				if ( isset( $decoded['callback'] ) ) {
+					unset( $decoded['callback'] );
+				}
+				if ( isset( $decoded['perPurposeConsent'] ) ) {
+					unset( $decoded['perPurposeConsent'] );
+				}
+				// Banner mode to get banner configuration only.
+			} elseif ( 'banner' === (string) $args['mode'] ) {
+				if ( isset( $decoded['banner'] ) ) {
+					return $decoded['banner'];
+				}
+
+				return array();
+			}
+
+			$configuration = $decoded;
+		}
+
+		return $configuration;
+	}
+
+
+	/**
+	 * Extracts Google properties from an Iubenda CS code.
+	 *
+	 * Parses the code to extract configuration, specifically tailored for non-AMP (normal) web pages.
+	 * This method optionally removes callback functions for easier parsing,
+	 * and supports basic or banner modes for configuration extraction.
+	 *
+	 * @param   string $code  (googleUrlPassthrough or googleAdsDataRedaction) The Iubenda code snippet.
+	 * @param   array  $args  Optional arguments to control parsing behavior.
+	 *
+	 * @return array Configuration data as an associative array.
+	 */
+	public function extract_cs_config_from_code_google_properties( $code, $args = array() ) {
+		// Check if the embed code have Callback Functions inside it or not.
+		if ( strpos( $code, 'callback' ) !== false ) {
+			$code = $this->remove_callbacks_for_parsing( $code );
+		}
+
+		$configuration = array();
+		$defaults      = array(
+			'mode'  => 'basic',
+			'parse' => false,
+		);
+
+		// parse incoming $args into an array and merge it with $defaults.
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( empty( $code ) ) {
+			return $configuration;
+		}
+
+		// parse code if needed.
+		$parsed_code = true === $args['parse'] ? $this->sanitize_and_prepare_code( $code, true ) : $code;
+
+		// get script.
+		$parsed_script = '';
+
+		preg_match_all( '/src\=(?:[\"|\'])(.*?)(?:[\"|\'])/', $parsed_code, $matches );
+
+		// find the iubenda script url.
+		if ( ! empty( $matches[1] ) ) {
+			foreach ( $matches[1] as $found_script ) {
+				if ( strpos( $found_script, 'iubenda_cs.js' ) ) {
+					$parsed_script = $found_script;
+					continue;
+				}
+			}
+		}
+
+		// strip tags.
+		$parsed_code = wp_kses( $parsed_code, array() );
+
+		// get configuration.
+		// Improved extraction to handle nested objects properly.
+		$extracted_config = '';
+		$config_start     = strpos( $parsed_code, '_iub.csConfiguration' );
+		if ( false !== $config_start ) {
+			// Find the opening brace.
+			$brace_pos = strpos( $parsed_code, '{', $config_start );
+			if ( false !== $brace_pos ) {
+				// Extract balanced braces content.
+				$config_content = $this->extract_balanced_braces( $parsed_code, $brace_pos + 1 );
+				if ( ! empty( $config_content ) ) {
+					$extracted_config = '{' . $config_content . '}';
+				}
+			}
+		}
+
+		// Fallback to regex if brace matching didn't work.
+		if ( empty( $extracted_config ) ) {
+			preg_match( '/_iub\.csConfiguration\s*=\s*(\{.*?\});/s', $parsed_code, $matches );
+			if ( ! empty( $matches[1] ) ) {
+				$extracted_config = $matches[1];
+			}
+		}
+
+		// Use extracted config if found, otherwise keep original parsed_code.
+		if ( ! empty( $extracted_config ) ) {
+			$parsed_code = $extracted_config;
 		}
 
 		// decode.
@@ -161,6 +318,12 @@ class Configuration_Parser {
 			return $configuration;
 		}
 
+		// Check if this is unified embed format (embeds.iubenda.com/widgets/).
+		if ( false !== strpos( $code, 'embeds.iubenda.com/widgets/' ) ) {
+			return $this->extract_config_from_unified_embed( $code, $args, $configuration );
+		}
+
+		// Handle csConfiguration format (existing logic).
 		// parse code if needed.
 		$parsed_code = true === $args['parse'] ? $this->sanitize_and_prepare_code( $code, true ) : $code;
 
@@ -183,10 +346,10 @@ class Configuration_Parser {
 		$parsed_code = wp_kses( $parsed_code, array() );
 
 		// get configuration.
-		preg_match( '/_iub.csConfiguration *= *{(.*?)\};/', $parsed_code, $matches );
+		preg_match( '/_iub\.csConfiguration\s*=\s*(\{.*?\});/s', $parsed_code, $matches );
 
 		if ( ! empty( $matches[1] ) ) {
-			$parsed_code = '{' . $matches[1] . '}';
+			$parsed_code = $matches[1];
 		}
 
 		// decode.
@@ -410,8 +573,27 @@ class Configuration_Parser {
 		// Remove slashes from the script.
 		$script = stripslashes( $script );
 
-		// Try to parse the configuration using iubenda()->configuration_parser->get_config_from_iubenda_code().
-		$parsed_configuration = $this->extract_cs_config_from_code( $script );
+		// Handle unified embed format (JEEG) — fetch config remotely and extract the key.
+		// Uses a request-level cache so multiple calls for the same embed only trigger one HTTP fetch.
+		if ( false !== strpos( $script, 'embeds.iubenda.com/widgets/' ) ) {
+			$cache_key = md5( $script );
+			if ( ! isset( $this->unified_embed_cache[ $cache_key ] ) ) {
+				$this->unified_embed_cache[ $cache_key ] = $this->extract_config_from_unified_embed( $script, array( 'mode' => 'basic' ), array() );
+			}
+
+			$config = $this->unified_embed_cache[ $cache_key ];
+			return isset( $config[ $key ] ) ? (string) $config[ $key ] : '';
+		}
+
+		// TODO unified this logic for google properties.
+		// Try to parse the configuration using iubenda()->configuration_parser->extract_cs_config_from_code_google_properties().
+		if ( 'googleUrlPassthrough' === $key || 'googleAdsDataRedaction' === $key ) {
+			$parsed_configuration = $this->extract_cs_config_from_code_google_properties( $script );
+		} else {
+			// Try to parse the configuration using iubenda()->configuration_parser->get_config_from_iubenda_code().
+			$parsed_configuration = $this->extract_cs_config_from_code( $script );
+		}
+
 		if ( ! empty( $parsed_configuration ) && isset( $parsed_configuration[ $key ] ) ) {
 			return $parsed_configuration[ $key ];
 		}
@@ -424,5 +606,149 @@ class Configuration_Parser {
 
 		// Return an empty string if the key is not found.
 		return '';
+	}
+
+	/**
+	 * Extract embed URL from script tag using DOMDocument.
+	 *
+	 * @param string $code HTML code containing script tag.
+	 * @return string|false Embed URL or false if extraction fails.
+	 */
+	public function extract_embed_url_with_dom( $code ) {
+		if ( ! class_exists( 'DOMDocument' ) ) {
+			return false;
+		}
+
+		$dom = new DOMDocument();
+		// Suppress warnings for malformed HTML.
+		libxml_use_internal_errors( true );
+		$dom->loadHTML( $code );
+		libxml_clear_errors();
+
+		$scripts = $dom->getElementsByTagName( 'script' );
+
+		foreach ( $scripts as $script ) {
+			if ( $script instanceof DOMElement ) {
+				$src = $script->getAttribute( 'src' );
+				if ( ! empty( $src ) && false !== strpos( $src, 'embeds.iubenda.com/widgets/' ) ) {
+					return $src;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Extract embed URL from script tag using string parsing (fallback).
+	 *
+	 * @param string $code HTML code containing script tag.
+	 * @return string|false Embed URL or false if extraction fails.
+	 */
+	public function extract_embed_url_with_fallback( $code ) {
+		// Remove any escaped quotes first.
+		$code = str_replace( '\\"', '"', $code );
+		$code = str_replace( "\\'", "'", $code );
+
+		// Split by quotes to extract potential URLs.
+		$parts = explode( '"', $code );
+
+		// Look for URL in odd-indexed parts (between quotes).
+		foreach ( $parts as $part ) {
+			// Clean any remaining escape characters.
+			$part          = stripslashes( $part );
+			$validated_url = filter_var( $part, FILTER_VALIDATE_URL );
+			if ( $validated_url && false !== strpos( $validated_url, 'embeds.iubenda.com/widgets/' ) ) {
+				return $validated_url;
+			}
+		}
+
+		// Also try single quotes.
+		$parts = explode( "'", $code );
+		foreach ( $parts as $part ) {
+			// Clean any remaining escape characters.
+			$part          = stripslashes( $part );
+			$validated_url = filter_var( $part, FILTER_VALIDATE_URL );
+			if ( $validated_url && false !== strpos( $validated_url, 'embeds.iubenda.com/widgets/' ) ) {
+				return $validated_url;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Extract configuration from unified embed URL.
+	 *
+	 * @param string               $code HTML code containing embed URL.
+	 * @param array<string, mixed> $args Arguments for extraction.
+	 * @param array<string, mixed> $configuration Default configuration.
+	 * @return array<string, mixed> Extracted configuration or empty array.
+	 */
+	private function extract_config_from_unified_embed( $code, $args, $configuration ) {
+		// Try DOMDocument first, fallback to string parsing.
+		$embed_url = $this->extract_embed_url_with_dom( $code );
+
+		if ( false === $embed_url ) {
+			$embed_url = $this->extract_embed_url_with_fallback( $code );
+		}
+
+		if ( false === $embed_url ) {
+			return $configuration;
+		}
+
+		// Fetch the JavaScript content.
+		$response = wp_remote_get( $embed_url, array( 'timeout' => 10 ) );
+
+		if ( is_wp_error( $response ) ) {
+			return $configuration;
+		}
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return $configuration;
+		}
+
+		$js_content = wp_remote_retrieve_body( $response );
+
+		// Extract _iub.csSiteConf from the JavaScript.
+		if ( ! preg_match( '/_iub\.csSiteConf\s*=\s*({[^;]+});/', $js_content, $config_matches ) ) {
+			return $configuration;
+		}
+
+		$config_json = $config_matches[1];
+
+		$decoded = json_decode( $config_json, true );
+
+		if ( empty( $decoded ) || ! is_array( $decoded ) ) {
+			return $configuration;
+		}
+
+		// Add script URL (for AMP template generation).
+		$decoded['script'] = '//cdn.iubenda.com/cs/iubenda_cs.js';
+
+		// Ensure lang field exists (use existing or fallback to 'en').
+		if ( empty( $decoded['lang'] ) ) {
+			$decoded['lang'] = 'en';
+		}
+
+		// Apply mode filtering (same as csConfiguration).
+		if ( 'basic' === $args['mode'] ) {
+			if ( isset( $decoded['banner'] ) ) {
+				unset( $decoded['banner'] );
+			}
+			if ( isset( $decoded['callback'] ) ) {
+				unset( $decoded['callback'] );
+			}
+			if ( isset( $decoded['perPurposeConsent'] ) ) {
+				unset( $decoded['perPurposeConsent'] );
+			}
+		} elseif ( 'banner' === (string) $args['mode'] ) {
+			if ( isset( $decoded['banner'] ) ) {
+				return $decoded['banner'];
+			}
+			return array();
+		}
+
+		return $decoded;
 	}
 }

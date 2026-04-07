@@ -170,10 +170,10 @@ class Cookie_Solution_Generator {
 		$autoblocking_feature_status = iubenda()->iub_auto_blocking->is_autoblocking_feature_available( $site_id );
 		if ( $autoblocking_feature_status ) {
 			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-			$after_configuration .= '<script type="text/javascript" src="//cs.iubenda.com/autoblocking/' . $site_id . '.js" charset="UTF-8" async></script>';
+			$after_configuration .= '<script type="text/javascript" src="//cs.iubenda.com/autoblocking/' . $site_id . '.js" charset="UTF-8" async fetchpriority="low"></script>';
 		} else {
 			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-			$after_configuration .= '<script type="text/javascript" src="//cs.iubenda.com/sync/' . $site_id . '.js" charset="UTF-8" async></script>';
+			$after_configuration .= '<script type="text/javascript" src="//cs.iubenda.com/sync/' . $site_id . '.js" charset="UTF-8" async fetchpriority="low"></script>';
 		}
 
 		return $before_configuration . wp_json_encode( $cs_configuration ) . '; ' . $after_configuration;

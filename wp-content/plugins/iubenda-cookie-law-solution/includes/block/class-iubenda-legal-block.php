@@ -85,7 +85,13 @@ class Iubenda_Legal_Block {
 	public function attach_legal_block_into_block_area() {
 		// Register IUB js block.
 		wp_register_script( 'iubenda-block-editor', IUBENDA_PLUGIN_URL . '/assets/js/legal_block.js', array( 'wp-blocks', 'wp-block-editor' ), iubenda()->version, true );
-		register_block_type( static::IUB_LEGAL_BLOCK_NAME, array( 'editor_script' => 'iubenda-block-editor' ) );
+		register_block_type(
+			static::IUB_LEGAL_BLOCK_NAME,
+			array(
+				'api_version'   => 3,
+				'editor_script' => 'iubenda-block-editor',
+			)
+		);
 
 		// Send iub vars from backend to JS file.
 		wp_localize_script(

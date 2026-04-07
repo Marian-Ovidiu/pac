@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/wp-content/themes/my_structure" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wp-content/themes/my_structure/app" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wp-includes" isTestSource="false" packagePrefix="PHPMailer" />
+      <excludeFolder url="file://$MODULE_DIR$/wp-content/themes/my_structure/vendor/_laravel_idea" />
+      <excludeFolder url="file://$MODULE_DIR$/wp-content/uploads" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

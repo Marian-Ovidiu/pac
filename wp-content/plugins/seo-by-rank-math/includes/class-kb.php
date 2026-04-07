@@ -31,6 +31,7 @@ class KB {
 		'free-account'                    => 'https://rankmath.com/my-account/',
 		'support'                         => 'https://rankmath.com/support/',
 		'pro'                             => 'https://rankmath.com/pricing/',
+		'site-checkout'                   => 'https://rankmath.com/site-checkout/',
 		'changelog'                       => 'https://rankmath.com/changelog/',
 		'changelog-free'                  => 'https://rankmath.com/changelog/free/',
 		'help-affiliate'                  => 'https://rankmath.com/affiliates/',
@@ -98,6 +99,7 @@ class KB {
 		'news-sitemap'                    => 'https://rankmath.com/kb/news-sitemap/',
 		'role-manager'                    => 'https://rankmath.com/kb/role-manager/',
 		'seo-analysis'                    => 'https://rankmath.com/kb/seo-analysis/',
+		'competitor-analyzer'             => 'https://rankmath.com/kb/analyzing-competitors-seo-strategy/',
 		'requirements'                    => 'https://rankmath.com/kb/requirements/',
 		'video-sitemap'                   => 'https://rankmath.com/kb/video-sitemap/',
 		'rich-snippets'                   => 'https://rankmath.com/kb/rich-snippets/',
@@ -105,6 +107,8 @@ class KB {
 		'fix-404'                         => 'https://rankmath.com/kb/fix-404-errors/',
 		'titles-meta'                     => 'https://rankmath.com/kb/titles-and-meta/',
 		'version-control'                 => 'https://rankmath.com/kb/version-control/',
+		'tools'                           => 'https://rankmath.com/kb/rank-math-status-and-tools/#database-tools',
+		'status'                          => 'https://rankmath.com/kb/rank-math-status-and-tools/#system-status',
 		'headless-support'                => 'https://rankmath.com/kb/headless-support/',
 		'faq-schema-block'                => 'https://rankmath.com/kb/faq-schema-block/',
 		'404-monitor'                     => 'https://rankmath.com/kb/monitor-404-errors/',
@@ -192,6 +196,13 @@ class KB {
 	 * @return array
 	 */
 	public static function get_links() {
-		return self::$links;
+		$processed = [];
+		foreach ( self::$links as $key => $base_url ) {
+			// Allow third-parties to append query parameters based on the base URL.
+			$params            = (array) apply_filters( 'rank_math/link', [], $key, $base_url );
+			$processed[ $key ] = ! empty( $params ) ? add_query_arg( $params, $base_url ) : $base_url;
+		}
+
+		return $processed;
 	}
 }

@@ -60,12 +60,37 @@ class WooCommerce extends WC_Vars {
 
 		$this->integrations();
 
-		if ( $this->remove_product_base || $this->remove_category_base ) {
+		if ( $this->should_redirect() ) {
 			new Product_Redirection();
+			new Permalink_Watcher();
 		}
 
-		new Permalink_Watcher();
 		parent::__construct();
+
+		$this->filter( 'rank_math/recalculate_score/data', 'recalculate_score_data', 10, 2 );
+	}
+
+	/**
+	 * Check if we should redirect product permalinks.
+	 *
+	 * @return bool
+	 */
+	public function should_redirect() {
+		$remove_base = $this->remove_product_base || $this->remove_category_base || $this->remove_parent_slugs;
+		if ( ! $remove_base ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'affiliate_wp' ) || ! isset( $_SERVER['REQUEST_URI'] ) ) {
+			return $remove_base;
+		}
+
+		$referral_var = affiliate_wp()->tracking->get_referral_var();
+		if ( strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), '/' . $referral_var . '/' ) === false ) {
+			return $remove_base;
+		}
+
+		return false;
 	}
 
 	/**
@@ -154,7 +179,7 @@ class WooCommerce extends WC_Vars {
 	 */
 	public function robots( $robots ) {
 
-		// Early Bail if current page is Woocommerce OnePage Checkout.
+		// Early Bail if current page is WooCommerce OnePage Checkout.
 		if ( function_exists( 'is_wcopc_checkout' ) && is_wcopc_checkout() ) {
 			return $robots;
 		}
@@ -232,5 +257,21 @@ class WooCommerce extends WC_Vars {
 		}
 
 		return $product->post->post_content;
+	}
+
+	/**
+	 * Update the values used for recalculating SEO score for products.
+	 *
+	 * @param array $values The values to be sent to the analyzer.
+	 * @param int   $post_id The post ID.
+	 *
+	 * @return array
+	 */
+	public function recalculate_score_data( $values, $post_id ) {
+		if ( 'product' === get_post_type( $post_id ) ) {
+			$values['content'] = $values['content'] . ' ' . get_the_excerpt( $post_id );
+		}
+
+		return $values;
 	}
 }

@@ -8,16 +8,28 @@ use Stripe\Stripe;
 
 class StripePayments
 {
+    protected static function getJsonPayload()
+    {
+        $rawPayload = file_get_contents('php://input');
+        $data = json_decode($rawPayload ?: '', true);
+
+        return is_array($data) ? $data : [];
+    }
+
     public static function createIntent()
     {
         Stripe::setApiKey(my_env('SECRET_KEY'));
-        $data         = json_decode(file_get_contents("php://input"), true);
+        $data         = self::getJsonPayload();
         $amount       = isset($data['amount']) ? (int) $data['amount'] : 0;
-        $progetto_id  = $data['progetto_id'] ?? null;
+        $progetto_id  = isset($data['progetto_id']) ? (int) $data['progetto_id'] : null;
         $progetto     = Progetto::find($progetto_id);
         $progettoName = $progetto ? "Donazione per il progetto: " . $progetto->title : "Donazione generica";
 
         error_log("[createIntent] Ricevuto importo: {$amount}, progetto_id: {$progetto_id}");
+
+        if ($amount <= 0) {
+            wp_send_json_error(['message' => 'Importo non valido.'], 400);
+        }
 
         try {
             $paymentIntent = PaymentIntent::create([
@@ -38,12 +50,17 @@ class StripePayments
 
     public static function completePayment()
     {
-        $data   = json_decode(file_get_contents("php://input"), true);
+        $data   = self::getJsonPayload();
         $amount = isset($data['amount']) ? (int) $data['amount'] : 0;
-        $email  = $data['email'] ?? null;
+        $email  = isset($data['email']) ? sanitize_email($data['email']) : null;
 
         error_log("[completePayment] Email ricevuta: " . print_r($email, true));
         error_log("[completePayment] Dati ricevuti: " . print_r($data, true));
+
+        if ($amount <= 0) {
+            wp_send_json_error(['message' => 'Importo non valido.'], 400);
+            return;
+        }
 
         if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             error_log("[completePayment] Email non valida: {$email}");
@@ -98,16 +115,20 @@ class StripePayments
 
     public static function createUser($data)
     {
-        $email   = $data['email'];
+        $email   = isset($data['email']) ? sanitize_email($data['email']) : '';
         $user_id = email_exists($email);
+
+        if (! $email) {
+            return;
+        }
 
         if (! $user_id) {
             $user_id = wp_insert_user([
                 'user_login' => $email,
                 'user_pass'  => wp_generate_password(),
                 'user_email' => $email,
-                'first_name' => $data['name'],
-                'last_name'  => $data['surname'],
+                'first_name' => isset($data['name']) ? sanitize_text_field($data['name']) : '',
+                'last_name'  => isset($data['surname']) ? sanitize_text_field($data['surname']) : '',
                 'role'       => 'donator',
             ]);
             error_log("[createUser] Utente creato con ID: {$user_id}");
@@ -115,10 +136,10 @@ class StripePayments
             error_log("[createUser] L'utente esiste già con ID: {$user_id}");
         }
 
-        update_user_meta($user_id, 'telefono', $data['phone'] ?? '');
-        update_user_meta($user_id, 'codice_fiscale', $data['codiceFiscale'] ?? '');
-        update_user_meta($user_id, 'importo_donato', $data['amount']);
-        update_user_meta($user_id, 'title', $data['progettoId']);
-        update_user_meta($user_id, 'name', $data['name']);
+        update_user_meta($user_id, 'telefono', isset($data['phone']) ? sanitize_text_field($data['phone']) : '');
+        update_user_meta($user_id, 'codice_fiscale', isset($data['codiceFiscale']) ? sanitize_text_field($data['codiceFiscale']) : '');
+        update_user_meta($user_id, 'importo_donato', isset($data['amount']) ? (int) $data['amount'] : 0);
+        update_user_meta($user_id, 'title', isset($data['progettoId']) ? (int) $data['progettoId'] : 0);
+        update_user_meta($user_id, 'name', isset($data['name']) ? sanitize_text_field($data['name']) : '');
     }
 }

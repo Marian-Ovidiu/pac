@@ -110,10 +110,6 @@ class Rest_Helper {
 			return $post;
 		}
 
-		if ( 'rank_math_locations' === $post->post_type ) {
-			return true;
-		}
-
 		if ( ! Helper::is_post_type_accessible( $post->post_type ) && 'rank_math_schema' !== $post->post_type ) {
 			return new WP_Error(
 				'rest_cannot_edit',
@@ -257,6 +253,7 @@ class Rest_Helper {
 	 */
 	public static function can_manage_settings( $request ) {
 		$type = $request->get_param( 'type' );
+		$type = $type === 'instant-indexing' ? 'general' : $type;
 		return $type === 'roleCapabilities' ? current_user_can( 'rank_math_role_manager' ) : current_user_can( "rank_math_$type" );
 	}
 

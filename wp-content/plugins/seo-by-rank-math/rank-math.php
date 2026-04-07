@@ -9,7 +9,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Rank Math SEO
- * Version:           1.0.250
+ * Version:           1.0.267
  * Plugin URI:        https://rankmath.com/
  * Description:       Rank Math SEO is the Best WordPress SEO plugin with the features of many SEO and AI SEO tools in a single package to help multiply your SEO traffic.
  * Author:            Rank Math SEO
@@ -34,7 +34,7 @@ final class RankMath {
 	 *
 	 * @var string
 	 */
-	public $version = '1.0.250';
+	public $version = '1.0.267';
 
 	/**
 	 * Rank Math database version.
@@ -67,7 +67,7 @@ final class RankMath {
 	/**
 	 * Hold install error messages.
 	 *
-	 * @var bool
+	 * @var array
 	 */
 	private $messages = [];
 
@@ -297,6 +297,7 @@ final class RankMath {
 		new \RankMath\Common();
 		$this->container['rewrite'] = new \RankMath\Rewrite();
 		new \RankMath\Compatibility();
+		$this->container['tracking'] = new \RankMath\Tracking();
 
 		// Frontend SEO Score.
 		$this->container['frontend_seo_score'] = new \RankMath\Frontend_SEO_Score();
@@ -392,6 +393,16 @@ final class RankMath {
 			new \RankMath\Elementor\Elementor();
 		}
 
+		// Loco Translate: initialize inline i18n injector for settings React UI.
+		if ( is_plugin_active( 'loco-translate/loco.php' ) ) {
+			new \RankMath\ThirdParty\Loco\Loco_I18n_Inline();
+		}
+
+		// WPML.
+		if ( is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' ) ) {
+			new \RankMath\ThirdParty\WPML();
+		}
+
 		// Divi theme.
 		add_action(
 			'after_setup_theme',
@@ -485,7 +496,7 @@ final class RankMath {
 
 		$more = [
 			'<a href="' . admin_url( '?page=rank-math&view=help' ) . '">' . esc_html__( 'Getting Started', 'rank-math' ) . '</a>',
-			'<a href="https://rankmath.com/kb/?utm_source=Plugin&utm_medium=Plugin%20Page%20KB%20Link&utm_campaign=WP" target="_blank">' . esc_html__( 'Documentation', 'rank-math' ) . '</a>',
+			'<a href="' . \RankMath\KB::get( 'knowledgebase', 'Plugin Page KB Link' ) . '" target="_blank">' . esc_html__( 'Documentation', 'rank-math' ) . '</a>',
 		];
 
 		return array_merge( $links, $more );

@@ -2,10 +2,10 @@
 Contributors: rankmath
 Plugin link: https://rankmath.com/?utm_source=LP&utm_campaign=WP
 Tags: seo, WordPress SEO, google search console, schema, redirection, 
-Tested up to: 6.8
+Tested up to: 7.0
 Requires at least: 6.3
 Requires PHP: 7.4
-Stable tag: 1.0.250
+Stable tag: 1.0.267
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -233,7 +233,7 @@ and many more
 ✔ PREMIUM 24x7x365 Dedicated Support Managers
 ✔ MOST COMPETITIVE PRICING EVER!
 
-**<a href="https://rankmath.com/pricing/" target="_blank">CHEK ALL THE PREMIUM FEATURES AND PRICING HERE</a>**
+**<a href="https://rankmath.com/pricing/" target="_blank">CHECK ALL THE PREMIUM FEATURES AND PRICING HERE</a>**
 
 
 ## CONNECT WITH THE TEAM AND SEO EXPERTS ##
@@ -339,12 +339,10 @@ Please drop us an email at support@rankmath.com, and we will be more than happy 
 
 == Changelog ==
 
-= 1.0.250 [July 31, 2025] =
-- Added: Support for [LLMs.txt file](https://rankmath.com/kb/llms-txt/)
-- Added: [New filter](https://rankmath.com/kb/filters-hooks-api-developer/#exclude-canonicals-from-sitemap) to exclude posts with canonical URLs in the sitemaps
-- Added: Link to [schedule post using SocialPilot in the Post Publish Panel](https://rankmath.com/kb/sharing-content-on-social-media/)
-- Fixed: [Incorrect slug](https://rankmath.com/kb/seo-meta-tags/#elementor) being added to posts when switched using the Elementor Top Bar feature
-- Fixed: Inconsistent SEO score when using the [Update SEO Score tool](https://rankmath.com/kb/rank-math-status-and-tools/#recalculate-seo-score-for-posts) due to unprocessed focus keywords
-- Fixed: Missing SEO score when the [filter to disable Rank Math Integration from Gutenberg sidebar](https://rankmath.com/kb/filters-hooks-api-developer/#disable-gutenberg-sidebar) is used
+= 1.0.267 [Apr 01, 2026] =
+- Fixed: PHP error when [Focus keyword](https://rankmath.com/kb/what-is-a-focus-keyword/) is stored in array format
+- Fixed: PHP warnings related to [Analytics](https://rankmath.com/kb/analytics/) when connecting the site from the Analytics page
+- Fixed: `plugin_version` parameter is now always sent to the [Content AI](https://rankmath.com/content-ai/) as part of the payload
+- Fixed: WPML notice to activate the String Translation plugin was shown even when it was already active
 
 Full changelog can be found here - **[Rank Math changelog](https://rankmath.com/changelog/?utm_source=Plugin&utm_medium=Changelog&utm_campaign=WP)**

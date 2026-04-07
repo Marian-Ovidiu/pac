@@ -48,7 +48,10 @@ class Router extends Singleton
 
     public function handleRoute()
     {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $requestMethod = isset($_SERVER['REQUEST_METHOD'])
+            ? strtoupper(sanitize_key(wp_unslash($_SERVER['REQUEST_METHOD'])))
+            : 'GET';
+
         foreach ($this->routes as $route) {
             if ($this->match($route['uri']) && $this->checkMethod($route['method'], $requestMethod)) {
                 global $wp_query;
@@ -62,7 +65,10 @@ class Router extends Singleton
 
     public function handleAjax()
     {
-        $action = $_REQUEST['action'] ?? '';
+        $action = isset($_REQUEST['action'])
+            ? sanitize_key(wp_unslash($_REQUEST['action']))
+            : '';
+
         if (isset($this->ajaxRoutes[$action])) {
             call_user_func($this->ajaxRoutes[$action]);
             wp_die();

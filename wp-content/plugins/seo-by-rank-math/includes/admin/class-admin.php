@@ -42,8 +42,12 @@ class Admin implements Runner {
 		$this->action( 'save_post', 'canonical_check_notice' );
 		$this->action( 'cmb2_save_options-page_fields', 'update_is_configured_value', 10, 2 );
 		$this->filter( 'action_scheduler_pastdue_actions_check_pre', 'as_exclude_pastdue_actions' );
-		$this->action( 'rank_math/pro_badge', 'offer_icon' );
+		$this->filter( 'rank_math/pro_badge', 'offer_icon' );
 		$this->filter( 'load_script_translation_file', 'load_script_translation_file', 10, 3 );
+
+		// Use woocommerce textdomain for the Actiion scheduler strings.
+		$this->filter( 'gettext', 'remap_action_scheduler_translation', 10, 3 );
+		$this->filter( 'gettext_with_context', 'remap_action_scheduler_translation_with_context', 10, 4 );
 
 		// AJAX.
 		$this->ajax( 'search_pages', 'search_pages' );
@@ -324,6 +328,33 @@ class Admin implements Runner {
 	}
 
 	/**
+	 * Remap Action Scheduler translation to use WooCommerce's text domain (no context).
+	 *
+	 * @param string $translated Translated text.
+	 * @param string $text       Original text.
+	 * @param string $domain     Text domain.
+	 * @return string Modified translated text.
+	 */
+	public function remap_action_scheduler_translation( $translated, $text, $domain ) {
+		// phpcs:ignore -- Use WooCommerce text domain for Action Scheduler strings.
+		return $domain === 'action-scheduler' && Helper::is_woocommerce_active() ? __( $text, 'woocommerce' ) : $translated;
+	}
+
+	/**
+	 * Remap Action Scheduler translation to use WooCommerce's text domain (with context).
+	 *
+	 * @param string $translated Translated text.
+	 * @param string $text       Original text.
+	 * @param string $context    Context information for translators.
+	 * @param string $domain     Text domain.
+	 * @return string Modified translated text.
+	 */
+	public function remap_action_scheduler_translation_with_context( $translated, $text, $context, $domain ) {
+		// phpcs:ignore -- Use WooCommerce text domain for Action Scheduler strings.
+		return $domain === 'action-scheduler' && Helper::is_woocommerce_active() ? _x( $text, $context, 'woocommerce' ) : $translated;
+	}
+
+	/**
 	 * Set term query.
 	 *
 	 * @param array  $query    Array of query.
@@ -441,10 +472,10 @@ class Admin implements Runner {
 		}
 
 		$threshold_seconds = (int) apply_filters( 'action_scheduler_pastdue_actions_seconds', DAY_IN_SECONDS );
-		$threshhold_min    = (int) apply_filters( 'action_scheduler_pastdue_actions_min', 1 );
+		$threshold_min     = (int) apply_filters( 'action_scheduler_pastdue_actions_min', 1 );
 
-		$check = ( $num_pastdue_actions >= $threshhold_min );
-		return (bool) apply_filters( 'action_scheduler_pastdue_actions_check', $check, $num_pastdue_actions, $threshold_seconds, $threshhold_min );
+		$check = ( $num_pastdue_actions >= $threshold_min );
+		return (bool) apply_filters( 'action_scheduler_pastdue_actions_check', $check, $num_pastdue_actions, $threshold_seconds, $threshold_min );
 	}
 
 	/**
@@ -457,22 +488,25 @@ class Admin implements Runner {
 
 		// Holiday Season related variables.
 		$time                   = time();
-		$current_year           = 2022;
-		$anniversary_start_time = gmmktime( 17, 00, 00, 10, 30, $current_year ); // 30 Oct.
-		$anniversary_end_time   = gmmktime( 17, 00, 00, 11, 30, $current_year ); // 30 Nov.
-		$holiday_start_time     = gmmktime( 17, 00, 00, 12, 20, $current_year ); // 20 Dec.
-		$holiday_end_time       = gmmktime( 17, 00, 00, 01, 07, 2023 ); // 07 Jan.
+		$current_year           = 2025;
+		$anniversary_start_time = gmmktime( 17, 00, 00, 10, 29, $current_year ); // 29 Oct.
+		$anniversary_end_time   = gmmktime( 17, 00, 00, 12, 03, $current_year ); // 30 Nov.
+		$holiday_start_time     = gmmktime( 17, 00, 00, 12, 24, $current_year ); // 20 Dec.
+		$holiday_end_time       = gmmktime( 17, 00, 00, 01, 07, 2026 ); // 07 Jan.
 
+		ob_start();
 		if (
 			( $time > $anniversary_start_time && $time < $anniversary_end_time ) ||
 			( $time > $holiday_start_time && $time < $holiday_end_time )
 		) { ?>
-			<a href="https://rankmath.com/pricing/?utm_source=Plugin&utm_medium=Header+Offer+Icon&utm_campaign=WP" target="_blank" class="rank-math-tooltip bottom" style="margin-left:5px;">
+			<a href="<?php echo esc_url( \RankMath\KB::get( 'pro', 'Header Offer Icon' ) ); ?>" target="_blank" class="rank-math-tooltip bottom" style="margin-left:5px;">
 				🎉
 				<span><?php esc_attr_e( 'Exclusive Offer!', 'rank-math' ); ?></span>
 			</a>
 			<?php
 		}
+
+		return ob_get_clean();
 	}
 
 	/**

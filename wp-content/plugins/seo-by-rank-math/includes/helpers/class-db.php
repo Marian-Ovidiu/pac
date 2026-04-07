@@ -10,6 +10,7 @@
 
 namespace RankMath\Helpers;
 
+use RankMath\Helper;
 use RankMath\Admin\Database\Database;
 
 defined( 'ABSPATH' ) || exit;
@@ -154,7 +155,7 @@ class DB {
 	/**
 	 * Check if table exists in db or not.
 	 *
-	 * @param string $table_name Table name to check for existance.
+	 * @param string $table_name Table name to check for existence.
 	 *
 	 * @return bool
 	 */
@@ -184,6 +185,77 @@ class DB {
 		$check_table = self::query( "SELECT 1 FROM {$table_name} LIMIT {$limit}, 1" );
 
 		return ! empty( $check_table );
+	}
+
+	/**
+	 * Create table.
+	 *
+	 * @param string $table Table name.
+	 * @param string $schema Table schema.
+	 */
+	public static function create_table( $table = '', $schema = '' ) {
+		if ( ! $table || ! $schema ) {
+			return;
+		}
+
+		// Early Bail!!
+		if ( self::check_table_exists( $table ) ) {
+			return;
+		}
+
+		global $wpdb;
+		$collate = $wpdb->get_charset_collate();
+
+		$schema = "CREATE TABLE {$wpdb->prefix}{$table} ( $schema ) $collate;";
+
+		$upgrade_file = ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( file_exists( $upgrade_file ) ) {
+			require_once $upgrade_file; // @phpstan-ignore-line
+		}
+
+		$results = null;
+
+		$results = dbDelta( $schema );
+
+		if ( ! empty( $wpdb->last_error ) ) {
+			Helper::add_notification(
+				sprintf(
+					// translators: %1$s is the error message, %2$s is the table name.
+					__( 'Rank Math SEO: Getting error "%1$s" while creating table <code>%2$s</code>. Please contact your server administrator to fix this issue.', 'rank-math' ),
+					$wpdb->last_error,
+					$table
+				),
+				[
+					'type' => 'error',
+					'id'   => 'rank_math_db_error_' . $table,
+				]
+			);
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Create index on a column.
+	 *
+	 * @param string $index_name Index name.
+	 * @param string $table_name Table name.
+	 * @param array  $columns    Columns to create index on.
+	 *
+	 * @return void
+	 */
+	public static function create_index( $index_name, $table_name, $columns ) {
+		if ( ! $index_name || ! $table_name || ! $columns ) {
+			return;
+		}
+		global $wpdb;
+
+		// Bail early if index already exists.
+		if ( self::get_var( "SHOW INDEX FROM {$wpdb->prefix}{$table_name} WHERE Key_name = '{$index_name}'" ) ) {
+			return;
+		}
+
+		self::query( "CREATE INDEX {$index_name} ON {$wpdb->prefix}{$table_name} (" . implode( ',', $columns ) . ')' );
 	}
 
 	/**
