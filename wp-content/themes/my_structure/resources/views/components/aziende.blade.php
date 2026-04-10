@@ -1,6 +1,6 @@
 <section class="ui-section-tight">
     <div class="ui-container">
-        <div class="ui-panel overflow-hidden rounded-[2.5rem]">
+        <div class="ui-panel !rounded-none overflow-hidden">
             <div class="grid items-stretch md:grid-cols-[1.05fr_0.95fr]">
                 @if(!empty($immagine_url))
                     <figure class="relative min-h-[20rem] overflow-hidden">

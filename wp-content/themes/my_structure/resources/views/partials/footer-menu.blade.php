@@ -4,21 +4,21 @@
 @endphp
 <footer class="ui-section">
     <div class="ui-container">
-        <div class="ui-panel ui-noise rounded-[2.5rem] px-6 py-8 sm:px-8 lg:px-10">
-            <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-                <div class="space-y-5">
-                    <div class="flex items-center gap-4">
+        <div class="ui-panel ui-noise rounded-[2.75rem] px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
+            <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+                <div class="space-y-6">
+                    <div class="ui-brand-lockup">
                         @if ($logoUrl)
-                            <div class="ui-image-frame h-16 w-16 overflow-hidden rounded-full border-white/15">
+                            <div class="ui-brand-mark h-[4.75rem] w-[4.75rem] border-white/20 bg-white">
                                 <img class="h-full w-full object-cover" src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />
                             </div>
                         @endif
                         <div>
-                            <p class="text-xs uppercase tracking-[0.2em] text-white/70">Project Africa Conservation</p>
-                            <h2 class="font-nunitoBold text-2xl text-white">Conservazione, comunita, continuita</h2>
+                            <p class="ui-brand-tag !text-white/65">Project Africa Conservation</p>
+                            <h2 class="font-nunitoBold text-2xl leading-tight text-white sm:text-[2rem]">Conservazione, comunita, continuita</h2>
                         </div>
                     </div>
-                    <p class="max-w-md text-sm leading-7 text-white/75">
+                    <p class="max-w-lg text-sm leading-7 text-white/78 sm:text-[15px]">
                         La differenza la fai tu: ogni piccolo gesto crea un cambiamento concreto per la fauna e per le comunita locali.
                     </p>
                     <div class="flex flex-wrap gap-3">
@@ -32,14 +32,14 @@
                         <ul class="grid gap-3 sm:grid-cols-2">
                             @foreach($menu as $item)
                                 <li>
-                                    <a class="block rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-medium text-white/90 transition hover:bg-white/20" href="{{ $item->url }}">
+                                    <a class="block rounded-2xl border border-white/10 bg-white/10 px-4 py-3.5 text-sm font-medium text-white/90 transition hover:bg-white/20" href="{{ $item->url }}">
                                         {{ $item->title }}
                                     </a>
                                 </li>
                                 @if(!empty($item->children))
                                     @foreach($item->children as $subitem)
                                         <li>
-                                            <a class="block rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-medium text-white/90 transition hover:bg-white/20" href="{{ $subitem->url }}">
+                                            <a class="block rounded-2xl border border-white/10 bg-white/10 px-4 py-3.5 text-sm font-medium text-white/90 transition hover:bg-white/20" href="{{ $subitem->url }}">
                                                 {{ $subitem->title }}
                                             </a>
                                         </li>
@@ -49,7 +49,7 @@
                         </ul>
                     </nav>
 
-                    <ul class="flex items-start gap-3" aria-label="Social media">
+                    <ul class="flex flex-wrap items-start gap-3" aria-label="Social media">
                         <li>
                             <a href="https://www.facebook.com/share/15kZKmU4gr/" rel="noreferrer noopener" target="_blank" class="ui-button-ghost !rounded-full !bg-white/10 !px-4 !py-3 !text-white hover:!bg-white/18" aria-label="Facebook">
                                 Facebook
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="mt-8 flex flex-col gap-3 border-t border-white/10 pt-5 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
+            <div class="mt-10 flex flex-col gap-3 border-t border-white/10 pt-5 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
                 <p>&copy; 2024. PAC - Project Africa Conservation A.P.S. Tutti i diritti riservati.</p>
                 <p>Questo sito e protetto da reCAPTCHA ed e soggetto alla Privacy Policy e ai Termini di Servizio di Google.</p>
             </div>

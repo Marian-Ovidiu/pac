@@ -2,7 +2,6 @@
     <div class="ui-container">
         <div class="mx-auto max-w-3xl text-center">
             @if($titolo)
-                <span class="ui-kicker mb-5">Project Africa Conservation</span>
                 <h2 class="ui-title">{{ $titolo }}</h2>
             @endif
             @if($sottotitolo)
