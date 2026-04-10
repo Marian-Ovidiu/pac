@@ -1,40 +1,48 @@
-<section class="ui-section-tight">
+<section class="ui-companies">
     <div class="ui-container">
-        <div class="ui-panel !rounded-none overflow-hidden">
-            <div class="grid items-stretch md:grid-cols-[1.05fr_0.95fr]">
-                @if(!empty($immagine_url))
-                    <figure class="relative min-h-[20rem] overflow-hidden">
-                        <img
-                            class="h-full w-full object-cover"
-                            src="{{ $immagine_url }}"
-                            alt="{{ $immagine_alt ?? $titolo }}"
-                            title="{{ $immagine_title ?? '' }}"
-                            loading="lazy"
-                            decoding="async">
-                        @if($immagine_caption)
-                            <figcaption class="absolute bottom-0 left-0 right-0 bg-black/35 px-5 py-4 text-sm text-white/85">{{ $immagine_caption }}</figcaption>
-                        @endif
-                        @if($immagine_description)
-                            <div class="sr-only">{{ $immagine_description }}</div>
-                        @endif
-                    </figure>
+        <article class="ui-companies__panel">
+            @if(!empty($immagine_url))
+                <div class="ui-companies__background" aria-hidden="true">
+                    <img
+                        src="{{ $immagine_url }}"
+                        alt=""
+                        class="ui-companies__background-image"
+                        loading="lazy"
+                        decoding="async">
+                </div>
+            @endif
+
+            <div class="ui-companies__overlay"></div>
+
+            <div class="ui-companies__content">
+                <div class="ui-companies__eyebrow">
+                    <span class="ui-companies__eyebrow-icon" aria-hidden="true"></span>
+                    <span>PAC for companies</span>
+                </div>
+
+                @if($titolo)
+                    <h2 class="ui-companies__title">{{ $titolo }}</h2>
                 @endif
 
-                <div class="flex flex-col justify-center p-7 sm:p-10">
-                    <span class="ui-kicker border-white/15 bg-white/10 text-white">Aziende</span>
-                    <h2 class="mt-5 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">{{ $titolo }}</h2>
-                    <div class="mt-5 max-w-2xl text-base leading-7 text-white/80">{!! $descrizione !!}</div>
+                @if($descrizione)
+                    <div class="ui-companies__text">{!! $descrizione !!}</div>
+                @endif
 
-                    @if(isset($cta) && !empty($cta['url']) && !empty($cta['title']))
-                        <div class="mt-8">
-                            <a href="{{ $cta['url'] }}" aria-label="{{ $cta['title'] }}" class="ui-button-ghost">
-                                @include('svg.gallery')
-                                <span>{{ $cta['title'] }}</span>
-                            </a>
-                        </div>
-                    @endif
-                </div>
+                @if(isset($cta) && !empty($cta['url']) && !empty($cta['title']))
+                    <div class="ui-companies__actions">
+                        <a href="{{ $cta['url'] }}" aria-label="{{ $cta['title'] }}" class="ui-companies__button">
+                            <span>{{ $cta['title'] }}</span>
+                        </a>
+                    </div>
+                @endif
             </div>
-        </div>
+
+            @if($immagine_caption)
+                <div class="sr-only">{{ $immagine_caption }}</div>
+            @endif
+            @if($immagine_description)
+                <div class="sr-only">{{ $immagine_description }}</div>
+            @endif
+        </article>
     </div>
 </section>

@@ -1,46 +1,49 @@
-# 🔒 File di configurazione sensibili
+# Sensitive/local config
 !wp-config.php
+.env
+.env.*
 
-# ✅ Plugin e tema custom
-#wp-content/plugins/
-#wp-content/plugins/*/node_modules/
+# IDE / OS
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+wp-content/debug.log
+
+# Dependencies
+node_modules/
+vendor/
 wp-content/plugins/*/vendor/
-wp-content/plugins/wp-mail-smtp/
-
-!wp-content/plugins/woocommerce/
-!wp-content/plugins/woocommerce/**
-!wp-content/themes/
-# ✅ Plugin e tema custom
-!wp-content/themes/my_structure/**
 wp-content/themes/my_structure/node_modules/
 wp-content/themes/my_structure/vendor/
 
-# ❌ Runtime e cache
+# WordPress runtime/generated content
 wp-content/cache/
 wp-content/uploads/
-#wp-content/debug.log
 wp-content/upgrade/
 wp-content/upgrade-temp-backup/
 wp-content/wc-logs/
-*.log
+wp-content/ewww/
+wp-content/mu-plugins/
 
-# ❌ Roba di sistema
-.DS_Store
-Thumbs.db
-node_modules/
-vendor/
-
-# ❌ Backup ed esportazioni
+# Backups / exports
 *.sql
 *.zip
 *.tar.gz
 *.bak
 *.bk
 
-# ✅ Vite manifest e output
-!public/.vite/manifest.json
-!public/css/
-!public/js/
-!public/assets/
-/wp-content/ewww/
-/wp-content/themes/my_structure/resources/cache/
+# Keep custom theme sources, ignore generated artifacts
+!wp-content/themes/
+!wp-content/themes/my_structure/
+!wp-content/themes/my_structure/**
+wp-content/themes/my_structure/public/
+wp-content/themes/my_structure/resources/cache/
+wp-content/themes/my_structure/node_modules/
+wp-content/themes/my_structure/vendor/
+
+# Keep plugin/theme source, ignore known unwanted plugin copies
+!wp-content/plugins/
+wp-content/plugins/wp-mail-smtp/
