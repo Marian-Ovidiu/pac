@@ -9,9 +9,8 @@
 @endphp
 @extends('layouts.mainLayout')
 @section('content')
-    <section class="ui-section-tight">
-        <div class="ui-container">
-            <div class="ui-panel overflow-hidden rounded-[2.75rem]">
+    <section class="ui-section-tight ui-project-hero">
+        <div class="ui-panel ui-project-hero__panel overflow-hidden">
                 <div class="grid items-stretch lg:grid-cols-[1fr_1fr]">
                     <div class="p-7 sm:p-10 lg:p-12">
                         <a href="{{ home_url('/4-progetti-antibracconaggio-sociale') }}" class="ui-button-ghost mb-5">
@@ -52,7 +51,6 @@
                         </figure>
                     @endif
                 </div>
-            </div>
         </div>
     </section>
 

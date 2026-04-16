@@ -10,9 +10,8 @@
         ]));
     @endphp
 
-    <section class="ui-section-tight">
-        <div class="ui-container">
-            <div class="ui-panel overflow-hidden rounded-[2.75rem]">
+    <section class="ui-section-tight ui-project-hero">
+        <div class="ui-panel ui-project-hero__panel overflow-hidden">
                 <div class="grid items-stretch lg:grid-cols-[1.05fr_0.95fr]">
                     <div class="p-7 sm:p-10 lg:p-12">
                         <span class="ui-kicker border-white/15 bg-white/10 text-white">Archivio progetti</span>
@@ -50,7 +49,6 @@
                         </figure>
                     @endif
                 </div>
-            </div>
         </div>
     </section>
 

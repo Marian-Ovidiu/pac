@@ -2,7 +2,7 @@
     $options = \Models\Options\OpzioniGlobaliFields::get();
     $logoUrl = $options->logo['url'] ?? null;
 @endphp
-<header x-data="{ open: false }" class="ui-section-tight pb-3">
+<header x-data="{ open: false }" class="ui-site-header">
     <div class="ui-container">
         <div class="ui-card-soft px-4 py-4 sm:px-6 sm:py-5">
             <nav class="flex items-center justify-between gap-6" aria-label="Navigazione principale">
@@ -46,7 +46,14 @@
                 </ul>
             </nav>
 
-            <nav id="mobile-primary-menu" x-show="open" @click.away="open = false" class="mt-5 border-t border-custom-clay/50 pt-4 lg:hidden" aria-label="Navigazione mobile">
+            <nav
+                id="mobile-primary-menu"
+                x-cloak
+                x-show="open"
+                x-transition.origin.top.duration.500ms
+                @click.away="open = false"
+                class="ui-mobile-menu lg:hidden"
+                aria-label="Navigazione mobile">
                 <ul class="space-y-3">
                     @foreach ($menu as $item)
                         <li class="rounded-3xl bg-white/70 p-3 shadow-soft">

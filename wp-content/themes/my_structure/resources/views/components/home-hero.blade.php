@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 xl:gap-5">
+            <div class="grid grid-cols-2 gap-4 self-center xl:gap-5">
                 @foreach($projectSlides as $project)
                     <article class="ui-home-hero__card group">
                         @if(!empty($project['cta']['url']))
