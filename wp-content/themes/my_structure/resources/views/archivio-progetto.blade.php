@@ -1,7 +1,6 @@
 @extends('layouts.mainLayout')
 @section('content')
     @php
-        $thankYouUrl = '/grazie';
         $img = $opzioniArchivio->immagine_hero ?? [];
         $typingTitoli = array_values(array_filter([
             $opzioniArchivio->highlights_frase_1 ?? null,
@@ -10,90 +9,143 @@
         ]));
     @endphp
 
-    <section class="ui-section-tight ui-project-hero">
-        <div class="ui-panel ui-project-hero__panel overflow-hidden">
-                <div class="grid items-stretch lg:grid-cols-[1.05fr_0.95fr]">
-                    <div class="p-7 sm:p-10 lg:p-12">
-                        <span class="ui-kicker border-white/15 bg-white/10 text-white">Archivio progetti</span>
-                        <h1 class="mt-5 font-nunitoBold text-4xl leading-[1.04] text-white sm:text-5xl lg:text-6xl">
-                            {{ $opzioniArchivio->titolo_hero }}
-                        </h1>
-                        @if(!empty($typingTitoli))
-                            <div x-data="typingEffect({{ json_encode($typingTitoli) }})" class="mt-5">
-                                <p class="text-lg font-medium text-white/80 sm:text-xl">
-                                    <span x-text="displayText"></span>
-                                </p>
-                            </div>
-                        @endif
-                        @if(!empty($opzioniArchivio->testo_sotto_hero))
-                            <div class="mt-6 max-w-2xl text-base leading-7 text-white/75">
-                                {!! $opzioniArchivio->testo_sotto_hero !!}
-                            </div>
-                        @endif
-                        <div class="mt-8 flex flex-wrap gap-3">
-                            <span class="ui-pill border-white/20 bg-white/10 text-white/80">Sostieni un progetto specifico</span>
-                            <span class="ui-pill border-white/20 bg-white/10 text-white/80">Donazione guidata in 3 step</span>
+    <section class="archive-project-hero">
+        @if (!empty($img['url']))
+            <div class="archive-project-hero__mobile-bg" aria-hidden="true">
+                <img
+                    src="{{ $img['url'] }}"
+                    alt=""
+                    class="archive-project-hero__mobile-bg-image"
+                    loading="eager">
+            </div>
+        @endif
+
+        <div class="ui-container">
+            <div class="archive-project-hero__layout">
+                <div class="archive-project-hero__copy">
+                    <span class="archive-project-hero__eyebrow">Archivio progetti</span>
+                    <h1 class="archive-project-hero__title">
+                        {{ $opzioniArchivio->titolo_hero }}
+                    </h1>
+
+                    @if(!empty($typingTitoli))
+                        <div x-data="typingEffect({{ json_encode($typingTitoli) }})" class="archive-project-hero__highlight">
+                            <span x-text="displayText"></span>
                         </div>
+                    @endif
+
+                    @if(!empty($opzioniArchivio->testo_sotto_hero))
+                        <div class="archive-project-hero__text">
+                            {!! $opzioniArchivio->testo_sotto_hero !!}
+                        </div>
+                    @endif
+
+                    <div class="archive-project-hero__actions">
+                        <a href="#archive-project-list" class="archive-project-hero__button">
+                            Scopri i progetti
+                        </a>
                     </div>
 
-                    @if (!empty($img['url']))
-                        <figure class="min-h-[24rem] lg:min-h-full">
+                    <div class="archive-project-hero__stats">
+                        <div>
+                            <strong>{{ count($progetti) }}+</strong>
+                            <span>progetti</span>
+                        </div>
+                        <div>
+                            <strong>3</strong>
+                            <span>ambiti di impatto</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (!empty($img['url']))
+                    <div class="archive-project-hero__visual">
+                        <figure class="archive-project-hero__frame">
                             <img
                                 src="{{ $img['url'] }}"
                                 alt="{{ $img['alt'] ?? ($opzioniArchivio->titolo_hero ?? 'Progetti') }}"
                                 title="{{ $img['title'] ?? '' }}"
                                 width="{{ $img['width'] ?? '' }}"
                                 height="{{ $img['height'] ?? '' }}"
-                                class="h-full w-full object-cover"
-                                loading="lazy">
+                                class="archive-project-hero__image"
+                                loading="eager">
+                            <div class="archive-project-hero__frame-overlay"></div>
+                            <figcaption class="archive-project-hero__caption">
+                                <span>Focus progetti</span>
+                                <strong>{{ $opzioniArchivio->titolo_hero }}</strong>
+                            </figcaption>
                         </figure>
-                    @endif
-                </div>
+                        <div class="archive-project-hero__halo" aria-hidden="true"></div>
+                    </div>
+                @endif
+            </div>
         </div>
     </section>
 
-    <section class="ui-section">
+    <section class="archive-project-list" id="archive-project-list">
         <div class="ui-container">
-            <div class="space-y-10">
-                @foreach ($progetti as $index => $progetto)
-                    <article class="ui-card overflow-hidden">
-                        <div class="grid items-stretch gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-                            <div class="{{ $index % 2 === 1 ? 'lg:order-2' : '' }}">
-                                <div class="relative h-full min-h-[24rem]">
+            <div class="archive-project-list__layout">
+                <aside class="archive-project-list__intro">
+                    <span class="archive-project-list__eyebrow">Archivio progetti</span>
+                    <h2 class="archive-project-list__title archive-project-list__title--desktop">
+                        Dare un futuro alla <span>natura.</span>
+                    </h2>
+                    <h2 class="archive-project-list__title archive-project-list__title--mobile">
+                        Azioni concrete per il <span>pianeta.</span>
+                    </h2>
+                    <p class="archive-project-list__kicker">Protezione fauna selvatica</p>
+                    <p class="archive-project-list__text archive-project-list__text--desktop">
+                        Esplora le nostre missioni sul campo. Ogni scheda rappresenta una sfida viva e un impegno costante per la biodiversita globale.
+                    </p>
+                    <p class="archive-project-list__text archive-project-list__text--mobile">
+                        Esplora i nostri interventi sul campo. Ogni progetto e un passo verso un futuro piu sostenibile e giusto.
+                    </p>
+                    <a href="#archive-project-list-cards" class="archive-project-list__button">
+                        Scopri i progetti
+                    </a>
+                    <div class="archive-project-list__stats">
+                        <div>
+                            <strong>{{ count($progetti) }}+</strong>
+                            <span>progetti attivi</span>
+                        </div>
+                        <div>
+                            <strong>50k</strong>
+                            <span>ettari protetti</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="archive-project-list__showcase" id="archive-project-list-cards">
+                    <div class="archive-project-list__rings" aria-hidden="true"></div>
+
+                    <div class="archive-project-list__items">
+                        @foreach ($progetti as $index => $progetto)
+                            <article class="archive-project-card {{ $index % 2 === 1 ? 'archive-project-card--reverse' : '' }}">
+                                <a href="{{ get_permalink($progetto->id) }}" class="archive-project-card__media" aria-label="Scopri {{ $progetto->titolo_card }}">
                                     <img
                                         src="{{ $progetto->featured_image }}"
                                         alt="{{ $progetto->titolo_card }}"
                                         title="{{ $progetto->titolo_card }}"
-                                        class="h-full w-full object-cover"
+                                        class="archive-project-card__image"
                                         loading="lazy"
                                         decoding="async" />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-[rgba(18,32,24,0.88)] via-[rgba(18,32,24,0.2)] to-transparent"></div>
-                                    <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                                        <span class="ui-pill border-white/20 bg-white/10 text-white/80">In evidenza</span>
-                                        <h2 class="mt-4 font-nunitoBold text-3xl leading-tight text-white sm:text-4xl">
-                                            {{ $progetto->titolo_card }}
-                                        </h2>
-                                        <div class="ui-project-copy mt-4 max-w-2xl text-white/80 prose-p:text-white/80">
-                                            {!! $progetto->content !!}
-                                        </div>
-                                        <div class="mt-6">
-                                            <a href="{{ get_permalink($progetto->id) }}" class="ui-button-ghost">
-                                                Scopri il progetto
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                </a>
 
-                            <div class="p-4 sm:p-6 lg:p-8 {{ $index % 2 === 1 ? 'lg:order-1' : '' }}">
-                                @include('components.donation-form', [
-                                    'projectId' => $progetto->id,
-                                    'thankYouUrl' => $thankYouUrl,
-                                ])
-                            </div>
-                        </div>
-                    </article>
-                @endforeach
+                                <div class="archive-project-card__content">
+                                    <span class="archive-project-card__badge">Progetto {{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                                    <h3 class="archive-project-card__title">{{ $progetto->titolo_card }}</h3>
+                                    <p class="archive-project-card__text">
+                                        {{ wp_trim_words(wp_strip_all_tags($progetto->content), 26, '...') }}
+                                    </p>
+                                    <a href="{{ get_permalink($progetto->id) }}" class="archive-project-card__cta">
+                                        Scopri il progetto
+                                        <span aria-hidden="true">-></span>
+                                    </a>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </section>
