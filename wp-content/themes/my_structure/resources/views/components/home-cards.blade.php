@@ -14,21 +14,14 @@
                     @endphp
 
                     <article class="ui-project-card">
-                        @if(!empty($progetto['cta']['url']))
-                            <a
-                                href="{{ $progetto['cta']['url'] }}"
-                                aria-label="{{ $progetto['cta']['title'] ?? $progetto['titolo'] }}"
-                                class="absolute inset-0 z-10">
-                                <span class="sr-only">{{ $progetto['cta']['title'] ?? $progetto['titolo'] }}</span>
-                            </a>
-                        @endif
-
                         <figure class="ui-project-card__media">
                             @if(!empty($progetto['immagine']['url']))
+                                @php
+                                    $projectImageAlt = trim($progetto['immagine']['alt'] ?? '') ?: 'Progetto ' . $progetto['titolo'] . ' di Project Africa Conservation';
+                                @endphp
                                 <img
                                     src="{{ $progetto['immagine']['url'] }}"
-                                    alt="{{ $progetto['immagine']['alt'] ?? 'Immagine del progetto' }}"
-                                    title="{{ $progetto['immagine']['title'] ?? '' }}"
+                                    alt="{{ $projectImageAlt }}"
                                     class="ui-project-card__image"
                                     loading="lazy"
                                     decoding="async">
@@ -52,7 +45,7 @@
 
                             @if(!empty($progetto['cta']['url']) && !empty($progetto['cta']['title']))
                                 <div class="ui-project-card__footer">
-                                    <a href="{{ $progetto['cta']['url'] }}" aria-label="{{ $progetto['cta']['title'] }}" class="ui-project-card__button relative z-20">
+                                    <a href="{{ $progetto['cta']['url'] }}" aria-label="{{ $progetto['cta']['title'] }}: {{ $progetto['titolo'] }}" class="ui-project-card__button relative z-20">
                                         {{ $progetto['cta']['title'] }}
                                     </a>
                                 </div>

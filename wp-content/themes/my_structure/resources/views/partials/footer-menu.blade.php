@@ -57,8 +57,12 @@
                     <nav aria-label="Navigazione footer">
                         <ul class="ui-footer__nav">
                             @foreach($flatMenu as $item)
+                                @php
+                                    $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
+                                    $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
+                                @endphp
                                 <li>
-                                    <a class="ui-footer__nav-link" href="{{ $item->url }}">
+                                    <a class="ui-footer__nav-link" href="{{ $item->url }}" @if($isCurrent) aria-current="page" @endif>
                                         {{ $item->title }}
                                     </a>
                                 </li>

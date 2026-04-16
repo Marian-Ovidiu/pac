@@ -36,6 +36,16 @@
     @apply transition-colors duration-200;
   }
 
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--pac-moss);
+    outline-offset: 4px;
+  }
+
   img {
     @apply max-w-full;
   }

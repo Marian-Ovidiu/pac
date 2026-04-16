@@ -1,4 +1,4 @@
-<section class="ui-companies">
+<section class="ui-companies" @if($titolo) aria-labelledby="home-companies-title" @else aria-label="PAC for companies" @endif>
     <div class="ui-container">
         <article class="ui-companies__panel">
             @if(!empty($immagine_url))
@@ -21,7 +21,7 @@
                 </div>
 
                 @if($titolo)
-                    <h2 class="ui-companies__title">{{ $titolo }}</h2>
+                    <h2 id="home-companies-title" class="ui-companies__title">{{ $titolo }}</h2>
                 @endif
 
                 @if($descrizione)
@@ -30,7 +30,7 @@
 
                 @if(isset($cta) && !empty($cta['url']) && !empty($cta['title']))
                     <div class="ui-companies__actions">
-                        <a href="{{ $cta['url'] }}" aria-label="{{ $cta['title'] }}" class="ui-companies__button">
+                        <a href="{{ $cta['url'] }}" aria-label="{{ $cta['title'] }} - {{ $titolo ?: 'PAC for companies' }}" class="ui-companies__button">
                             <span>{{ $cta['title'] }}</span>
                         </a>
                     </div>

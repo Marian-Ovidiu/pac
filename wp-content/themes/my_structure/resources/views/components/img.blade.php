@@ -2,13 +2,13 @@
     'acf' => null,
     'class' => '',
     'sizes' => '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
-    'fallbackAlt' => 'Image',
+    'fallbackAlt' => 'Immagine Project Africa Conservation',
     'fallbackUrl' => '/placeholder.webp',
 ])
 
 @php
     $url = $acf['url'] ?? $fallbackUrl;
-    $alt = $acf['alt'] ?? $fallbackAlt;
+    $alt = trim($acf['alt'] ?? '') ?: $fallbackAlt;
     $title = $acf['title'] ?? '';
     $caption = $acf['caption'] ?? '';
     $description = $acf['description'] ?? '';
@@ -40,7 +40,7 @@
 @endphp
 
 <figure>
-    <img src="{{ $url }}" alt="{{ $alt }}" title="{{ $title }}"
+    <img src="{{ $url }}" alt="{{ $alt }}" @if($title) title="{{ $title }}" @endif
         class="w-full h-auto object-cover {{ $class }}" srcset="{{ $srcset }}" sizes="{{ $sizes }}"
         loading="lazy" decoding="async">
 

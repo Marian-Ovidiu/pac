@@ -1,4 +1,9 @@
-<section class="ui-mono-logo">
+@php
+    $partnerImage = is_array($immagine_monologo ?? null) ? $immagine_monologo : null;
+    $partnerAlt = trim($partnerImage['alt'] ?? '') ?: 'Partner di Project Africa Conservation';
+@endphp
+
+<section class="ui-mono-logo" @if($titolo_monologo) aria-label="{{ $titolo_monologo }}" @endif>
     <div class="ui-container">
         <div class="hidden lg:flex ui-mono-logo__desktop">
             <div class="ui-mono-logo__mark" aria-hidden="true">
@@ -12,12 +17,14 @@
                 @endif
             </div>
 
-            @if($immagine_monologo)
+            @if($partnerImage)
                 <div class="ui-mono-logo__brand">
                     <img
-                            src="{{ $immagine_monologo['url'] }}"
-                            alt="{{ $immagine_monologo['alt'] ?? ($titolo_monologo ?? 'Partner') }}"
-                            class="ui-mono-logo__brand-image">
+                            src="{{ $partnerImage['url'] }}"
+                            alt="{{ $partnerAlt }}"
+                            class="ui-mono-logo__brand-image"
+                            loading="lazy"
+                            decoding="async">
                 </div>
             @endif
 
@@ -35,12 +42,14 @@
                     @endif--}}
                 </div>
 
-                @if($immagine_monologo)
+                @if($partnerImage)
                     <div class="ui-mono-logo__mobile-brand">
                         <img
-                                src="{{ $immagine_monologo['url'] }}"
-                                alt="{{ $immagine_monologo['alt'] ?? ($titolo_monologo ?? 'Partner') }}"
-                                class="ui-mono-logo__mobile-brand-image">
+                                src="{{ $partnerImage['url'] }}"
+                                alt="{{ $partnerAlt }}"
+                                class="ui-mono-logo__mobile-brand-image"
+                                loading="lazy"
+                                decoding="async">
                     </div>
                 @endif
 

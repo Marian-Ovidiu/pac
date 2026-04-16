@@ -21,9 +21,12 @@
     ];
 
     $aboutImage = is_array($image ?? null) ? $image : null;
+    $aboutImageAlt = trim($aboutImage['alt'] ?? '') ?: 'Project Africa Conservation: ' . $title;
+    $primaryCtaLabel = !empty($primaryCta['title']) ? $primaryCta['title'] . ' - ' . $title : null;
+    $secondaryCtaLabel = !empty($secondaryCta['title']) ? $secondaryCta['title'] . ' - ' . $title : null;
 @endphp
 
-<section class="ui-home-about">
+<section class="ui-home-about" aria-label="{{ $title }}">
     <div class="ui-container">
         <div class="hidden lg:grid ui-home-about__desktop">
             <div class="ui-home-about__panel">
@@ -33,12 +36,12 @@
 
                 <div class="ui-home-about__actions">
                     @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" class="ui-home-about__button ui-home-about__button--primary">
+                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--primary">
                             {{ $primaryCta['title'] }}
                         </a>
                     @endif
                     @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" class="ui-home-about__button ui-home-about__button--secondary">
+                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--secondary">
                             {{ $secondaryCta['title'] }}
                         </a>
                     @endif
@@ -50,8 +53,7 @@
                     <figure class="ui-home-about__image-wrap">
                         <img
                             src="{{ $aboutImage['url'] }}"
-                            alt="{{ $aboutImage['alt'] ?? $title }}"
-                            title="{{ $aboutImage['title'] ?? '' }}"
+                            alt="{{ $aboutImageAlt }}"
                             class="ui-home-about__image"
                             loading="lazy"
                             decoding="async">
@@ -60,7 +62,7 @@
                     <div class="ui-home-about__image-wrap ui-home-about__image-wrap--mock" aria-hidden="true"></div>
                 @endif
 
-                <div class="ui-home-about__floating ui-home-about__floating--stats">
+                <div class="ui-home-about__floating ui-home-about__floating--stats" role="group" aria-label="Numeri di Project Africa Conservation">
                     @foreach($stats as $stat)
                         <div class="ui-home-about__stat">
                             <div class="ui-home-about__stat-value">{{ $stat['value'] }}</div>
@@ -71,7 +73,7 @@
 
                 <div class="ui-home-about__floating ui-home-about__floating--note">
                     <div class="ui-home-about__note-kicker">Approccio</div>
-                    <ul class="ui-home-about__list">
+                    <ul class="ui-home-about__list" aria-label="Punti chiave dell'approccio PAC">
                         @foreach($highlights as $highlight)
                             <li>{{ $highlight }}</li>
                         @endforeach
@@ -90,15 +92,14 @@
                     <figure class="ui-home-about__mobile-image-wrap">
                         <img
                             src="{{ $aboutImage['url'] }}"
-                            alt="{{ $aboutImage['alt'] ?? $title }}"
-                            title="{{ $aboutImage['title'] ?? '' }}"
+                            alt="{{ $aboutImageAlt }}"
                             class="ui-home-about__mobile-image"
                             loading="lazy"
                             decoding="async">
                     </figure>
                 @endif
 
-                <div class="ui-home-about__mobile-stats">
+                <div class="ui-home-about__mobile-stats" role="group" aria-label="Numeri di Project Africa Conservation">
                     @foreach($stats as $stat)
                         <div class="ui-home-about__mobile-stat">
                             <div class="ui-home-about__stat-value">{{ $stat['value'] }}</div>
@@ -109,7 +110,7 @@
 
                 <div class="ui-home-about__mobile-note">
                     <div class="ui-home-about__note-kicker">Approccio</div>
-                    <ul class="ui-home-about__list">
+                    <ul class="ui-home-about__list" aria-label="Punti chiave dell'approccio PAC">
                         @foreach($highlights as $highlight)
                             <li>{{ $highlight }}</li>
                         @endforeach
@@ -118,12 +119,12 @@
 
                 <div class="ui-home-about__actions ui-home-about__actions--mobile">
                     @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" class="ui-home-about__button ui-home-about__button--primary">
+                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--primary">
                             {{ $primaryCta['title'] }}
                         </a>
                     @endif
                     @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" class="ui-home-about__button ui-home-about__button--secondary">
+                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--secondary">
                             {{ $secondaryCta['title'] }}
                         </a>
                     @endif

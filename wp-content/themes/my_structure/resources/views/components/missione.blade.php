@@ -2,9 +2,10 @@
     $missionBody = trim(strip_tags($testo_missione ?? ''));
     $missionTitle = $titolo_missione ?: 'La nostra missione va oltre la geografia.';
     $missionDescription = $missionBody ?: 'Project Africa Conservation crede che la stabilita ambientale a lungo termine sia possibile solo con empowerment delle comunita e presenza costante sul campo.';
+    $missionImageAlt = trim($immagine_missione_alt ?? '') ?: 'Missione di Project Africa Conservation: ' . $missionTitle;
 @endphp
 
-<section class="ui-mission">
+<section class="ui-mission" aria-label="{{ $missionTitle }}">
     <div class="ui-container">
         <div class="hidden lg:grid ui-mission__desktop">
             <div class="ui-mission__media-panel">
@@ -12,8 +13,7 @@
                     <figure class="ui-mission__media-frame">
                         <img
                             src="{{ $immagine_missione_url }}"
-                            alt="{{ $immagine_missione_alt ?? $missionTitle }}"
-                            title="{{ $immagine_missione_title ?? '' }}"
+                            alt="{{ $missionImageAlt }}"
                             class="ui-mission__media-image"
                             loading="lazy"
                             decoding="async">
@@ -32,12 +32,12 @@
 
                     <div class="ui-mission__actions">
                         @if(!empty($cta_missione_dona_ora_url) && !empty($cta_missione_dona_ora_titolo))
-                            <a href="{{ $cta_missione_dona_ora_url }}" class="ui-mission__button ui-mission__button--primary">
+                            <a href="{{ $cta_missione_dona_ora_url }}" aria-label="{{ $cta_missione_dona_ora_titolo }} - {{ $missionTitle }}" class="ui-mission__button ui-mission__button--primary">
                                 {{ $cta_missione_dona_ora_titolo }}
                             </a>
                         @endif
                         @if(!empty($cta_missione_galleria_url) && !empty($cta_missione_galleria_titolo))
-                            <a href="{{ $cta_missione_galleria_url }}" class="ui-mission__button ui-mission__button--secondary">
+                            <a href="{{ $cta_missione_galleria_url }}" aria-label="{{ $cta_missione_galleria_titolo }} - {{ $missionTitle }}" class="ui-mission__button ui-mission__button--secondary">
                                 {{ $cta_missione_galleria_titolo }}
                             </a>
                         @endif
@@ -54,8 +54,7 @@
                     <figure class="ui-mission__mobile-media">
                         <img
                             src="{{ $immagine_missione_url }}"
-                            alt="{{ $immagine_missione_alt ?? $missionTitle }}"
-                            title="{{ $immagine_missione_title ?? '' }}"
+                            alt="{{ $missionImageAlt }}"
                             class="ui-mission__mobile-image"
                             loading="lazy"
                             decoding="async">
@@ -71,12 +70,12 @@
 
                     <div class="ui-mission__mobile-actions">
                         @if(!empty($cta_missione_dona_ora_url) && !empty($cta_missione_dona_ora_titolo))
-                            <a href="{{ $cta_missione_dona_ora_url }}" class="ui-mission__button ui-mission__button--primary ui-mission__button--block">
+                            <a href="{{ $cta_missione_dona_ora_url }}" aria-label="{{ $cta_missione_dona_ora_titolo }} - {{ $missionTitle }}" class="ui-mission__button ui-mission__button--primary ui-mission__button--block">
                                 {{ $cta_missione_dona_ora_titolo }}
                             </a>
                         @endif
                         @if(!empty($cta_missione_galleria_url) && !empty($cta_missione_galleria_titolo))
-                            <a href="{{ $cta_missione_galleria_url }}" class="ui-mission__button ui-mission__button--outline ui-mission__button--block">
+                            <a href="{{ $cta_missione_galleria_url }}" aria-label="{{ $cta_missione_galleria_titolo }} - {{ $missionTitle }}" class="ui-mission__button ui-mission__button--outline ui-mission__button--block">
                                 {{ $cta_missione_galleria_titolo }}
                             </a>
                         @endif

@@ -2,9 +2,12 @@
     $projectSlides = array_values(array_filter($featuredProjects ?? [], static function ($project) {
         return !empty($project['immagine']['url']) && !empty($project['titolo']);
     }));
+
+    $primaryCtaLabel = !empty($primaryCta['title']) ? $primaryCta['title'] . ' - Project Africa Conservation' : null;
+    $secondaryCtaLabel = !empty($secondaryCta['title']) ? $secondaryCta['title'] . ' - Project Africa Conservation' : null;
 @endphp
 
-<section class="ui-section-tight ui-home-hero">
+<section class="ui-section-tight ui-home-hero" aria-label="{{ $title }}">
     <div class="ui-container">
         <div class="hidden items-start gap-8 lg:grid lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] xl:gap-10">
             <div class="ui-home-hero__intro">
@@ -14,12 +17,12 @@
 
                 <div class="mt-8 flex flex-wrap gap-3">
                     @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" class="ui-home-hero__button ui-home-hero__button--primary">
+                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-hero__button ui-home-hero__button--primary">
                             {{ $primaryCta['title'] }}
                         </a>
                     @endif
                     @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" class="ui-home-hero__button ui-home-hero__button--secondary">
+                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-hero__button ui-home-hero__button--secondary">
                             {{ $secondaryCta['title'] }}
                         </a>
                     @endif
@@ -27,33 +30,40 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4 self-center xl:gap-5">
-                @foreach($projectSlides as $project)
+                @foreach($projectSlides as $index => $project)
+                    @php
+                        $projectTitle = trim($project['titolo'] ?? '');
+                        $projectImage = $project['immagine'] ?? [];
+                        $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
+                        $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
+                        $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
+                    @endphp
                     <article class="ui-home-hero__card group">
                         @if(!empty($project['cta']['url']))
                             <a
                                 href="{{ $project['cta']['url'] }}"
-                                aria-label="{{ $project['cta']['title'] ?? $project['titolo'] }}"
+                                aria-label="{{ $projectLinkLabel }}"
                                 class="absolute inset-0 z-10">
-                                <span class="sr-only">{{ $project['cta']['title'] ?? $project['titolo'] }}</span>
+                                <span class="sr-only">{{ $projectLinkLabel }}</span>
                             </a>
                         @endif
 
                         <img
-                            src="{{ $project['immagine']['url'] }}"
-                            alt="{{ $project['immagine']['alt'] ?? $project['titolo'] }}"
-                            title="{{ $project['immagine']['title'] ?? '' }}"
+                            src="{{ $projectImage['url'] }}"
+                            alt="{{ $projectAlt }}"
                             class="ui-home-hero__card-image"
-                            loading="lazy"
-                            decoding="async">
+                            loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                            decoding="async"
+                            @if($index === 0) fetchpriority="high" @endif>
 
-                        <div class="ui-home-hero__card-overlay"></div>
+                        <div class="ui-home-hero__card-overlay" aria-hidden="true"></div>
 
                         <div class="ui-home-hero__card-copy">
-                            <h3 class="ui-home-hero__card-title">{{ $project['titolo'] }}</h3>
+                            <h3 class="ui-home-hero__card-title">{{ $projectTitle }}</h3>
                             @if(!empty($project['cta']['title']))
                                 <span class="ui-home-hero__card-link">
                                     {{ $project['cta']['title'] }}
-                                    <span aria-hidden="true">→</span>
+                                    <span aria-hidden="true">&rarr;</span>
                                 </span>
                             @endif
                         </div>
@@ -65,34 +75,39 @@
         <div class="lg:hidden">
             <div class="swiper js-home-hero-slider ui-home-hero__mobile-slider" role="region" aria-roledescription="carousel" aria-label="Progetti in evidenza">
                 <div class="swiper-wrapper">
-                    @foreach($projectSlides as $project)
+                    @foreach($projectSlides as $index => $project)
                         @php
-                            $projectDescription = trim(($project['immagine']['caption'] ?? '') ?: ($project['immagine']['description'] ?? ''));
+                            $projectTitle = trim($project['titolo'] ?? '');
+                            $projectImage = $project['immagine'] ?? [];
+                            $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
+                            $projectDescription = trim(($projectImage['caption'] ?? '') ?: ($projectImage['description'] ?? ''));
+                            $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
+                            $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
                         @endphp
-                        <div class="swiper-slide">
+                        <div class="swiper-slide" role="group" aria-label="{{ $projectTitle }}">
                             <article class="ui-home-hero__mobile-card">
                                 @if(!empty($project['cta']['url']))
                                     <a
                                         href="{{ $project['cta']['url'] }}"
-                                        aria-label="{{ $project['cta']['title'] ?? $project['titolo'] }}"
+                                        aria-label="{{ $projectLinkLabel }}"
                                         class="absolute inset-0 z-10">
-                                        <span class="sr-only">{{ $project['cta']['title'] ?? $project['titolo'] }}</span>
+                                        <span class="sr-only">{{ $projectLinkLabel }}</span>
                                     </a>
                                 @endif
 
                                 <img
-                                    src="{{ $project['immagine']['url'] }}"
-                                    alt="{{ $project['immagine']['alt'] ?? $project['titolo'] }}"
-                                    title="{{ $project['immagine']['title'] ?? '' }}"
+                                    src="{{ $projectImage['url'] }}"
+                                    alt="{{ $projectAlt }}"
                                     class="ui-home-hero__mobile-image"
-                                    loading="eager"
-                                    decoding="async">
+                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                    decoding="async"
+                                    @if($index === 0) fetchpriority="high" @endif>
 
-                                <div class="ui-home-hero__mobile-overlay"></div>
+                                <div class="ui-home-hero__mobile-overlay" aria-hidden="true"></div>
 
                                 <div class="ui-home-hero__mobile-copy">
                                     <span class="ui-home-hero__eyebrow ui-home-hero__eyebrow--mobile">Progetto in evidenza</span>
-                                    <h2 class="ui-home-hero__mobile-title">{{ $project['titolo'] }}</h2>
+                                    <h2 class="ui-home-hero__mobile-title">{{ $projectTitle }}</h2>
                                     @if($projectDescription)
                                         <p class="ui-home-hero__mobile-text">{{ $projectDescription }}</p>
                                     @elseif($description)
@@ -102,7 +117,7 @@
                                     @if(!empty($project['cta']['title']))
                                         <span class="ui-home-hero__mobile-button">
                                             {{ $project['cta']['title'] }}
-                                            <span aria-hidden="true">→</span>
+                                            <span aria-hidden="true">&rarr;</span>
                                         </span>
                                     @endif
                                 </div>
@@ -111,7 +126,7 @@
                     @endforeach
                 </div>
 
-                <div class="swiper-pagination ui-home-hero__pagination"></div>
+                <div class="swiper-pagination ui-home-hero__pagination" aria-hidden="true"></div>
             </div>
         </div>
     </div>
