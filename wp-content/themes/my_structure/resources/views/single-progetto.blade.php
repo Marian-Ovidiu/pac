@@ -9,88 +9,111 @@
 @endphp
 @extends('layouts.mainLayout')
 @section('content')
-    <section class="ui-section-tight ui-project-hero">
-        <div class="ui-panel ui-project-hero__panel overflow-hidden">
-                <div class="grid items-stretch lg:grid-cols-[1fr_1fr]">
-                    <div class="p-7 sm:p-10 lg:p-12">
-                        <a href="{{ home_url('/4-progetti-antibracconaggio-sociale') }}" class="ui-button-ghost mb-5">
-                            Torna ai progetti
-                        </a>
-                        <span class="ui-kicker border-white/15 bg-white/10 text-white">Scheda progetto</span>
-                        <h1 class="mt-5 font-nunitoBold text-4xl leading-[1.04] text-white sm:text-5xl lg:text-6xl">
-                            {{ $progetto->titolo_hero }}
-                        </h1>
-                        <div class="ui-richtext mt-6 max-w-2xl prose-p:text-white prose-p:opacity-80 prose-strong:text-white prose-headings:text-white">
-                            {!! $progetto->testo_hero !!}
-                        </div>
+    <section class="project-single-hero">
+        <div class="ui-container">
+            <div class="project-single-hero__layout">
+                <div class="project-single-hero__copy">
+                    <a href="{{ home_url('/4-progetti-antibracconaggio-sociale') }}" class="project-single-hero__back">
+                        <span aria-hidden="true">&larr;</span>
+                        <span>Torna ai progetti</span>
+                    </a>
 
-                        @if (function_exists('pll_get_the_languages'))
-                            @php $languages = pll_get_the_languages(['raw' => 1]); @endphp
-                            @if(!empty($languages))
-                                <div class="mt-8 flex flex-wrap gap-2">
-                                    @foreach ($languages as $lang)
-                                        <a href="{{ $lang['url'] }}" class="ui-pill {{ $lang['current_lang'] ? '!bg-white !text-custom-dark-green' : 'border-white/20 bg-white/10 text-white/80' }}">
-                                            {{ strtoupper($lang['slug']) }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            @endif
-                        @endif
+                    <span class="project-single-kicker">Scheda progetto</span>
+                    <h1>{{ $progetto->titolo_hero }}</h1>
+                    <div class="project-single-hero__text">
+                        {!! $progetto->testo_hero !!}
                     </div>
 
-                    @if(!empty($img['url']))
-                        <figure class="min-h-[24rem]">
-                            <img
-                                src="{{ $img['url'] }}"
-                                alt="{{ $img['alt'] ?? $progetto->titolo_hero }}"
-                                class="h-full w-full object-cover object-top"
-                                loading="eager"
-                                decoding="async"
-                                width="1920"
-                                height="1080">
-                        </figure>
+                    <div class="project-single-hero__actions">
+                        <a href="#project-donation" class="project-single-button project-single-button--primary">Sostieni questo progetto</a>
+                        <a href="#project-details" class="project-single-button project-single-button--secondary">Approfondisci</a>
+                    </div>
+
+                    @if (function_exists('pll_get_the_languages'))
+                        @php $languages = pll_get_the_languages(['raw' => 1]); @endphp
+                        @if(!empty($languages))
+                            <div class="project-single-hero__langs">
+                                @foreach ($languages as $lang)
+                                    <a href="{{ $lang['url'] }}" class="{{ $lang['current_lang'] ? 'is-active' : '' }}">
+                                        {{ strtoupper($lang['slug']) }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
                     @endif
                 </div>
+
+                @if(!empty($img['url']))
+                    <figure class="project-single-hero__media">
+                        <img
+                            src="{{ $img['url'] }}"
+                            alt="{{ $img['alt'] ?? $progetto->titolo_hero }}"
+                            loading="eager"
+                            decoding="async"
+                            width="1920"
+                            height="1080">
+                        <figcaption>
+                            <span>Missione PAC</span>
+                            <strong>{{ $progetto->titolo_card ?: $progetto->titolo_hero }}</strong>
+                        </figcaption>
+                    </figure>
+                @endif
+            </div>
         </div>
     </section>
 
+    <div id="project-details" class="project-single-details">
     @component('components.section', [
         'titolo' => $progetto->problemi_titolo_1,
         'items' => $progetto->getProblemi(),
+        'eyebrow' => 'Problemi sul campo',
+        'theme' => 'problem',
     ])
     @endcomponent
 
     @component('components.section', [
         'titolo' => $progetto->soluzioni_titolo_1,
         'items' => $progetto->getSoluzioni(),
+        'eyebrow' => 'Soluzioni concrete',
+        'theme' => 'solution',
     ])
     @endcomponent
+    </div>
 
-    <section class="ui-section">
+    <section id="project-donation" class="project-donation-section">
         <div class="ui-container">
-            <div class="ui-card overflow-hidden">
-                <div class="grid lg:grid-cols-[1.05fr_0.95fr]">
-                    <div class="relative min-h-[24rem]">
+            <div class="project-donation-section__head">
+                <span class="project-single-kicker">Sostieni ora</span>
+                <h2>Trasforma il tuo supporto in azione concreta.</h2>
+                <p>Ogni donazione aiuta PAC a portare risorse, formazione e presenza operativa dove il progetto ne ha piu bisogno.</p>
+            </div>
+
+            <div class="project-donation-card">
+                <div class="project-donation-card__story">
+                    <figure>
                         <img
                             src="{{ $progetto->featured_image }}"
                             alt="{{ $progetto->titolo_card }}"
                             title="{{ $progetto->titolo_card }}"
-                            class="h-full w-full object-cover"
                             loading="lazy"
                             decoding="async" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-[rgba(18,32,24,0.88)] via-[rgba(18,32,24,0.18)] to-transparent"></div>
-                        <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                            <span class="ui-pill border-white/20 bg-white/10 text-white/80">Sostieni ora</span>
-                            <h2 class="mt-4 font-nunitoBold text-3xl leading-tight text-white sm:text-4xl">
-                                {{ $progetto->titolo_card }}
-                            </h2>
-                            <div class="ui-project-copy mt-4 max-w-2xl text-white/80 prose-p:text-white/80">
-                                {!! $progetto->content !!}
-                            </div>
+                    </figure>
+                    <div class="project-donation-card__copy">
+                        <span>Donazione progetto</span>
+                        <h3>{{ $progetto->titolo_card }}</h3>
+                        <div class="project-donation-card__text">
+                            {!! $progetto->content !!}
                         </div>
+                        <ul>
+                            <li>Importo libero o suggerito</li>
+                            <li>Pagamento sicuro con Stripe</li>
+                            <li>Conferma e ringraziamento via email</li>
+                        </ul>
                     </div>
+                </div>
 
-                    <div class="p-4 sm:p-6 lg:p-8">
+                <div class="project-donation-card__form">
+                    <div class="project-donation-card__sticky">
                         @include('components.donation-form', [
                             'projectId' => $progetto->id,
                             'thankYouUrl' => $thankYouUrl,

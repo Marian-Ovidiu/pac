@@ -1,31 +1,35 @@
-<section class="ui-section">
+@php
+    $eyebrow = $eyebrow ?? 'Approfondimento';
+    $theme = $theme ?? 'default';
+@endphp
+
+<section class="project-editorial-section project-editorial-section--{{ $theme }}">
     <div class="ui-container">
         @if ($titolo)
-            <div class="mx-auto mb-12 max-w-3xl text-center">
-                <span class="ui-kicker mb-5">Approfondimento</span>
-                <h2 class="ui-title">{{ $titolo }}</h2>
+            <div class="project-editorial-section__head">
+                <span class="project-single-kicker">{{ $eyebrow }}</span>
+                <h2>{{ $titolo }}</h2>
             </div>
         @endif
 
-        <div class="space-y-8">
+        <div class="project-editorial-section__items">
             @foreach ($items as $index => $item)
                 @php
                     $hasImage = isset($item['immagini']) && count($item['immagini']) > 0;
                 @endphp
 
-                <article class="ui-card overflow-hidden">
-                    <div class="grid {{ $hasImage ? 'lg:grid-cols-[0.92fr_1.08fr]' : '' }}">
+                <article class="project-editorial-card {{ $index % 2 === 1 ? 'project-editorial-card--reverse' : '' }}">
+                    <div class="project-editorial-card__layout {{ $hasImage ? 'has-image' : '' }}">
                         @if($hasImage)
-                            <div class="{{ $index % 2 === 1 ? 'lg:order-2' : '' }} border-b border-custom-clay/40 lg:border-b-0">
-                                <div class="swiper swiper-progetto h-[18rem] w-full sm:h-[24rem]" role="group" aria-roledescription="carousel" aria-label="Galleria immagini del progetto">
+                            <div class="project-editorial-card__media">
+                                <div class="swiper swiper-progetto" role="group" aria-roledescription="carousel" aria-label="Galleria immagini del progetto">
                                     <div class="swiper-wrapper">
                                         @foreach ($item['immagini'] as $img)
-                                            <figure class="swiper-slide h-[18rem] sm:h-[24rem]">
+                                            <figure class="swiper-slide">
                                                 <img
                                                     src="{{ $img['url'] }}"
                                                     alt="{{ $img['alt'] ?? ($item['sottoTitolo'] ?? 'Immagine progetto') }}"
                                                     title="{{ $img['title'] ?? ($item['sottoTitolo'] ?? '') }}"
-                                                    class="h-full w-full object-cover"
                                                     loading="lazy">
                                                 @if(!empty($img['caption']))
                                                     <figcaption class="sr-only">{{ $img['caption'] }}</figcaption>
@@ -38,16 +42,14 @@
                             </div>
                         @endif
 
-                        <div class="flex flex-col justify-center p-6 sm:p-8 lg:p-10 {{ $hasImage && $index % 2 === 1 ? 'lg:order-1' : '' }}">
+                        <div class="project-editorial-card__copy">
+                            <span class="project-editorial-card__index">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
                             @if (!empty($item['sottoTitolo']))
-                                <span class="ui-kicker mb-4">Sul campo</span>
-                                <h3 class="font-nunitoBold text-2xl text-custom-ink sm:text-3xl">
-                                    {{ $item['sottoTitolo'] }}
-                                </h3>
+                                <h3>{{ $item['sottoTitolo'] }}</h3>
                             @endif
 
                             @if (!empty($item['testo']))
-                                <div class="ui-richtext mt-4">
+                                <div class="project-editorial-card__text">
                                     {!! $item['testo'] !!}
                                 </div>
                             @endif
