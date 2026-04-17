@@ -39,14 +39,14 @@
                                 {{ $item->title }}
                             </a>
                             @if (!empty($item->children))
-                                <ul class="absolute right-0 top-full z-50 hidden min-w-[15rem] rounded-3xl border border-custom-clay/60 bg-white/96 p-3 shadow-card backdrop-blur-sm group-hover:block group-focus-within:block">
+                                <ul class="ui-header-submenu">
                                     @foreach ($item->children as $subitem)
                                         @php
                                             $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
                                             $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
                                         @endphp
                                         <li>
-                                            <a href="{{ $subitem->url }}" class="block rounded-2xl px-4 py-3 text-sm font-medium text-custom-ink hover:bg-custom-sand" @if($isSubCurrent) aria-current="page" @endif>
+                                            <a href="{{ $subitem->url }}" class="ui-header-submenu__link" @if($isSubCurrent) aria-current="page" @endif>
                                                 {{ $subitem->title }}
                                             </a>
                                         </li>
@@ -66,25 +66,33 @@
                 @click.away="open = false"
                 class="ui-mobile-menu lg:hidden"
                 aria-label="Navigazione mobile">
-                <ul class="space-y-3">
+                <ul class="ui-mobile-menu__list">
                     @foreach ($menu as $item)
                         @php
                             $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
                             $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
+                            $hasChildren = !empty($item->children);
                         @endphp
-                        <li class="rounded-3xl bg-white/70 p-3 shadow-soft">
-                            <a href="{{ $item->url }}" class="block text-base font-semibold text-custom-ink" @if($isCurrent) aria-current="page" @endif>
-                                {{ $item->title }}
+                        <li class="ui-mobile-menu__item">
+                            <a
+                                href="{{ $item->url }}"
+                                class="ui-mobile-menu__link"
+                                @if($isCurrent) aria-current="page" @endif
+                                @if($hasChildren) aria-haspopup="true" @endif>
+                                <span>{{ $item->title }}</span>
+                                @if($hasChildren)
+                                    <span class="ui-mobile-menu__count">{{ count($item->children) }}</span>
+                                @endif
                             </a>
-                            @if (!empty($item->children))
-                                <ul class="mt-3 space-y-2 border-l border-custom-clay pl-4">
+                            @if ($hasChildren)
+                                <ul class="ui-mobile-menu__submenu">
                                     @foreach ($item->children as $subitem)
                                         @php
                                             $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
                                             $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
                                         @endphp
                                         <li>
-                                            <a href="{{ $subitem->url }}" class="block text-sm text-custom-stone" @if($isSubCurrent) aria-current="page" @endif>
+                                            <a href="{{ $subitem->url }}" class="ui-mobile-menu__sublink" @if($isSubCurrent) aria-current="page" @endif>
                                                 {{ $subitem->title }}
                                             </a>
                                         </li>
