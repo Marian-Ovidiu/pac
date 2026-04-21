@@ -1,5 +1,4 @@
-# Sensitive/local config (wp-config.php: non committare — credenziali / ambiente)
-wp-config.php
+# Sensitive/local config (wp-config.php è di nuovo versionato; segreti preferibilmente in .env / env hosting)
 .env
 .env.*
 
