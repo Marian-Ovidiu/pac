@@ -63,7 +63,7 @@
             </template>
 
             <div class="mt-8 flex justify-end">
-                <button @click.prevent="goToStep(2)" :disabled="!isAmountValid()" class="ui-button disabled:cursor-not-allowed disabled:opacity-50">
+                <button type="button" @click.prevent="goToStep(2)" :disabled="!isAmountValid()" class="ui-button disabled:cursor-not-allowed disabled:opacity-50">
                     {{ load_static_strings('Avanti') }}
                 </button>
             </div>
@@ -113,10 +113,11 @@
             </div>
 
             <div class="mt-8 flex flex-wrap justify-between gap-3">
-                <button @click="step = 1" class="ui-button-secondary">
+                <button type="button" @click="step = 1" class="ui-button-secondary">
                     {{ load_static_strings('Indietro') }}
                 </button>
                 <button
+                    type="button"
                     @click="touched.name = true; touched.surname = true; touched.email = true; touched.phone = true; goToStep(3)"
                     :disabled="!isUserDataValid()"
                     class="ui-button disabled:cursor-not-allowed disabled:opacity-50">
@@ -140,10 +141,10 @@
             </div>
 
             <div class="mt-8 flex flex-wrap justify-between gap-3">
-                <button @click="step = 2" class="ui-button-secondary">
+                <button type="button" @click="step = 2" class="ui-button-secondary">
                     {{ load_static_strings('Indietro') }}
                 </button>
-                <button @click="submitForm()" class="ui-button">
+                <button type="button" @click="submitForm()" class="ui-button">
                     {{ load_static_strings('Dona ora') }}
                 </button>
             </div>

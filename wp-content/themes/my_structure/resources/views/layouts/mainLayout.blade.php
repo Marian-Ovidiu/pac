@@ -2,6 +2,8 @@
     $seoPluginActive = theme_seo_plugin_active();
     $metaDescription = theme_meta_description();
     $schemaGraph = $seoPluginActive ? null : theme_schema_graph();
+    $canonicalUrl = $seoPluginActive ? null : theme_canonical_url();
+    $ogMeta = $seoPluginActive ? null : theme_open_graph_meta();
     $bodyClasses = implode(' ', get_body_class('flex flex-col min-h-screen font-nunitoSansRegular'));
 @endphp
 <!DOCTYPE html>
@@ -16,6 +18,18 @@
     @if (!$seoPluginActive && $schemaGraph)
         <script type="application/ld+json">{!! wp_json_encode($schemaGraph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
     @endif
+    @if (!$seoPluginActive && !empty($canonicalUrl))
+        <link rel="canonical" href="{{ esc_url($canonicalUrl) }}">
+    @endif
+    @if (!$seoPluginActive && !empty($ogMeta))
+        @foreach ($ogMeta as $ogProp => $ogContent)
+            @if ((string) $ogContent !== '')
+                <meta property="{{ esc_attr($ogProp) }}" content="{{ esc_attr($ogContent) }}">
+            @endif
+        @endforeach
+    @endif
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">

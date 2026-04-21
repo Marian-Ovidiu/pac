@@ -86,7 +86,15 @@ class BaseGroupAcf
 
     public function __isset($name)
     {
-        return array_key_exists($name, $this->attributes);
+        if (array_key_exists($name, $this->attributes)) {
+            return true;
+        }
+
+        $parts = explode('_', $name);
+        $parts = array_map('ucfirst', $parts);
+        $method = 'get' . implode('', $parts) . 'Attribute';
+
+        return method_exists($this, $method);
     }
 
     public static function getByLanguage($postType, $acfField = 'lingua', $language = null) {

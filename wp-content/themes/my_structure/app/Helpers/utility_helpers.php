@@ -134,8 +134,32 @@ if (!function_exists('theme_seo_plugin_active')) {
     }
 }
 
+if (!function_exists('theme_meta_description_normalize')) {
+    /**
+     * Plain-text meta description chunk (layout applies esc_attr on output).
+     */
+    function theme_meta_description_normalize($text, $maxWords = 40) {
+        $text = wp_strip_all_tags((string) $text, true);
+        $text = trim(preg_replace('/\s+/', ' ', $text));
+
+        if ($text === '') {
+            return '';
+        }
+
+        return wp_trim_words($text, $maxWords, '...');
+    }
+}
+
 if (!function_exists('theme_meta_description')) {
+    /**
+     * Meta description when no SEO plugin outputs one (mainLayout, theme_open_graph_meta, theme_schema_graph).
+     * Covers: singular (any), front page, blog index, taxonomy archives, post type archives, author, date; generic fallback.
+     */
     function theme_meta_description() {
+        if (theme_seo_plugin_active()) {
+            return '';
+        }
+
         if (is_singular()) {
             $post = get_queried_object();
 
@@ -143,34 +167,242 @@ if (!function_exists('theme_meta_description')) {
                 $excerpt = has_excerpt($post) ? get_the_excerpt($post) : '';
 
                 if ($excerpt !== '') {
-                    return wp_strip_all_tags($excerpt, true);
+                    return theme_meta_description_normalize($excerpt, 40);
                 }
 
                 $content = wp_strip_all_tags(strip_shortcodes((string) $post->post_content), true);
                 $content = trim(preg_replace('/\s+/', ' ', $content));
 
                 if ($content !== '') {
-                    return wp_trim_words($content, 30, '...');
+                    return theme_meta_description_normalize($content, 30);
                 }
+            }
+        }
+
+        if (is_front_page()) {
+            $description = get_bloginfo('description', 'display');
+
+            if (is_string($description) && $description !== '') {
+                return theme_meta_description_normalize($description, 40);
+            }
+
+            return theme_meta_description_normalize(
+                get_bloginfo('name', 'display') . ' – Sito ufficiale PAC - Project Africa Conservation.',
+                35
+            );
+        }
+
+        if (is_home() && !is_front_page()) {
+            $postsPageId = (int) get_option('page_for_posts');
+
+            if ($postsPageId > 0) {
+                $page = get_post($postsPageId);
+
+                if ($page instanceof WP_Post) {
+                    if (has_excerpt($page)) {
+                        $ex = theme_meta_description_normalize(get_the_excerpt($page), 40);
+
+                        if ($ex !== '') {
+                            return $ex;
+                        }
+                    }
+
+                    $fromContent = theme_meta_description_normalize(
+                        strip_shortcodes((string) $page->post_content),
+                        30
+                    );
+
+                    if ($fromContent !== '') {
+                        return $fromContent;
+                    }
+                }
+            }
+
+            $blogTitle = single_post_title('', false);
+
+            if (is_string($blogTitle) && $blogTitle !== '') {
+                return theme_meta_description_normalize(
+                    $blogTitle . ' – ' . get_bloginfo('name', 'display'),
+                    28
+                );
+            }
+        }
+
+        if (is_category() || is_tag() || is_tax()) {
+            $term = get_queried_object();
+
+            if ($term instanceof WP_Term) {
+                $rawDesc = term_description($term);
+
+                if (is_string($rawDesc) && trim(wp_strip_all_tags($rawDesc)) !== '') {
+                    $out = theme_meta_description_normalize($rawDesc, 40);
+
+                    if ($out !== '') {
+                        return $out;
+                    }
+                }
+
+                $name = single_term_title('', false);
+
+                if (is_string($name) && $name !== '') {
+                    return theme_meta_description_normalize(
+                        $name . ' – ' . get_bloginfo('name', 'display'),
+                        28
+                    );
+                }
+            }
+        }
+
+        if (is_post_type_archive()) {
+            $archiveDesc = get_the_archive_description();
+
+            if (is_string($archiveDesc) && trim(wp_strip_all_tags($archiveDesc)) !== '') {
+                $out = theme_meta_description_normalize($archiveDesc, 40);
+
+                if ($out !== '') {
+                    return $out;
+                }
+            }
+
+            $archiveTitle = post_type_archive_title('', false);
+
+            if (is_string($archiveTitle) && $archiveTitle !== '') {
+                return theme_meta_description_normalize(
+                    $archiveTitle . ' – ' . get_bloginfo('name', 'display'),
+                    28
+                );
+            }
+        }
+
+        if (is_author()) {
+            $author = get_queried_object();
+
+            if ($author instanceof WP_User) {
+                $bio = get_the_author_meta('description', $author->ID);
+
+                if (is_string($bio) && trim(wp_strip_all_tags($bio)) !== '') {
+                    $out = theme_meta_description_normalize($bio, 40);
+
+                    if ($out !== '') {
+                        return $out;
+                    }
+                }
+
+                return theme_meta_description_normalize(
+                    sprintf(
+                        /* translators: %s: author display name */
+                        __('Articoli di %s', 'my_structure'),
+                        $author->display_name
+                    ) . ' – ' . get_bloginfo('name', 'display'),
+                    28
+                );
+            }
+        }
+
+        if (is_date()) {
+            $archiveDesc = get_the_archive_description();
+
+            if (is_string($archiveDesc) && trim(wp_strip_all_tags($archiveDesc)) !== '') {
+                $out = theme_meta_description_normalize($archiveDesc, 40);
+
+                if ($out !== '') {
+                    return $out;
+                }
+            }
+
+            $title = wp_get_document_title();
+
+            if (is_string($title) && $title !== '') {
+                return theme_meta_description_normalize($title, 35);
             }
         }
 
         $description = get_bloginfo('description', 'display');
 
         if (is_string($description) && $description !== '') {
-            return wp_strip_all_tags($description, true);
+            return theme_meta_description_normalize($description, 40);
         }
 
-        return 'Sito ufficiale PAC - Project Africa Conservation.';
+        return theme_meta_description_normalize(
+            'Sito ufficiale PAC - Project Africa Conservation.',
+            20
+        );
     }
 }
 
-if (!function_exists('theme_schema_graph')) {
-    function theme_schema_graph() {
-        if (!is_front_page()) {
-            return null;
+if (!function_exists('theme_social_urls')) {
+    /**
+     * URL profili social (footer, JSON-LD sameAs). Override da OpzioniGlobaliFields (campi url_facebook, url_instagram, url_linkedin) se valorizzati e URL validi.
+     *
+     * @return array{facebook: string, instagram: string, linkedin: string}
+     */
+    function theme_social_urls() {
+        static $cached = null;
+
+        if ($cached !== null) {
+            return $cached;
         }
 
+        $defaults = [
+            'facebook' => 'https://www.facebook.com/share/15kZKmU4gr/',
+            'instagram' => 'https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==',
+            'linkedin' => 'https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/',
+        ];
+
+        $out = $defaults;
+
+        if (class_exists('\Models\Options\OpzioniGlobaliFields')) {
+            $opts = \Models\Options\OpzioniGlobaliFields::get();
+
+            if (is_object($opts)) {
+                $map = [
+                    'facebook' => 'url_facebook',
+                    'instagram' => 'url_instagram',
+                    'linkedin' => 'url_linkedin',
+                ];
+
+                foreach ($map as $key => $prop) {
+                    $val = $opts->{$prop} ?? null;
+
+                    if (!is_string($val)) {
+                        continue;
+                    }
+
+                    $val = trim($val);
+
+                    if ($val === '') {
+                        continue;
+                    }
+
+                    $clean = esc_url_raw($val);
+
+                    if ($clean !== '' && function_exists('wp_http_validate_url') && wp_http_validate_url($clean)) {
+                        $out[$key] = $clean;
+                    }
+                }
+            }
+        }
+
+        $cached = $out;
+
+        return $cached;
+    }
+}
+
+if (!function_exists('theme_schema_organization_id')) {
+    /**
+     * Stable @id for Organization JSON-LD (referenced by WebPage.isPartOf).
+     */
+    function theme_schema_organization_id() {
+        return trailingslashit(home_url('/')) . '#organization';
+    }
+}
+
+if (!function_exists('theme_schema_organization_node')) {
+    /**
+     * @return array<string, mixed>
+     */
+    function theme_schema_organization_node() {
         $options = class_exists('\Models\Options\OpzioniGlobaliFields')
             ? \Models\Options\OpzioniGlobaliFields::get()
             : null;
@@ -179,27 +411,221 @@ if (!function_exists('theme_schema_graph')) {
             ? $options->logo['url']
             : null;
 
+        $social = theme_social_urls();
         $sameAs = array_values(array_filter([
-            'https://www.facebook.com/15kZKmU4gr/',
-            'https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==',
-            'https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/',
+            $social['facebook'] ?? '',
+            $social['instagram'] ?? '',
+            $social['linkedin'] ?? '',
         ]));
 
-        $graph = [
-            '@context' => 'https://schema.org',
+        $node = [
             '@type' => 'Organization',
+            '@id' => theme_schema_organization_id(),
             'name' => get_bloginfo('name', 'display'),
-            'url' => home_url('/'),
+            'url' => trailingslashit(home_url('/')),
         ];
 
         if ($logo) {
-            $graph['logo'] = $logo;
+            $node['logo'] = $logo;
         }
 
         if (!empty($sameAs)) {
-            $graph['sameAs'] = $sameAs;
+            $node['sameAs'] = $sameAs;
         }
 
-        return $graph;
+        return $node;
+    }
+}
+
+if (!function_exists('theme_canonical_url')) {
+    /**
+     * Canonical URL when no SEO plugin outputs one (for rel="canonical" and JSON-LD).
+     */
+    function theme_canonical_url() {
+        if (is_front_page()) {
+            return trailingslashit(home_url('/'));
+        }
+
+        if (is_home() && !is_front_page()) {
+            $postsPageId = (int) get_option('page_for_posts');
+
+            if ($postsPageId > 0) {
+                $url = get_permalink($postsPageId);
+
+                return is_string($url) && $url !== '' ? $url : null;
+            }
+
+            return trailingslashit(home_url('/'));
+        }
+
+        if (is_singular()) {
+            $post = get_queried_object();
+
+            if ($post instanceof WP_Post) {
+                if (function_exists('wp_get_canonical_url')) {
+                    $canonical = wp_get_canonical_url($post);
+
+                    if (is_string($canonical) && $canonical !== '') {
+                        return $canonical;
+                    }
+                }
+
+                $url = get_permalink($post);
+
+                return is_string($url) && $url !== '' ? $url : null;
+            }
+        }
+
+        if (is_category() || is_tag() || is_tax()) {
+            $term = get_queried_object();
+
+            if ($term instanceof WP_Term) {
+                $link = get_term_link($term);
+
+                return !is_wp_error($link) && is_string($link) ? $link : null;
+            }
+        }
+
+        if (is_post_type_archive()) {
+            $postType = get_query_var('post_type');
+
+            if (is_array($postType)) {
+                $postType = reset($postType);
+            }
+
+            if (!is_string($postType) || $postType === '') {
+                $postType = get_post_type();
+            }
+
+            if (!is_string($postType) || $postType === '') {
+                return null;
+            }
+
+            $link = get_post_type_archive_link($postType);
+
+            return is_string($link) && $link !== '' ? $link : null;
+        }
+
+        if (is_author()) {
+            $author = get_queried_object();
+
+            if ($author instanceof WP_User) {
+                return get_author_posts_url((int) $author->ID);
+            }
+        }
+
+        if (is_date()) {
+            $year = get_query_var('year');
+            $monthnum = get_query_var('monthnum');
+            $day = get_query_var('day');
+
+            if ($year) {
+                if ($monthnum && $day) {
+                    return get_day_link((int) $year, (int) $monthnum, (int) $day);
+                }
+
+                if ($monthnum) {
+                    return get_month_link((int) $year, (int) $monthnum);
+                }
+
+                return get_year_link((int) $year);
+            }
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('theme_open_graph_meta')) {
+    /**
+     * Open Graph meta values when no SEO plugin is active (output as property/content in layout).
+     *
+     * @return array<string, string>
+     */
+    function theme_open_graph_meta() {
+        $canonical = theme_canonical_url();
+        $description = theme_meta_description();
+        $title = function_exists('wp_get_document_title') ? wp_get_document_title() : wp_title('|', false, 'right');
+
+        $type = 'website';
+
+        if (is_singular('post')) {
+            $type = 'article';
+        }
+
+        $options = class_exists('\Models\Options\OpzioniGlobaliFields')
+            ? \Models\Options\OpzioniGlobaliFields::get()
+            : null;
+
+        $image = is_object($options) && !empty($options->logo['url'])
+            ? (string) $options->logo['url']
+            : '';
+
+        $out = [
+            'og:title' => is_string($title) ? $title : '',
+            'og:description' => is_string($description) ? $description : '',
+            'og:type' => $type,
+            'og:site_name' => get_bloginfo('name', 'display'),
+        ];
+
+        if (is_string($canonical) && $canonical !== '') {
+            $out['og:url'] = $canonical;
+        }
+
+        if ($image !== '') {
+            $out['og:image'] = $image;
+        }
+
+        return $out;
+    }
+}
+
+if (!function_exists('theme_schema_graph')) {
+    /**
+     * JSON-LD @graph when no SEO plugin: Organization on all pages; WebPage on non-front pages.
+     *
+     * @return array<string, mixed>
+     */
+    function theme_schema_graph() {
+        $organization = theme_schema_organization_node();
+
+        if (is_front_page()) {
+            return [
+                '@context' => 'https://schema.org',
+                '@graph' => [$organization],
+            ];
+        }
+
+        $canonical = theme_canonical_url();
+
+        if (!is_string($canonical) || $canonical === '') {
+            return [
+                '@context' => 'https://schema.org',
+                '@graph' => [$organization],
+            ];
+        }
+
+        $docTitle = function_exists('wp_get_document_title') ? wp_get_document_title() : '';
+
+        $webPage = [
+            '@type' => 'WebPage',
+            '@id' => trailingslashit($canonical) . '#webpage',
+            'url' => $canonical,
+            'name' => is_string($docTitle) && $docTitle !== '' ? $docTitle : get_bloginfo('name', 'display'),
+            'isPartOf' => [
+                '@id' => theme_schema_organization_id(),
+            ],
+        ];
+
+        $metaDesc = theme_meta_description();
+
+        if (is_string($metaDesc) && $metaDesc !== '') {
+            $webPage['description'] = $metaDesc;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@graph' => [$organization, $webPage],
+        ];
     }
 }

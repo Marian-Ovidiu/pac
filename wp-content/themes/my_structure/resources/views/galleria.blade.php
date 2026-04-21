@@ -2,7 +2,11 @@
 @section('content')
 @php
     $heroImage = $galleria->immagine_12 ?: $galleria->immagine_1;
-    $typingWords = array_values(array_filter($galleria->highlights ?? []));
+    $typingWords = array_values(array_filter([
+        $galleria->parola_1 ?? null,
+        $galleria->parola_2 ?? null,
+        $galleria->parola_3 ?? null,
+    ]));
     $gallerySections = [
         [
             'title' => 'Sguardi dal campo',
@@ -29,10 +33,12 @@
                     <h1 class="gallery-archive-hero__title">{{ $galleria->titolo }}</h1>
                 @endif
 
-                <div class="gallery-archive-hero__highlight">
+                <div
+                    class="gallery-archive-hero__highlight"
+                    @if (!empty($typingWords)) x-data="typingEffect({{ json_encode($typingWords) }})" @endif>
                     <span>{{ $galleria->frase_base ?: 'Ogni foto, una storia di' }}</span>
-                    @if(!empty($typingWords))
-                        <strong x-data="typingEffect({{ json_encode($typingWords) }})">
+                    @if (!empty($typingWords))
+                        <strong class="gallery-archive-hero__typing">
                             <span x-text="displayText"></span>
                         </strong>
                     @endif
@@ -103,17 +109,19 @@
             <h1 class="gallery-hero__title">{{ $galleria->titolo }}</h1>
         @endif
 
-        <div class="gallery-hero__line">
+        <div
+            class="gallery-hero__line"
+            @if (!empty($typingWords)) x-data="typingEffect({{ json_encode($typingWords) }})" @endif>
             <span>{{ $galleria->frase_base ?: 'Ogni foto, una storia di' }}</span>
-            @if(!empty($typingWords))
-                <span x-data="typingEffect({{ json_encode($typingWords) }})" class="gallery-hero__typing">
+            @if (!empty($typingWords))
+                <span class="gallery-hero__typing">
                     <span x-text="displayText"></span><span class="gallery-hero__cursor" aria-hidden="true"></span>
                 </span>
             @endif
         </div>
 
         <a href="#gallery-grid" class="gallery-hero__button">
-            <span>Scopri i progetti</span>
+            <span>Esplora la galleria</span>
             <span aria-hidden="true">&rarr;</span>
         </a>
 
@@ -128,10 +136,6 @@
     <div class="gallery-showcase__inner">
         <div class="gallery-showcase__mobile-head">
             <h2>La Galleria</h2>
-            <div class="gallery-showcase__tabs" aria-hidden="true">
-                <span>Recenti</span>
-                <span>Popolari</span>
-            </div>
         </div>
 
         <div class="gallery-showcase__desktop">
@@ -153,12 +157,6 @@
                             <h2>{{ $sectionMeta['title'] }}</h2>
                             <p>{{ $sectionMeta['intro'] }}</p>
                         </div>
-                        @if($sectionIndex === 0)
-                            <div class="gallery-showcase__tabs" aria-hidden="true">
-                                <span>Recenti</span>
-                                <span>Popolari</span>
-                            </div>
-                        @endif
                     </div>
 
                     <div class="gallery-section__grid gallery-section__grid--{{ $sectionIndex + 1 }}">
@@ -211,7 +209,6 @@
                                 decoding="async"
                                 alt="{{ $gr['immagine']['alt'] ?? ($gr['testo'] ?? $galleria->titolo ?? 'Immagine galleria') }}"
                                 title="{{ $gr['immagine']['title'] ?? ($gr['testo'] ?? '') }}" />
-                            <span aria-hidden="true"></span>
                             @if($gr['testo'])
                                 <figcaption>{{ $gr['testo'] }}</figcaption>
                             @endif
@@ -226,10 +223,6 @@
                     </article>
                 @endif
             @endforeach
-        </div>
-
-        <div class="gallery-showcase__more">
-            <a href="{{ home_url('/progetti') }}">Carica altre storie <span aria-hidden="true">&rarr;</span></a>
         </div>
 
         <section class="gallery-donation-strip">

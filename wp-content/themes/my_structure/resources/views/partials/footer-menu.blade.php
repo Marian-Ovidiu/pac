@@ -1,6 +1,7 @@
 @php
     $options = \Models\Options\OpzioniGlobaliFields::get();
     $logoUrl = $options->logo['url'] ?? null;
+    $socialUrls = theme_social_urls();
     $flatMenu = [];
 
     foreach ($menu as $item) {
@@ -75,27 +76,24 @@
                     <span class="ui-footer__label">Social</span>
                     <ul class="ui-footer__social" aria-label="Social media">
                         <li>
-                            <a href="https://www.facebook.com/share/15kZKmU4gr/" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="Facebook">
+                            <a href="{{ esc_url($socialUrls['facebook']) }}" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="PAC su Facebook">
                                 <svg class="ui-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.2-1.5 1.5-1.5h1.7V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1v2.3H7.6V13h2.7v8h3.2z" />
                                 </svg>
-                                <span class="sr-only">Facebook</span>
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.instagram.com/pacitalia?igsh=MWkycW1lZnRmNnAxMA==" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="Instagram">
+                            <a href="{{ esc_url($socialUrls['instagram']) }}" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="PAC su Instagram">
                                 <svg class="ui-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M7.8 2.5h8.4c2.9 0 5.3 2.4 5.3 5.3v8.4c0 2.9-2.4 5.3-5.3 5.3H7.8c-2.9 0-5.3-2.4-5.3-5.3V7.8c0-2.9 2.4-5.3 5.3-5.3zm0 1.9c-1.9 0-3.4 1.5-3.4 3.4v8.4c0 1.9 1.5 3.4 3.4 3.4h8.4c1.9 0 3.4-1.5 3.4-3.4V7.8c0-1.9-1.5-3.4-3.4-3.4H7.8zm4.2 3.2a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8zm0 1.9a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm4.6-2.3a1 1 0 1 1 0 2.1 1 1 0 0 1 0-2.1z" />
                                 </svg>
-                                <span class="sr-only">Instagram</span>
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.linkedin.com/in/project-africa-conservation-a-p-s-b81a95340/" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="LinkedIn">
+                            <a href="{{ esc_url($socialUrls['linkedin']) }}" rel="noreferrer noopener" target="_blank" class="ui-footer__social-link" aria-label="PAC su LinkedIn">
                                 <svg class="ui-footer__social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M6.9 8.9H3.7V21h3.2V8.9zM5.3 3a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8zm6.8 5.9H9V21h3.2v-6c0-1.6.3-3.1 2.3-3.1 1.9 0 2 1.8 2 3.2V21h3.2v-6.7c0-3.3-.7-5.7-4.5-5.7-1.8 0-3 .9-3.5 1.8h-.1V8.9z" />
                                 </svg>
-                                <span class="sr-only">LinkedIn</span>
                             </a>
                         </li>
                     </ul>

@@ -21,8 +21,20 @@
                 <article class="project-editorial-card {{ $index % 2 === 1 ? 'project-editorial-card--reverse' : '' }}">
                     <div class="project-editorial-card__layout {{ $hasImage ? 'has-image' : '' }}">
                         @if($hasImage)
+                            @php
+                                $carouselHintId = 'swiper-progetto-hint-' . uniqid();
+                            @endphp
                             <div class="project-editorial-card__media">
-                                <div class="swiper swiper-progetto" role="group" aria-roledescription="carousel" aria-label="Galleria immagini del progetto">
+                                <div
+                                    class="swiper swiper-progetto"
+                                    role="group"
+                                    aria-roledescription="carousel"
+                                    aria-label="Galleria immagini del progetto"
+                                    aria-describedby="{{ $carouselHintId }}"
+                                    tabindex="0">
+                                    <p class="sr-only" id="{{ $carouselHintId }}">
+                                        Carosello: con il carosello a fuoco, usa le frecce Sinistra e Destra (o Pagina su e Pagina giù) per cambiare immagine. Puoi anche usare i pulsanti in basso per aprire una slide.
+                                    </p>
                                     <div class="swiper-wrapper">
                                         @foreach ($item['immagini'] as $img)
                                             <figure class="swiper-slide">
@@ -37,13 +49,12 @@
                                             </figure>
                                         @endforeach
                                     </div>
-                                    <div class="swiper-pagination !bottom-4" aria-hidden="true"></div>
+                                    <div class="swiper-pagination !bottom-4"></div>
                                 </div>
                             </div>
                         @endif
 
                         <div class="project-editorial-card__copy">
-                            <span class="project-editorial-card__index">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
                             @if (!empty($item['sottoTitolo']))
                                 <h3>{{ $item['sottoTitolo'] }}</h3>
                             @endif

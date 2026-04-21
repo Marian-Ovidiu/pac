@@ -1,3 +1,4 @@
+/** Alpine: stato interno `texts`; non confondere con wp_localize_script `highlights` su `main`. */
 export default function typingEffect(passedTexts = []) {
     return {
         texts: passedTexts,

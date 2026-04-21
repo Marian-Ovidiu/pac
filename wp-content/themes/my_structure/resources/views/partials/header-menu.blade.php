@@ -6,7 +6,7 @@
     <div class="ui-container">
         <div class="ui-card-soft px-4 py-4 sm:px-6 sm:py-5">
             <nav class="flex items-center justify-between gap-6" aria-label="Navigazione principale">
-                <a href="{{ home_url('/') }}" title="{{ __('Home', 'text_domain') }}" class="ui-brand-lockup shrink-0">
+                <a href="{{ home_url('/') }}" title="{{ __('Home', 'my_structure') }}" class="ui-brand-lockup shrink-0">
                     @if ($logoUrl)
                         <div class="flex h-16 w-auto items-center sm:h-[4.5rem]">
                             <img class="h-full w-auto object-contain" src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />

@@ -36,10 +36,12 @@
         <div class="lg:hidden ui-mono-logo__mobile-shell">
             <article class="ui-mono-logo__mobile-card">
                 <div class="ui-mono-logo__mobile-copy">
-                    <span class="ui-mono-logo__mobile-kicker">Featured partner</span>
-                    {{-- @if($titolo_monologo)
-                        <h2 class="ui-mono-logo__mobile-title">{{ $titolo_monologo }}</h2>
-                    @endif--}}
+                    @if($titolo_monologo)
+                        <span class="ui-mono-logo__mobile-kicker">Featured partner</span>
+                        <h2 class="ui-mono-logo__mobile-title">"{{ $titolo_monologo }}"</h2>
+                    @else
+                        <h2 class="ui-mono-logo__mobile-kicker">Featured partner</h2>
+                    @endif
                 </div>
 
                 @if($partnerImage)

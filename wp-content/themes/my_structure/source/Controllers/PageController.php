@@ -5,13 +5,12 @@ use Core\Bases\BaseController;
 use Models\AziendeFields;
 use Models\GalleriaFields;
 use Models\Grazie;
-use Models\Progetti;
-use Models\Progetto;
 
 class PageController extends BaseController
 {
     public function galleria()
     {
+        // wp_localize_script: global `highlights` (allineato a ProgettoController::archive). galleria.blade.php usa ancora json_encode inline per typingEffect().
         $this->addVarJs('main', 'highlights', GalleriaFields::get()->highlights);
         $this->render('galleria', ['galleria' => GalleriaFields::get()]);
     }
@@ -25,33 +24,5 @@ class PageController extends BaseController
     {
         $fields = Grazie::get();
         $this->render('grazie', ['fields' => $fields]);
-    }
-
-    public function progetti()
-    {
-        $fields   = Progetti::get();
-        $progetti = [];
-        foreach ($fields->progetti as $progetto) {
-            $progetti[] = Progetto::find($progetto);
-        }
-        $fields->progetti   = $progetti;
-        $available_gateways = [];
-        if (function_exists('WC') && class_exists('\WC_Payment_Gateways')) {
-            $wc = \WC();
-            if ($wc && $wc->payment_gateways) {
-                $available_gateways = $wc->payment_gateways->get_available_payment_gateways();
-            }
-        }
-
-        $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
-        $this->addVarJs('main', 'highlights', [
-            $fields->highlights_frase_1 ?? '',
-            $fields->highlights_frase_2 ?? '',
-            $fields->highlights_frase_3 ?? '',
-        ]);
-        $this->render('archivio-progetto', [
-            'fields'                => $fields,
-            'pagamenti_disponibili' => $available_gateways,
-        ]);
     }
 }

@@ -13,11 +13,6 @@
         <div class="ui-container">
             <div class="project-single-hero__layout">
                 <div class="project-single-hero__copy">
-                    <a href="{{ home_url('/4-progetti-antibracconaggio-sociale') }}" class="project-single-hero__back">
-                        <span aria-hidden="true">&larr;</span>
-                        <span>Torna ai progetti</span>
-                    </a>
-
                     <span class="project-single-kicker">Scheda progetto</span>
                     <h1>{{ $progetto->titolo_hero }}</h1>
                     <div class="project-single-hero__text">
