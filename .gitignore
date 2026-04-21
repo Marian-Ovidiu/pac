@@ -1,4 +1,5 @@
-# Sensitive / locale (wp-config.php nella root resta versionato; non aggiungere wp-config.php tra le ignore)
+# Sensitive/local config (wp-config.php: non committare — credenziali / ambiente)
+wp-config.php
 .env
 .env.*
 
@@ -13,12 +14,11 @@ wp-content/debug.log
 
 # Dependencies
 node_modules/
-vendor/
-wp-content/plugins/*/vendor/
-# Rank Math SEO: includi vendor in repo (altrimenti deploy senza autoload.php)
-!wp-content/plugins/seo-by-rank-math/
-!wp-content/plugins/seo-by-rank-math/vendor/
-!wp-content/plugins/seo-by-rank-math/vendor/**
+# Solo vendor in radice repo (es. Composer). `vendor/` globale escludeva anche wp-content/plugins/*/vendor/.
+/vendor/
+# --- TEMP: commentato per versionare wp-content/plugins completo (vendor incluso). Rimetti dopo il push. ---
+# wp-content/plugins/*/vendor/
+# --- FINE TEMP ---
 wp-content/themes/my_structure/node_modules/
 wp-content/themes/my_structure/vendor/
 
@@ -49,7 +49,7 @@ wp-content/themes/my_structure/vendor/
 
 # Keep plugin/theme source, ignore known unwanted plugin copies
 !wp-content/plugins/
-wp-content/plugins/wp-mail-smtp/
+# --- TEMP: commentato per includere wp-mail-smtp nel push. Rimetti dopo il push. ---
+# wp-content/plugins/wp-mail-smtp/
+# --- FINE TEMP ---
 
-# Root: wp-config.php tracciato (override se un pattern sopra lo escludesse per errore)
-!/wp-config.php
