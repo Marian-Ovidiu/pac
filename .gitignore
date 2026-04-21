@@ -16,6 +16,10 @@ wp-content/debug.log
 node_modules/
 vendor/
 wp-content/plugins/*/vendor/
+# Rank Math SEO: includi vendor in repo (altrimenti deploy senza autoload.php)
+!wp-content/plugins/seo-by-rank-math/
+!wp-content/plugins/seo-by-rank-math/vendor/
+!wp-content/plugins/seo-by-rank-math/vendor/**
 wp-content/themes/my_structure/node_modules/
 wp-content/themes/my_structure/vendor/
 
