@@ -41,7 +41,7 @@ wp-content/mu-plugins/
 !wp-content/themes/
 !wp-content/themes/my_structure/
 !wp-content/themes/my_structure/**
-wp-content/themes/my_structure/public/
+# public/ contiene output Vite (manifest + css/js): versionalo così il deploy via Git ha gli stili senza Node sul server. Dopo modifiche a SCSS/JS: npm run build nel tema e commit.
 wp-content/themes/my_structure/resources/cache/
 wp-content/themes/my_structure/node_modules/
 wp-content/themes/my_structure/vendor/
