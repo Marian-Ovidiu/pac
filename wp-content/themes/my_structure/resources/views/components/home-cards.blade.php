@@ -15,12 +15,14 @@
 
                     <article class="ui-project-card">
                         <figure class="ui-project-card__media">
-                            @if(!empty($progetto['immagine']['url']))
-                                @php
-                                    $projectImageAlt = trim($progetto['immagine']['alt'] ?? '') ?: 'Progetto ' . $progetto['titolo'] . ' di Project Africa Conservation';
-                                @endphp
+                            @php
+                                $cardImgUrl = theme_acf_image_url($progetto['immagine'] ?? null);
+                                $cardImgArr = is_array($progetto['immagine'] ?? null) ? $progetto['immagine'] : [];
+                                $projectImageAlt = trim($cardImgArr['alt'] ?? '') ?: 'Progetto ' . $progetto['titolo'] . ' di Project Africa Conservation';
+                            @endphp
+                            @if($cardImgUrl !== '')
                                 <img
-                                    src="{{ $progetto['immagine']['url'] }}"
+                                    src="{{ esc_url($cardImgUrl) }}"
                                     alt="{{ $projectImageAlt }}"
                                     class="ui-project-card__image"
                                     loading="lazy"
@@ -40,7 +42,7 @@
                         <div class="ui-project-card__body">
                             <h3 class="ui-project-card__title">{{ $progetto['titolo'] }}</h3>
                             <p class="ui-project-card__text">
-                                {{ $progetto['immagine']['caption'] ?? 'Approfondisci questo programma sul campo e scopri come sostenerlo.' }}
+                                {{ !empty($cardImgArr['caption']) ? $cardImgArr['caption'] : 'Approfondisci questo programma sul campo e scopri come sostenerlo.' }}
                             </p>
 
                             @if(!empty($progetto['cta']['url']) && !empty($progetto['cta']['title']))

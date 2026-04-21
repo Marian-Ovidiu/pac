@@ -1,6 +1,9 @@
 @php
     $projectSlides = array_values(array_filter($featuredProjects ?? [], static function ($project) {
-        return !empty($project['immagine']['url']) && !empty($project['titolo']);
+        $src = theme_acf_image_url($project['immagine'] ?? null);
+        $titolo = trim((string) ($project['titolo'] ?? ''));
+
+        return $src !== '' && $titolo !== '';
     }));
 
     $primaryCtaLabel = !empty($primaryCta['title']) ? $primaryCta['title'] . ' - Project Africa Conservation' : null;
@@ -33,7 +36,8 @@
                 @foreach($projectSlides as $index => $project)
                     @php
                         $projectTitle = trim($project['titolo'] ?? '');
-                        $projectImage = $project['immagine'] ?? [];
+                        $projectImage = is_array($project['immagine'] ?? null) ? $project['immagine'] : [];
+                        $projectSrc = theme_acf_image_url($project['immagine'] ?? null);
                         $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
                         $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
                         $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
@@ -49,7 +53,7 @@
                         @endif
 
                         <img
-                            src="{{ $projectImage['url'] }}"
+                            src="{{ esc_url($projectSrc) }}"
                             alt="{{ $projectAlt }}"
                             class="ui-home-hero__card-image"
                             loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
@@ -78,25 +82,18 @@
                     @foreach($projectSlides as $index => $project)
                         @php
                             $projectTitle = trim($project['titolo'] ?? '');
-                            $projectImage = $project['immagine'] ?? [];
+                            $projectImage = is_array($project['immagine'] ?? null) ? $project['immagine'] : [];
+                            $projectSrc = theme_acf_image_url($project['immagine'] ?? null);
                             $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
                             $projectDescription = trim(($projectImage['caption'] ?? '') ?: ($projectImage['description'] ?? ''));
                             $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
                             $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
                         @endphp
                         <div class="swiper-slide" role="group" aria-label="{{ $projectTitle }}">
+                            {{-- Nessun link full-card qui: intercettava i touch e Swiper non riceveva lo swipe. Il CTA è il solo link (sotto). --}}
                             <article class="ui-home-hero__mobile-card">
-                                @if(!empty($project['cta']['url']))
-                                    <a
-                                        href="{{ $project['cta']['url'] }}"
-                                        aria-label="{{ $projectLinkLabel }}"
-                                        class="absolute inset-0 z-10">
-                                        <span class="sr-only">{{ $projectLinkLabel }}</span>
-                                    </a>
-                                @endif
-
                                 <img
-                                    src="{{ $projectImage['url'] }}"
+                                    src="{{ esc_url($projectSrc) }}"
                                     alt="{{ $projectAlt }}"
                                     class="ui-home-hero__mobile-image"
                                     loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
@@ -114,11 +111,11 @@
                                         <p class="ui-home-hero__mobile-text">{{ $description }}</p>
                                     @endif
 
-                                    @if(!empty($project['cta']['title']))
-                                        <span class="ui-home-hero__mobile-button">
+                                    @if(!empty($project['cta']['url']) && !empty($project['cta']['title']))
+                                        <a href="{{ esc_url($project['cta']['url']) }}" class="ui-home-hero__mobile-button" aria-label="{{ $projectLinkLabel }}">
                                             {{ $project['cta']['title'] }}
                                             <span aria-hidden="true">&rarr;</span>
-                                        </span>
+                                        </a>
                                     @endif
                                 </div>
                             </article>

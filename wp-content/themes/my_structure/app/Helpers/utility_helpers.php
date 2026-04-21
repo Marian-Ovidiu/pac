@@ -79,6 +79,58 @@ if (!function_exists('vite_asset_css')) {
     }
 }
 
+if (!function_exists('theme_acf_image_url')) {
+    /**
+     * URL file immagine da valore campo ACF "Immagine" (qualsiasi formato di ritorno).
+     * Evita slide hero vuote quando il campo è "URL immagine" o "ID allegato" invece di "Array".
+     *
+     * @param mixed $image Valore grezzo da get_field / modello.
+     */
+    function theme_acf_image_url($image) {
+        if ($image === null || $image === '' || $image === false) {
+            return '';
+        }
+
+        if (is_array($image)) {
+            if (!empty($image['url']) && is_string($image['url'])) {
+                return $image['url'];
+            }
+
+            if (!empty($image['ID']) && is_numeric($image['ID']) && function_exists('wp_get_attachment_image_url')) {
+                $u = wp_get_attachment_image_url((int) $image['ID'], 'full');
+
+                return $u ? (string) $u : '';
+            }
+        }
+
+        if (is_numeric($image) && function_exists('wp_get_attachment_image_url')) {
+            $u = wp_get_attachment_image_url((int) $image, 'full');
+
+            return $u ? (string) $u : '';
+        }
+
+        if (is_string($image)) {
+            $t = trim($image);
+
+            if ($t === '') {
+                return '';
+            }
+
+            if (preg_match('#^https?://#i', $t) || ($t !== '' && $t[0] === '/')) {
+                return $t;
+            }
+        }
+
+        if (is_object($image) && isset($image->ID) && is_numeric($image->ID) && function_exists('wp_get_attachment_image_url')) {
+            $u = wp_get_attachment_image_url((int) $image->ID, 'full');
+
+            return $u ? (string) $u : '';
+        }
+
+        return '';
+    }
+}
+
 if (!function_exists('camelToKebab')) {
     function camelToKebab($string) {
         return strtolower(preg_replace('/(?<!^)([A-Z])/', '-$1', $string));

@@ -1,1 +1,0 @@
-document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".js-home-hero-slider").forEach(e=>{new Swiper(e,{slidesPerView:1,spaceBetween:16,loop:e.querySelectorAll(".swiper-slide").length>1,speed:700,autoHeight:!0,grabCursor:!0,watchOverflow:!0,pagination:{el:e.querySelector(".swiper-pagination"),clickable:!0}})})});

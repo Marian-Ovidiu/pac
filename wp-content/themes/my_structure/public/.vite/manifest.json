@@ -1,37 +1,57 @@
 {
-  "_swiper-core-CGs-SkvH.js": {
-    "file": "js/swiper-core-CGs-SkvH.js",
+  "_autoplay-Dp-NTGso.js": {
+    "file": "js/autoplay-Dp-NTGso.js",
+    "name": "autoplay",
+    "imports": [
+      "_swiper-core-Djsrv6K8.js"
+    ]
+  },
+  "_swiper-DV8PrLMj.css": {
+    "file": "css/swiper-DV8PrLMj.css",
+    "src": "_swiper-DV8PrLMj.css"
+  },
+  "_swiper-core-Djsrv6K8.js": {
+    "file": "js/swiper-core-Djsrv6K8.js",
     "name": "swiper-core"
   },
   "assets/js/homeSlider.js": {
-    "file": "js/homeSlider-Cpgy1mUb.js",
+    "file": "js/homeSlider-JIYpmInY.js",
     "name": "homeSlider",
     "src": "assets/js/homeSlider.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_swiper-core-Djsrv6K8.js",
+      "_autoplay-Dp-NTGso.js"
+    ],
+    "css": [
+      "css/homeSlider-DE0q59Ew.css",
+      "css/swiper-DV8PrLMj.css"
+    ]
   },
   "assets/js/main.js": {
-    "file": "js/main-lMnOqZaM.js",
+    "file": "js/main-BuYnKPZJ.js",
     "name": "main",
     "src": "assets/js/main.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-CGs-SkvH.js"
+      "_swiper-core-Djsrv6K8.js"
     ],
     "css": [
-      "css/main-DV8PrLMj.css"
+      "css/swiper-DV8PrLMj.css"
     ]
   },
   "assets/js/progettoSlider.js": {
-    "file": "js/progettoSlider-Jg7xLO4J.js",
+    "file": "js/progettoSlider-C_oA2Mjs.js",
     "name": "progettoSlider",
     "src": "assets/js/progettoSlider.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-CGs-SkvH.js"
+      "_swiper-core-Djsrv6K8.js",
+      "_autoplay-Dp-NTGso.js"
     ]
   },
   "assets/scss/style.scss": {
-    "file": "css/style-LjF9TKNx.css",
+    "file": "css/style-DGNA5lZs.css",
     "src": "assets/scss/style.scss",
     "isEntry": true
   }

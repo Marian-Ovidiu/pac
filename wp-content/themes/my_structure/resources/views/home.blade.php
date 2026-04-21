@@ -4,33 +4,8 @@
  */
 ?>
 @php
-    $projects = array_values(array_filter([
-        [
-            'immagine' => $data->immagine_tutti_progetti ?? null,
-            'titolo' => $data->titolo_tutti_progetti ?? null,
-            'cta' => $data->cta_tutti_progetti ?? null,
-        ],
-        [
-            'immagine' => $data->immagine_sociale_ghana ?? null,
-            'titolo' => $data->titolo_sociale_ghana ?? null,
-            'cta' => $data->cta_sociale_ghana ?? null,
-        ],
-        [
-            'immagine' => $data->immagine_sociale_nigeria ?? null,
-            'titolo' => $data->titolo_sociale_nigeria ?? null,
-            'cta' => $data->cta_sociale_nigeria ?? null,
-        ],
-        [
-            'immagine' => $data->immagine_antibracconaggio ?? null,
-            'titolo' => $data->titolo_antibracconaggio ?? null,
-            'cta' => $data->cta_antibracconaggio ?? null,
-        ],
-        [
-            'immagine' => $data->immagine_cani ?? null,
-            'titolo' => $data->titolo_cani ?? null,
-            'cta' => $data->cta_cani ?? null,
-        ],
-    ], static function ($project) {
+    // Stessi dati dello slider ACF (immagine_1…4): accessor HomeFields::getProgettiAttribute.
+    $projects = array_values(array_filter($data->progetti ?? [], static function ($project) {
         return !empty($project['titolo']) || !empty($project['immagine']) || !empty($project['cta']);
     }));
 

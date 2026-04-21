@@ -1,37 +1,57 @@
-# Sitemap principale
-Sitemap: https://project-africa-conservation.org/sitemap_index.xml
+# robots.txt — Project Africa Conservation
+# File fisico in radice: ha priorità sul robots “virtuale” dei plugin SEO; modifica qui e ridistribuisci.
 
-# Regole generali per tutti i bot
 User-agent: *
 
-# 🛍️ Blocca pagine WooCommerce non usate
+# Sitemap (indice Rank Math / WordPress)
+Sitemap: https://project-africa-conservation.org/sitemap_index.xml
+
+# ---------------------------------------------------------------------------
+# WooCommerce — pagine transazionali (URL senza lingua e con prefisso Polylang)
+# ---------------------------------------------------------------------------
 Disallow: /shop/
 Disallow: /cart/
 Disallow: /checkout/
 Disallow: /my-account/
+Disallow: /*/shop/
+Disallow: /*/cart/
+Disallow: /*/checkout/
+Disallow: /*/my-account/
 
-# 🔐 Blocca area admin e file di sistema
+# ---------------------------------------------------------------------------
+# Archivi WordPress category / tag non usati sul sito (allineato al 404 in tema)
+# ---------------------------------------------------------------------------
+Disallow: /category/
+Disallow: /tag/
+Disallow: /*/category/
+Disallow: /*/tag/
+
+# ---------------------------------------------------------------------------
+# Amministrazione e login
+# ---------------------------------------------------------------------------
 Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
 Disallow: /wp-login.php
 Disallow: /wp-register.php
-Allow: /wp-admin/admin-ajax.php
 
-# 🧼 Blocca log, file temporanei e upload WooCommerce
+# Endpoint spesso sfruttato da bot (non necessario all’indicizzazione)
+Disallow: /xmlrpc.php
+
+# ---------------------------------------------------------------------------
+# Upload: solo cartelle sensibili WooCommerce; il resto di /uploads/ resta indicizzabile
+# ---------------------------------------------------------------------------
 Disallow: /wp-content/uploads/wc-logs/
 Disallow: /wp-content/uploads/woocommerce_transient_files/
 Disallow: /wp-content/uploads/woocommerce_uploads/
-
-# ✅ Consenti immagini e media caricati
 Allow: /wp-content/uploads/
 
-# 🧪 Blocca parametri URL inutili
+# ---------------------------------------------------------------------------
+# Parametri che duplicano contenuti o sono anteprime / sessioni
+# ---------------------------------------------------------------------------
+Disallow: /*?replytocom=
+Disallow: /*?preview=
 Disallow: /*?preview=true
 Disallow: /*?session_id=
-
-# 📁 Blocca PDF se non vuoi che vengano indicizzati
-# (Rimuovi questa riga se hai PDF pubblici importanti)
-Disallow: /*.pdf$
-
-# ✏️ Blocca archivi inutilizzati (categorie e tag articoli)
-Disallow: /category/
-Disallow: /tag/
+Disallow: /*?s=
+Disallow: /*?orderby=
+Disallow: /*?add-to-cart=

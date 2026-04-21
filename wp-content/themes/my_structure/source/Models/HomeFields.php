@@ -112,24 +112,24 @@ class HomeFields extends BaseGroupAcf
         $this->addField('immagine_azienda');
     }
 
+    /**
+     * Slide hero + griglia progetti home: campi ACF slider (immagine_1…4, titolo_1…4, cta_1…4).
+     * I campi "sezione progetti" (immagine_tutti_progetti, ghana, nigeria…) restano nel gruppo per altri usi in bacheca ma non alimentano più questa lista.
+     */
     public function getProgettiAttribute()
     {
-        $this->repeater_progetti[0]['immagine'] = $this->immagine_tutti_progetti;
-        $this->repeater_progetti[0]['titolo'] = $this->titolo_tutti_progetti;
-        $this->repeater_progetti[0]['cta'] = $this->cta_tutti_progetti;
-        $this->repeater_progetti[1]['immagine'] = $this->immagine_sociale_ghana;
-        $this->repeater_progetti[1]['titolo'] = $this->titolo_sociale_ghana;
-        $this->repeater_progetti[1]['cta'] = $this->cta_sociale_ghana;
-        $this->repeater_progetti[2]['immagine'] = $this->immagine_sociale_nigeria;
-        $this->repeater_progetti[2]['titolo'] = $this->titolo_sociale_nigeria;
-        $this->repeater_progetti[2]['cta'] = $this->cta_sociale_nigeria;
-        $this->repeater_progetti[3]['immagine'] = $this->immagine_antibracconaggio;
-        $this->repeater_progetti[3]['titolo'] = $this->titolo_antibracconaggio;
-        $this->repeater_progetti[3]['cta'] = $this->cta_antibracconaggio;
-        $this->repeater_progetti[4]['immagine'] = $this->immagine_cani;
-        $this->repeater_progetti[4]['titolo'] = $this->titolo_cani;
-        $this->repeater_progetti[4]['cta'] = $this->cta_cani;
+        $slides = [];
 
-        return $this->repeater_progetti;
+        for ($i = 1; $i <= 4; $i++) {
+            $slides[] = [
+                'immagine' => $this->attributes["immagine_$i"] ?? $this->{"immagine_$i"} ?? null,
+                'titolo'   => $this->attributes["titolo_$i"] ?? $this->{"titolo_$i"} ?? null,
+                'cta'      => $this->attributes["cta_$i"] ?? $this->{"cta_$i"} ?? null,
+            ];
+        }
+
+        $this->repeater_progetti = $slides;
+
+        return $slides;
     }
 }
