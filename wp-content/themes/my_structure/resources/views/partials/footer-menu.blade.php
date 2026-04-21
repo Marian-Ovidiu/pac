@@ -103,6 +103,7 @@
             <div class="ui-footer__bottom">
                 <p>&copy; 2024. PAC - Project Africa Conservation A.P.S. Tutti i diritti riservati.</p>
                 <p>Questo sito e protetto da reCAPTCHA ed e soggetto alla Privacy Policy e ai Termini di Servizio di Google.</p>
+                <p class="ui-footer__credit" lang="en">Made with love and coffee by Marian.</p>
             </div>
         </div>
     </div>

@@ -4119,10 +4119,6 @@
   }
 }
 
-.ui-footer {
-  padding: 0 0 2rem;
-}
-
 .ui-footer__panel {
   background: #0f2618;
   padding: 1.5rem 0;
@@ -4276,6 +4272,15 @@
   font-size: 0.8rem;
   line-height: 1.6;
   color: rgba(247, 242, 231, 0.62);
+}
+
+.ui-footer__credit {
+  grid-column: 1 / -1;
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: rgba(247, 242, 231, 0.45);
 }
 
 @media (min-width: 1024px) {
