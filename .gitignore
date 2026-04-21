@@ -1,5 +1,4 @@
-# Sensitive/local config
-!wp-config.php
+# Sensitive / locale (wp-config.php nella root resta versionato; non aggiungere wp-config.php tra le ignore)
 .env
 .env.*
 
@@ -51,3 +50,6 @@ wp-content/themes/my_structure/vendor/
 # Keep plugin/theme source, ignore known unwanted plugin copies
 !wp-content/plugins/
 wp-content/plugins/wp-mail-smtp/
+
+# Root: wp-config.php tracciato (override se un pattern sopra lo escludesse per errore)
+!/wp-config.php
