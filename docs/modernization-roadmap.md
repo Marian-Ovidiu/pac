@@ -1,5 +1,9 @@
 # PAC Modernization Roadmap
 
+> La roadmap storica resta il riferimento architetturale. La sequenza operativa corrente,
+> aggiornata dopo l'import del database di produzione e il nuovo audit locale, e in
+> [`docs/release-integration-plan.md`](./release-integration-plan.md).
+
 ## Scope
 
 Questa roadmap copre il risanamento del progetto WordPress/PHP custom presente in questo repository, con focus su:

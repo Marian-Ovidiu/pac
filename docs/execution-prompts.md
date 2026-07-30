@@ -1,5 +1,9 @@
 # PAC Execution Prompts
 
+> Questo documento conserva lo storico delle priorita 0-7 eseguite nel 2026.
+> Per il piano attivo di integrazione e i prompt piccoli/sequenziali per modelli mini, usare
+> [`docs/release-integration-plan.md`](./release-integration-plan.md).
+
 ## Uso
 
 Questi prompt sono pensati per essere passati a un coding agent sul repository corrente. Ogni prompt include contesto, obiettivo, vincoli e output attesi.

@@ -42,3 +42,4 @@ Questo repository usa una struttura locale per agenti e skill in `.codex/`.
 
 - Roadmap: [`docs/modernization-roadmap.md`](/C:/projects/privati/pac/docs/modernization-roadmap.md)
 - Prompt operativi: [`docs/execution-prompts.md`](/C:/projects/privati/pac/docs/execution-prompts.md)
+- Piano di integrazione release attivo: [`docs/release-integration-plan.md`](docs/release-integration-plan.md)
