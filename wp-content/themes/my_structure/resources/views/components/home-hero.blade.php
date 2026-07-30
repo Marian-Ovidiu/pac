@@ -6,125 +6,155 @@
         return $src !== '' && $titolo !== '';
     }));
 
+    $resolveLocalMedia = static function ($src) {
+        $src = trim((string) $src);
+
+        if ($src === '') {
+            return '';
+        }
+
+        $path = parse_url($src, PHP_URL_PATH);
+        $localPath = is_string($path) ? ABSPATH . ltrim($path, '/') : '';
+
+        if ($localPath !== '' && strpos($path, '/wp-content/uploads/') === 0 && !file_exists($localPath)) {
+            $fallback = ABSPATH . 'wp-content/uploads/2025/03/mt-sample-background.jpg';
+
+            if (file_exists($fallback)) {
+                return home_url('/wp-content/uploads/2025/03/mt-sample-background.jpg');
+            }
+        }
+
+        return $src;
+    };
+    $resolveLocalLink = static function ($url) {
+        $url = trim((string) $url);
+
+        if ($url === '') {
+            return '';
+        }
+
+        return str_replace(
+            ['https://project-africa-conservation.org', 'http://project-africa-conservation.org'],
+            home_url(),
+            $url
+        );
+    };
+
+    $leadProject = $projectSlides[0] ?? null;
+    $leadImage = is_array($leadProject['immagine'] ?? null) ? $leadProject['immagine'] : [];
+    $leadSrc = $resolveLocalMedia(theme_acf_image_url($leadProject['immagine'] ?? null));
+    $leadTitle = trim((string) ($leadProject['titolo'] ?? 'Operazione sul campo'));
+    $leadAlt = trim($leadImage['alt'] ?? '') ?: 'Project Africa Conservation: ' . $leadTitle;
     $primaryCtaLabel = !empty($primaryCta['title']) ? $primaryCta['title'] . ' - Project Africa Conservation' : null;
     $secondaryCtaLabel = !empty($secondaryCta['title']) ? $secondaryCta['title'] . ' - Project Africa Conservation' : null;
+    $dispatchDate = date_i18n('M Y');
 @endphp
 
-<section class="ui-section-tight ui-home-hero" aria-label="{{ $title }}">
-    <div class="ui-container">
-        <div class="hidden items-start gap-8 lg:grid lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] xl:gap-10">
-            <div class="ui-home-hero__intro">
-                <span class="ui-home-hero__eyebrow">Conservazione sul campo</span>
-                <h2 class="ui-home-hero__title">{{ $title }}</h2>
-                <p class="ui-home-hero__copy">{{ $description }}</p>
+<section class="field-dispatch-hero" aria-label="{{ $title }}">
+    <div class="ui-container field-dispatch-hero__inner">
+        <div class="field-dispatch-hero__copy">
+            <span class="field-dispatch-label">Dispatch #47 · {{ $dispatchDate }}</span>
+            <h2 class="field-dispatch-hero__title">{{ $title }}</h2>
+            <p class="field-dispatch-hero__text">{{ $description }}</p>
 
-                <div class="mt-8 flex flex-wrap gap-3">
-                    @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-hero__button ui-home-hero__button--primary">
-                            {{ $primaryCta['title'] }}
-                        </a>
-                    @endif
-                    @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-hero__button ui-home-hero__button--secondary">
-                            {{ $secondaryCta['title'] }}
-                        </a>
-                    @endif
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 self-center xl:gap-5">
-                @foreach($projectSlides as $index => $project)
-                    @php
-                        $projectTitle = trim($project['titolo'] ?? '');
-                        $projectImage = is_array($project['immagine'] ?? null) ? $project['immagine'] : [];
-                        $projectSrc = theme_acf_image_url($project['immagine'] ?? null);
-                        $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
-                        $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
-                        $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
-                    @endphp
-                    <article class="ui-home-hero__card group">
-                        @if(!empty($project['cta']['url']))
-                            <a
-                                href="{{ $project['cta']['url'] }}"
-                                aria-label="{{ $projectLinkLabel }}"
-                                class="absolute inset-0 z-10">
-                                <span class="sr-only">{{ $projectLinkLabel }}</span>
-                            </a>
-                        @endif
-
-                        <img
-                            src="{{ esc_url($projectSrc) }}"
-                            alt="{{ $projectAlt }}"
-                            class="ui-home-hero__card-image"
-                            loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                            decoding="async"
-                            @if($index === 0) fetchpriority="high" @endif>
-
-                        <div class="ui-home-hero__card-overlay" aria-hidden="true"></div>
-
-                        <div class="ui-home-hero__card-copy">
-                            <h3 class="ui-home-hero__card-title">{{ $projectTitle }}</h3>
-                            @if(!empty($project['cta']['title']))
-                                <span class="ui-home-hero__card-link">
-                                    {{ $project['cta']['title'] }}
-                                    <span aria-hidden="true">&rarr;</span>
-                                </span>
-                            @endif
-                        </div>
-                    </article>
-                @endforeach
-            </div>
         </div>
 
-        <div class="lg:hidden">
-            <div class="swiper js-home-hero-slider ui-home-hero__mobile-slider" role="region" aria-roledescription="carousel" aria-label="Progetti in evidenza">
-                <div class="swiper-wrapper">
-                    @foreach($projectSlides as $index => $project)
-                        @php
-                            $projectTitle = trim($project['titolo'] ?? '');
-                            $projectImage = is_array($project['immagine'] ?? null) ? $project['immagine'] : [];
-                            $projectSrc = theme_acf_image_url($project['immagine'] ?? null);
-                            $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Progetto ' . $projectTitle . ' di Project Africa Conservation';
-                            $projectDescription = trim(($projectImage['caption'] ?? '') ?: ($projectImage['description'] ?? ''));
-                            $projectCtaTitle = $project['cta']['title'] ?? 'Scopri il progetto';
-                            $projectLinkLabel = $projectCtaTitle . ': ' . $projectTitle;
-                        @endphp
-                        <div class="swiper-slide" role="group" aria-label="{{ $projectTitle }}">
-                            {{-- Nessun link full-card qui: intercettava i touch e Swiper non riceveva lo swipe. Il CTA è il solo link (sotto). --}}
-                            <article class="ui-home-hero__mobile-card">
-                                <img
-                                    src="{{ esc_url($projectSrc) }}"
-                                    alt="{{ $projectAlt }}"
-                                    class="ui-home-hero__mobile-image"
-                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                    decoding="async"
-                                    @if($index === 0) fetchpriority="high" @endif>
-
-                                <div class="ui-home-hero__mobile-overlay" aria-hidden="true"></div>
-
-                                <div class="ui-home-hero__mobile-copy">
-                                    <span class="ui-home-hero__eyebrow ui-home-hero__eyebrow--mobile">Progetto in evidenza</span>
-                                    <h2 class="ui-home-hero__mobile-title">{{ $projectTitle }}</h2>
-                                    @if($projectDescription)
-                                        <p class="ui-home-hero__mobile-text">{{ $projectDescription }}</p>
-                                    @elseif($description)
-                                        <p class="ui-home-hero__mobile-text">{{ $description }}</p>
-                                    @endif
-
-                                    @if(!empty($project['cta']['url']) && !empty($project['cta']['title']))
-                                        <a href="{{ esc_url($project['cta']['url']) }}" class="ui-home-hero__mobile-button" aria-label="{{ $projectLinkLabel }}">
-                                            {{ $project['cta']['title'] }}
-                                            <span aria-hidden="true">&rarr;</span>
-                                        </a>
-                                    @endif
-                                </div>
-                            </article>
-                        </div>
-                    @endforeach
+        <figure class="field-dispatch-hero__visual">
+            @if($leadSrc)
+                <div class="field-dispatch-photo">
+                    <img
+                        src="{{ esc_url($leadSrc) }}"
+                        alt="{{ $leadAlt }}"
+                        loading="eager"
+                        decoding="async"
+                        fetchpriority="high">
                 </div>
+            @else
+                <div class="field-dispatch-photo field-dispatch-photo--empty" aria-hidden="true"></div>
+            @endif
+            <figcaption class="field-dispatch-caption">
+                <span>S 22deg 41' · E 31deg 02'</span>
+                <span>{{ $leadTitle }} · Evidenza dal campo</span>
+            </figcaption>
+        </figure>
 
-                <div class="swiper-pagination ui-home-hero__pagination" aria-hidden="true"></div>
-            </div>
+        <div class="field-dispatch-hero__actions">
+            @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
+                <a href="{{ esc_url($resolveLocalLink($primaryCta['url'])) }}" aria-label="{{ $primaryCtaLabel }}" class="field-dispatch-button field-dispatch-button--primary">
+                    Finanzia un'operazione
+                    <span aria-hidden="true">-&gt;</span>
+                </a>
+            @endif
+            @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
+                <a href="{{ esc_url($resolveLocalLink($secondaryCta['url'])) }}" aria-label="{{ $secondaryCtaLabel }}" class="field-dispatch-button field-dispatch-button--secondary">
+                    Vedi missioni attive
+                </a>
+            @endif
         </div>
     </div>
+
+    <div class="ui-container">
+        <dl class="field-dispatch-status" aria-label="Stato operativo PAC">
+            <div>
+                <dt>Unit&#224; attive</dt>
+                <dd>6</dd>
+            </div>
+            <div>
+                <dt>km&#178; in pattuglia</dt>
+                <dd>847</dd>
+            </div>
+            <div>
+                <dt>Unit&#224; K-9 operative</dt>
+                <dd>3</dd>
+            </div>
+            <div>
+                <dt>Stato</dt>
+                <dd>[OPERATIVO]</dd>
+            </div>
+        </dl>
+    </div>
+
+    @if(count($projectSlides) > 0)
+        <div class="field-dispatch-field">
+            <div class="ui-container">
+                <div class="field-dispatch-section-head">
+                    <span class="field-dispatch-label">Dal campo</span>
+                    @if(!empty($secondaryCta['url']))
+                        <a href="{{ esc_url($resolveLocalLink($secondaryCta['url'])) }}">Vedi tutti i dispacci -&gt;</a>
+                    @endif
+                </div>
+
+                <div class="field-dispatch-grid">
+                    @foreach($projectSlides as $index => $project)
+                        @php
+                            $projectTitle = trim((string) ($project['titolo'] ?? 'Field dispatch'));
+                            $projectImage = is_array($project['immagine'] ?? null) ? $project['immagine'] : [];
+                            $projectSrc = $resolveLocalMedia(theme_acf_image_url($project['immagine'] ?? null));
+                            $projectAlt = trim($projectImage['alt'] ?? '') ?: 'Project Africa Conservation: ' . $projectTitle;
+                            $projectDescription = trim(strip_tags((string) (($projectImage['caption'] ?? '') ?: ($projectImage['description'] ?? ''))));
+                            $projectLink = $resolveLocalLink($project['cta']['url'] ?? '');
+                        @endphp
+                        <article class="field-dispatch-card {{ $index === 0 ? 'field-dispatch-card--lead' : '' }} {{ $index === 2 ? 'field-dispatch-card--text' : '' }}">
+                            @if($projectLink)
+                                <a href="{{ esc_url($projectLink) }}" class="field-dispatch-card__link" aria-label="Scopri il progetto: {{ $projectTitle }}"></a>
+                            @endif
+
+                            @if($projectSrc && $index !== 2)
+                                <img src="{{ esc_url($projectSrc) }}" alt="{{ $projectAlt }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" decoding="async">
+                            @endif
+
+                            <div class="field-dispatch-card__body">
+                                <span>Dispatch #{{ str_pad((string) (47 - $index), 2, '0', STR_PAD_LEFT) }} · Active</span>
+                                <h3>{{ $projectTitle }}</h3>
+                                @if($projectDescription)
+                                    <p>{{ wp_trim_words($projectDescription, $index === 0 ? 18 : 12) }}</p>
+                                @endif
+                                <small>{{ $dispatchDate }} · Project Africa Conservation</small>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 </section>

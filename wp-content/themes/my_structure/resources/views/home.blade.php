@@ -10,7 +10,7 @@
     }));
 
     $featuredProjects = array_slice($projects, 0, 4);
-    $heroTitle = $data->titolo_progetti ?? 'Proteggiamo la fauna. Rafforziamo le comunita.';
+    $heroTitle = "L'Africa ha ranger. Hanno bisogno di supporto.";
     $heroDescription = trim(strip_tags($data->descrizione_progetti ?? 'Sosteniamo progetti concreti tra tutela della fauna, antibracconaggio e sviluppo sociale, con una presenza costante sul campo.'));
 
 @endphp

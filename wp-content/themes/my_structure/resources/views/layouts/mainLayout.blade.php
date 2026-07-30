@@ -4,7 +4,7 @@
     $schemaGraph = $seoPluginActive ? null : theme_schema_graph();
     $canonicalUrl = $seoPluginActive ? null : theme_canonical_url();
     $ogMeta = $seoPluginActive ? null : theme_open_graph_meta();
-    $bodyClasses = implode(' ', get_body_class('flex flex-col min-h-screen font-nunitoSansRegular'));
+    $bodyClasses = implode(' ', get_body_class('flex flex-col min-h-screen font-body'));
 @endphp
 <!DOCTYPE html>
 <html {!! function_exists('language_attributes') ? language_attributes() : 'lang="it"' !!}>
@@ -30,10 +30,7 @@
     @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     @yield('head')
     <?php wp_head(); ?>
 </head>

@@ -12,6 +12,11 @@ module.exports = {
         nunitoBold: ['Nunito', 'sans-serif'],
         nunitoSansRegular: ['Nunito Sans', 'sans-serif'],
         nunitoSansLight: ['Nunito Sans', 'sans-serif'],
+        display: ['Cormorant Garamond', 'Georgia', 'serif'],
+        editorial: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['DM Mono', 'Courier New', 'monospace'],
+        label: ['Space Grotesk', 'system-ui', 'sans-serif'],
       },
       colors: {
         'custom-green': '#84CE59',

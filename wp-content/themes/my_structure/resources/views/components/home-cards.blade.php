@@ -1,61 +1,67 @@
-<section class="ui-projects-grid">
+@php
+    $typeLabels = [
+        'Water & Health',
+        'Healthcare',
+        'Protection',
+        'Surveillance',
+    ];
+@endphp
+
+<section class="fd-operations" aria-label="Progetti e operazioni PAC">
     <div class="ui-container">
-        <div class="ui-projects-grid__wrap">
+        <ol class="fd-operations__list" role="list">
             @foreach($progetti as $index => $progetto)
                 @if(!empty($progetto['titolo']))
                     @php
-                        $badge = match($index) {
-                            0 => 'Water & Health',
-                            1 => 'Healthcare',
-                            2 => 'Protection',
-                            3 => 'Surveillance',
-                            default => 'Field program',
-                        };
+                        $num       = str_pad((string) ($index + 1), 3, '0', STR_PAD_LEFT);
+                        $typeLabel = $typeLabels[$index] ?? 'Field program';
+                        $cardImg   = is_array($progetto['immagine'] ?? null) ? $progetto['immagine'] : [];
+                        $cardImgUrl = theme_acf_image_url($progetto['immagine'] ?? null);
+                        $cardImgAlt = trim($cardImg['alt'] ?? '') ?: 'Progetto ' . $progetto['titolo'] . ' &#8212; PAC';
+                        $cardCaption = $cardImg['caption'] ?? '';
+                        $ctaUrl    = $progetto['cta']['url'] ?? '';
+                        $ctaTitle  = $progetto['cta']['title'] ?? 'Scopri';
                     @endphp
 
-                    <article class="ui-project-card">
-                        <figure class="ui-project-card__media">
-                            @php
-                                $cardImgUrl = theme_acf_image_url($progetto['immagine'] ?? null);
-                                $cardImgArr = is_array($progetto['immagine'] ?? null) ? $progetto['immagine'] : [];
-                                $projectImageAlt = trim($cardImgArr['alt'] ?? '') ?: 'Progetto ' . $progetto['titolo'] . ' di Project Africa Conservation';
-                            @endphp
-                            @if($cardImgUrl !== '')
-                                <img
-                                    src="{{ esc_url($cardImgUrl) }}"
-                                    alt="{{ $projectImageAlt }}"
-                                    class="ui-project-card__image"
-                                    loading="lazy"
-                                    decoding="async">
-                            @else
-                                <div class="ui-project-card__placeholder" aria-hidden="true">
-                                    <svg viewBox="0 0 48 48" fill="none" class="h-14 w-14">
-                                        <path d="M8 36L18.5 24.5C20.2 22.6 23.2 22.5 25.1 24.2L29 27.8L33.1 22.8C34.9 20.5 38.3 20.2 40.6 22L44 24.7V40H8V36Z" fill="currentColor" opacity=".28"/>
-                                        <circle cx="18" cy="16" r="4.5" fill="currentColor" opacity=".28"/>
-                                    </svg>
-                                </div>
-                            @endif
+                    <li class="fd-operations__row {{ $index === 0 ? 'fd-operations__row--featured' : '' }}">
 
-                            <span class="ui-project-card__badge">{{ $badge }}</span>
-                        </figure>
+                        {{-- Row number --}}
+                        <span class="fd-operations__num" aria-hidden="true">#{{ $num }}</span>
 
-                        <div class="ui-project-card__body">
-                            <h3 class="ui-project-card__title">{{ $progetto['titolo'] }}</h3>
-                            <p class="ui-project-card__text">
-                                {{ !empty($cardImgArr['caption']) ? $cardImgArr['caption'] : 'Approfondisci questo programma sul campo e scopri come sostenerlo.' }}
-                            </p>
-
-                            @if(!empty($progetto['cta']['url']) && !empty($progetto['cta']['title']))
-                                <div class="ui-project-card__footer">
-                                    <a href="{{ $progetto['cta']['url'] }}" aria-label="{{ $progetto['cta']['title'] }}: {{ $progetto['titolo'] }}" class="ui-project-card__button relative z-20">
-                                        {{ $progetto['cta']['title'] }}
-                                    </a>
-                                </div>
+                        {{-- Thumbnail --}}
+                        <div class="fd-operations__thumb" aria-hidden="{{ $cardImgUrl ? 'false' : 'true' }}">
+                            @if($cardImgUrl)
+                                <img src="{{ esc_url($cardImgUrl) }}"
+                                     alt="{{ $cardImgAlt }}"
+                                     loading="lazy"
+                                     decoding="async">
                             @endif
                         </div>
-                    </article>
+
+                        {{-- Body --}}
+                        <div class="fd-operations__body">
+                            <span class="fd-operations__type">{{ $typeLabel }}</span>
+                            <h3 class="fd-operations__title">{{ $progetto['titolo'] }}</h3>
+                            @if($cardCaption)
+                                <p class="fd-operations__desc">{{ wp_trim_words($cardCaption, 18) }}</p>
+                            @endif
+                        </div>
+
+                        {{-- Status + CTA --}}
+                        <div class="fd-operations__tail">
+                            <span class="fd-operations__badge">[ACTIVE]</span>
+                            @if($ctaUrl)
+                                <a href="{{ esc_url($ctaUrl) }}"
+                                   class="fd-operations__cta"
+                                   aria-label="{{ $ctaTitle }}: {{ $progetto['titolo'] }} &#8212; PAC">
+                                    {{ $ctaTitle }} &#8594;
+                                </a>
+                            @endif
+                        </div>
+
+                    </li>
                 @endif
             @endforeach
-        </div>
+        </ol>
     </div>
 </section>

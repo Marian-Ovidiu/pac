@@ -1,135 +1,80 @@
 @php
     $stats = [
-        [
-            'value' => (string) count($projects),
-            'label' => 'progetti attivi',
-        ],
-        [
-            'value' => '3',
-            'label' => 'aree di impatto',
-        ],
-        [
-            'value' => '365',
-            'label' => 'giorni sul campo',
-        ],
+        ['value' => (string) count($projects), 'label' => 'Progetti attivi'],
+        ['value' => '3',                        'label' => 'Aree di impatto'],
+        ['value' => '365',                      'label' => 'Giorni sul campo'],
     ];
 
     $highlights = [
         'Tutela della fauna e anti-bracconaggio.',
-        'Progetti sociali radicati nelle comunita locali.',
+        'Progetti sociali radicati nelle comunit&#224; locali.',
         'Presenza continua, relazioni stabili, risultati misurabili.',
     ];
 
-    $aboutImage = is_array($image ?? null) ? $image : null;
-    $aboutImageAlt = trim($aboutImage['alt'] ?? '') ?: 'Project Africa Conservation: ' . $title;
-    $primaryCtaLabel = !empty($primaryCta['title']) ? $primaryCta['title'] . ' - ' . $title : null;
-    $secondaryCtaLabel = !empty($secondaryCta['title']) ? $secondaryCta['title'] . ' - ' . $title : null;
+    $aboutImage    = is_array($image ?? null) ? $image : null;
+    $aboutImageUrl = $aboutImage['url'] ?? '';
+    $aboutImageAlt = trim($aboutImage['alt'] ?? '') ?: 'Project Africa Conservation &#8212; ' . $title;
 @endphp
 
-<section class="ui-home-about" aria-label="{{ $title }}">
-    <div class="ui-container">
-        <div class="hidden lg:grid ui-home-about__desktop">
-            <div class="ui-home-about__panel">
-                <span class="ui-home-about__eyebrow">Chi siamo</span>
-                <h2 class="ui-home-about__title">{{ $title }}</h2>
-                <p class="ui-home-about__copy">{{ $description }}</p>
+<section class="fd-mission" aria-labelledby="fd-mission-title">
+    <div class="ui-container fd-mission__inner">
 
-                <div class="ui-home-about__actions">
-                    @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--primary">
-                            {{ $primaryCta['title'] }}
-                        </a>
-                    @endif
-                    @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--secondary">
-                            {{ $secondaryCta['title'] }}
-                        </a>
-                    @endif
-                </div>
-            </div>
+        {{-- ── Copy column ── --}}
+        <div class="fd-mission__copy">
+            <span class="fd-label">Missione operativa</span>
 
-            <div class="ui-home-about__visual">
-                @if(!empty($aboutImage['url']))
-                    <figure class="ui-home-about__image-wrap">
-                        <img
-                            src="{{ $aboutImage['url'] }}"
-                            alt="{{ $aboutImageAlt }}"
-                            class="ui-home-about__image"
-                            loading="lazy"
-                            decoding="async">
-                    </figure>
-                @else
-                    <div class="ui-home-about__image-wrap ui-home-about__image-wrap--mock" aria-hidden="true"></div>
+            <h2 class="fd-mission__title" id="fd-mission-title">{{ $title }}</h2>
+
+            <p class="fd-mission__body">{{ $description }}</p>
+
+            <ul class="fd-mission__highlights" aria-label="Punti chiave">
+                @foreach($highlights as $item)
+                    <li>{!! $item !!}</li>
+                @endforeach
+            </ul>
+
+            <div class="fd-mission__actions">
+                @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
+                    <a href="{{ esc_url($primaryCta['url']) }}"
+                       aria-label="{{ $primaryCta['title'] }} &#8212; Project Africa Conservation"
+                       class="field-dispatch-button field-dispatch-button--primary">
+                        {{ $primaryCta['title'] }}
+                        <span aria-hidden="true">&#8594;</span>
+                    </a>
                 @endif
-
-                <div class="ui-home-about__floating ui-home-about__floating--stats" role="group" aria-label="Numeri di Project Africa Conservation">
-                    @foreach($stats as $stat)
-                        <div class="ui-home-about__stat">
-                            <div class="ui-home-about__stat-value">{{ $stat['value'] }}</div>
-                            <div class="ui-home-about__stat-label">{{ $stat['label'] }}</div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="ui-home-about__floating ui-home-about__floating--note">
-                    <div class="ui-home-about__note-kicker">Approccio</div>
-                    <ul class="ui-home-about__list" aria-label="Punti chiave dell'approccio PAC">
-                        @foreach($highlights as $highlight)
-                            <li>{{ $highlight }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
+                    <a href="{{ esc_url($secondaryCta['url']) }}"
+                       aria-label="{{ $secondaryCta['title'] }} &#8212; Project Africa Conservation"
+                       class="field-dispatch-button field-dispatch-button--secondary">
+                        {{ $secondaryCta['title'] }}
+                    </a>
+                @endif
             </div>
         </div>
 
-        <div class="lg:hidden ui-home-about__mobile">
-            <div class="ui-home-about__mobile-card">
-                <span class="ui-home-about__eyebrow">Chi siamo</span>
-                <h2 class="ui-home-about__mobile-title">{{ $title }}</h2>
-                <p class="ui-home-about__mobile-copy">{{ $description }}</p>
+        {{-- ── Visual column ── --}}
+        <div class="fd-mission__visual">
+            @if($aboutImageUrl)
+                <figure class="fd-mission__photo">
+                    <img src="{{ esc_url($aboutImageUrl) }}"
+                         alt="{{ $aboutImageAlt }}"
+                         loading="lazy"
+                         decoding="async">
+                    <figcaption class="fd-mission__photo-caption">
+                        <span>{{ $aboutImage['caption'] ?? 'Attivit&#224; sul campo &#8212; PAC' }}</span>
+                    </figcaption>
+                </figure>
+            @endif
 
-                @if(!empty($aboutImage['url']))
-                    <figure class="ui-home-about__mobile-image-wrap">
-                        <img
-                            src="{{ $aboutImage['url'] }}"
-                            alt="{{ $aboutImageAlt }}"
-                            class="ui-home-about__mobile-image"
-                            loading="lazy"
-                            decoding="async">
-                    </figure>
-                @endif
-
-                <div class="ui-home-about__mobile-stats" role="group" aria-label="Numeri di Project Africa Conservation">
-                    @foreach($stats as $stat)
-                        <div class="ui-home-about__mobile-stat">
-                            <div class="ui-home-about__stat-value">{{ $stat['value'] }}</div>
-                            <div class="ui-home-about__stat-label">{{ $stat['label'] }}</div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="ui-home-about__mobile-note">
-                    <div class="ui-home-about__note-kicker">Approccio</div>
-                    <ul class="ui-home-about__list" aria-label="Punti chiave dell'approccio PAC">
-                        @foreach($highlights as $highlight)
-                            <li>{{ $highlight }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="ui-home-about__actions ui-home-about__actions--mobile">
-                    @if(!empty($primaryCta['url']) && !empty($primaryCta['title']))
-                        <a href="{{ $primaryCta['url'] }}" aria-label="{{ $primaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--primary">
-                            {{ $primaryCta['title'] }}
-                        </a>
-                    @endif
-                    @if(!empty($secondaryCta['url']) && !empty($secondaryCta['title']))
-                        <a href="{{ $secondaryCta['url'] }}" aria-label="{{ $secondaryCtaLabel }}" class="ui-home-about__button ui-home-about__button--secondary">
-                            {{ $secondaryCta['title'] }}
-                        </a>
-                    @endif
-                </div>
-            </div>
+            <dl class="fd-mission__metrics" aria-label="Numeri PAC">
+                @foreach($stats as $stat)
+                    <div>
+                        <dd>{{ $stat['value'] }}</dd>
+                        <dt>{{ $stat['label'] }}</dt>
+                    </div>
+                @endforeach
+            </dl>
         </div>
+
     </div>
 </section>

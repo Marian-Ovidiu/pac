@@ -1,157 +1,146 @@
 @extends('layouts.mainLayout')
 @section('content')
-    @php
-        $img = $opzioniArchivio->immagine_hero ?? [];
-        $typingTitoli = array_values(array_filter([
-            $opzioniArchivio->highlights_frase_1 ?? null,
-            $opzioniArchivio->highlights_frase_2 ?? null,
-            $opzioniArchivio->highlights_frase_3 ?? null,
-        ]));
-    @endphp
+@php
+    $img          = $opzioniArchivio->immagine_hero ?? [];
+    $heroTitle    = $opzioniArchivio->titolo_hero   ?? 'Operazioni sul campo.';
+    $heroText     = $opzioniArchivio->testo_sotto_hero ?? '';
+    $count        = count($progetti);
 
-    <section class="archive-project-hero">
-        @if (!empty($img['url']))
-            <div class="archive-project-hero__mobile-bg" aria-hidden="true">
-                <img
-                    src="{{ $img['url'] }}"
-                    alt=""
-                    class="archive-project-hero__mobile-bg-image"
-                    loading="eager">
-            </div>
+    $typingTitoli = array_values(array_filter([
+        $opzioniArchivio->highlights_frase_1 ?? null,
+        $opzioniArchivio->highlights_frase_2 ?? null,
+        $opzioniArchivio->highlights_frase_3 ?? null,
+    ]));
+@endphp
+
+{{-- ── HERO ─────────────────────────────────────────────── --}}
+<section class="fd-archive-hero" aria-labelledby="fd-archive-title">
+    <div class="ui-container fd-archive-hero__inner">
+
+        <div class="fd-archive-hero__copy">
+            <span class="fd-label">Archivio operazioni</span>
+
+            <h1 class="fd-archive-hero__title" id="fd-archive-title">
+                {!! $heroTitle !!}
+            </h1>
+
+            @if(!empty($typingTitoli))
+                <p class="fd-archive-hero__ticker"
+                   x-data="typingEffect({{ json_encode($typingTitoli) }})"
+                   aria-live="polite"
+                   aria-atomic="true">
+                    <span x-text="displayText"></span>
+                </p>
+            @endif
+
+            @if($heroText)
+                <div class="fd-archive-hero__text">
+                    {!! wp_strip_all_tags($heroText) !!}
+                </div>
+            @endif
+
+            <dl class="fd-archive-hero__stats" aria-label="Numeri operazioni PAC">
+                <div>
+                    <dd>{{ $count }}+</dd>
+                    <dt>Operazioni documentate</dt>
+                </div>
+                <div>
+                    <dd>50k</dd>
+                    <dt>Ettari protetti</dt>
+                </div>
+                <div>
+                    <dd>6</dd>
+                    <dt>Paesi attivi</dt>
+                </div>
+            </dl>
+
+            <a href="#fd-archive-list"
+               class="field-dispatch-button field-dispatch-button--primary fd-archive-hero__cta"
+               aria-label="Scorri all'elenco dei progetti">
+                Scopri le operazioni &#8594;
+            </a>
+        </div>
+
+        @if(!empty($img['url']))
+            <figure class="fd-archive-hero__photo">
+                <img src="{{ esc_url($img['url']) }}"
+                     alt="{{ $img['alt'] ?? $heroTitle }}"
+                     loading="eager"
+                     decoding="async"
+                     width="{{ $img['width'] ?? '' }}"
+                     height="{{ $img['height'] ?? '' }}">
+                <figcaption class="field-dispatch-caption">
+                    <span>Operazioni PAC</span>
+                    <span>{{ $heroTitle }}</span>
+                </figcaption>
+            </figure>
         @endif
 
-        <div class="ui-container">
-            <div class="archive-project-hero__layout">
-                <div class="archive-project-hero__copy">
-                    <span class="archive-project-hero__eyebrow">Archivio progetti</span>
-                    <h1 class="archive-project-hero__title">
-                        {{ $opzioniArchivio->titolo_hero }}
-                    </h1>
+    </div>
+</section>
 
-                    @if(!empty($typingTitoli))
-                        <div x-data="typingEffect({{ json_encode($typingTitoli) }})" class="archive-project-hero__highlight">
-                            <span x-text="displayText"></span>
-                        </div>
+{{-- ── LIST ─────────────────────────────────────────────── --}}
+<section class="fd-archive-list" id="fd-archive-list" aria-label="Elenco operazioni PAC">
+    <div class="ui-container">
+
+        <div class="fd-archive-list__head">
+            <span class="fd-label">{{ $count }} operazioni</span>
+            <p class="fd-archive-list__desc">
+                Ogni scheda rappresenta un impegno concreto sul campo.
+                Anti-bracconaggio, K-9, supporto comunit&#224;, sorveglianza attiva.
+            </p>
+        </div>
+
+        <ol class="fd-archive-cards" role="list">
+            @foreach($progetti as $index => $progetto)
+                @php
+                    $permalink   = get_permalink($progetto->id);
+                    $num         = str_pad((string)($index + 1), 3, '0', STR_PAD_LEFT);
+                    $thumb       = $progetto->featured_image ?? '';
+                    $thumbAlt    = $progetto->titolo_card ?? 'Operazione PAC';
+                    $excerpt     = wp_trim_words(wp_strip_all_tags($progetto->content ?? ''), 22, '&#8230;');
+                @endphp
+
+                <li class="fd-archive-card {{ $index % 2 === 1 ? 'fd-archive-card--reverse' : '' }}">
+
+                    @if($thumb)
+                        <figure class="fd-archive-card__media">
+                            <a href="{{ esc_url($permalink) }}"
+                               tabindex="-1"
+                               aria-hidden="true">
+                                <img src="{{ esc_url($thumb) }}"
+                                     alt="{{ esc_attr($thumbAlt) }}"
+                                     loading="{{ $index < 2 ? 'eager' : 'lazy' }}"
+                                     decoding="async">
+                            </a>
+                        </figure>
                     @endif
 
-                    @if(!empty($opzioniArchivio->testo_sotto_hero))
-                        <div class="archive-project-hero__text">
-                            {!! $opzioniArchivio->testo_sotto_hero !!}
-                        </div>
-                    @endif
-
-                    <div class="archive-project-hero__actions">
-                        <a href="#archive-project-list" class="archive-project-hero__button">
-                            Scopri i progetti
+                    <div class="fd-archive-card__body">
+                        <span class="fd-archive-card__num" aria-hidden="true">#{{ $num }}</span>
+                        <h2 class="fd-archive-card__title">
+                            <a href="{{ esc_url($permalink) }}"
+                               class="fd-archive-card__link">
+                                {{ $progetto->titolo_card }}
+                            </a>
+                        </h2>
+                        @if($excerpt)
+                            <p class="fd-archive-card__excerpt">{{ $excerpt }}</p>
+                        @endif
+                        <a href="{{ esc_url($permalink) }}"
+                           class="fd-archive-card__cta"
+                           aria-label="Scopri operazione: {{ $progetto->titolo_card }}">
+                            Leggi operazione &#8594;
                         </a>
                     </div>
 
-                    <div class="archive-project-hero__stats">
-                        <div>
-                            <strong>{{ count($progetti) }}+</strong>
-                            <span>progetti</span>
-                        </div>
-                        <div>
-                            <strong>3</strong>
-                            <span>ambiti di impatto</span>
-                        </div>
-                    </div>
-                </div>
+                    <span class="fd-archive-card__badge">[ACTIVE]</span>
 
-                @if (!empty($img['url']))
-                    <div class="archive-project-hero__visual">
-                        <figure class="archive-project-hero__frame">
-                            <img
-                                src="{{ $img['url'] }}"
-                                alt="{{ $img['alt'] ?? ($opzioniArchivio->titolo_hero ?? 'Progetti') }}"
-                                title="{{ $img['title'] ?? '' }}"
-                                width="{{ $img['width'] ?? '' }}"
-                                height="{{ $img['height'] ?? '' }}"
-                                class="archive-project-hero__image"
-                                loading="eager">
-                            <div class="archive-project-hero__frame-overlay"></div>
-                            <figcaption class="archive-project-hero__caption">
-                                <span>Focus progetti</span>
-                                <strong>{{ $opzioniArchivio->titolo_hero }}</strong>
-                            </figcaption>
-                        </figure>
-                        <div class="archive-project-hero__halo" aria-hidden="true"></div>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </section>
+                </li>
+            @endforeach
+        </ol>
 
-    <section class="archive-project-list" id="archive-project-list">
-        <div class="ui-container">
-            <div class="archive-project-list__layout">
-                <aside class="archive-project-list__intro">
-                    <div class="archive-project-list__intro-lead">
-                        <span class="archive-project-list__eyebrow">Archivio progetti</span>
-                        <h2 class="archive-project-list__title archive-project-list__title--desktop">
-                            Dare un futuro alla <span>natura.</span>
-                        </h2>
-                        <h2 class="archive-project-list__title archive-project-list__title--mobile">
-                            Azioni concrete per il <span>pianeta.</span>
-                        </h2>
-                        <p class="archive-project-list__kicker">Protezione fauna selvatica</p>
-                    </div>
-                    <div class="archive-project-list__intro-aside">
-                        <p class="archive-project-list__text archive-project-list__text--desktop">
-                            Esplora le nostre missioni sul campo. Ogni scheda rappresenta una sfida viva e un impegno costante per la biodiversita globale.
-                        </p>
-                        <p class="archive-project-list__text archive-project-list__text--mobile">
-                            Esplora i nostri interventi sul campo. Ogni progetto e un passo verso un futuro piu sostenibile e giusto.
-                        </p>
-                        <div class="archive-project-list__stats">
-                            <div>
-                                <strong>{{ count($progetti) }}+</strong>
-                                <span>progetti attivi</span>
-                            </div>
-                            <div>
-                                <strong>50k</strong>
-                                <span>ettari protetti</span>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
+    </div>
+</section>
 
-                <div class="archive-project-list__showcase" id="archive-project-list-cards">
-                    <div class="archive-project-list__rings" aria-hidden="true"></div>
-
-                    <div class="archive-project-list__items">
-                        @foreach ($progetti as $index => $progetto)
-                            @php
-                                $progettoPermalink = get_permalink($progetto->id);
-                            @endphp
-                            <article class="archive-project-card {{ $index % 2 === 1 ? 'archive-project-card--reverse' : '' }}">
-                                <a href="{{ esc_url($progettoPermalink) }}" class="archive-project-card__stretch">
-                                    <span class="sr-only">Scopri {{ $progetto->titolo_card }}</span>
-                                </a>
-                                <div class="archive-project-card__media">
-                                    <img
-                                        src="{{ $progetto->featured_image }}"
-                                        alt=""
-                                        class="archive-project-card__image"
-                                        loading="lazy"
-                                        decoding="async" />
-                                </div>
-
-                                <div class="archive-project-card__content">
-                                    <h3 class="archive-project-card__title">{{ $progetto->titolo_card }}</h3>
-                                    <p class="archive-project-card__text">
-                                        {{ wp_trim_words(wp_strip_all_tags($progetto->content), 26, '...') }}
-                                    </p>
-                                    <span class="archive-project-card__cta" aria-hidden="true">
-                                        Scopri il progetto
-                                        <span aria-hidden="true">-></span>
-                                    </span>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 @stop

@@ -1,84 +1,44 @@
 @php
     $options = \Models\Options\OpzioniGlobaliFields::get();
     $logoUrl = $options->logo['url'] ?? null;
+    $dispatchNumber = '47';
+    $dispatchDate = date_i18n('M Y');
 @endphp
-<header class="ui-site-header">
-    <div class="ui-container">
-        <div class="ui-card-soft px-4 py-4 sm:px-6 sm:py-5">
-            <nav class="flex items-center justify-between gap-6" aria-label="Navigazione principale">
-                <a href="{{ home_url('/') }}" title="{{ __('Home', 'my_structure') }}" class="ui-brand-lockup shrink-0">
-                    @if ($logoUrl)
-                        <div class="flex h-16 w-auto items-center sm:h-[4.5rem]">
-                            <img class="h-full w-auto object-contain" src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />
-                        </div>
-                    @endif
-                </a>
 
-                {{-- Menu mobile senza Alpine: <details> evita conflitti Blade (@click…) e funziona anche se main.js è in ritardo / bloccato dal banner cookie. --}}
-                {{-- details senza position:relative così .ui-mobile-menu (absolute) resta ancorato a .ui-card-soft (wide), non al box stretto del summary. --}}
-                <details class="ui-mobile-nav-disclosure lg:hidden">
-                    <summary
-                        class="ui-button-secondary cursor-pointer select-none !px-4 !py-2.5 list-none marker:content-none [&::-webkit-details-marker]:hidden"
-                        aria-controls="mobile-primary-menu"
-                        aria-label="Apri o chiudi menu principale">
-                        Menu
-                    </summary>
-                    <nav
-                        id="mobile-primary-menu"
-                        class="ui-mobile-menu"
-                        aria-label="Navigazione mobile">
-                        <ul class="ui-mobile-menu__list">
-                            @foreach ($menu as $item)
-                                @php
-                                    $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
-                                    $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
-                                    $hasChildren = !empty($item->children);
-                                @endphp
-                                <li class="ui-mobile-menu__item">
-                                    <a
-                                        href="{{ $item->url }}"
-                                        class="ui-mobile-menu__link"
-                                        @if($isCurrent) aria-current="page" @endif
-                                        @if($hasChildren) aria-haspopup="true" @endif>
-                                        <span>{{ $item->title }}</span>
-                                        @if($hasChildren)
-                                            <span class="ui-mobile-menu__count">{{ count($item->children) }}</span>
-                                        @endif
-                                    </a>
-                                    @if ($hasChildren)
-                                        <ul class="ui-mobile-menu__submenu">
-                                            @foreach ($item->children as $subitem)
-                                                @php
-                                                    $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
-                                                    $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
-                                                @endphp
-                                                <li>
-                                                    <a href="{{ $subitem->url }}" class="ui-mobile-menu__sublink" @if($isSubCurrent) aria-current="page" @endif>
-                                                        {{ $subitem->title }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    </nav>
-                </details>
+<header class="ui-site-header ui-dispatch-header">
+    <div class="ui-dispatch-header__bar">
+        <div class="ui-container ui-dispatch-header__inner">
+            <a href="{{ home_url('/') }}" title="{{ __('Home', 'my_structure') }}" class="ui-dispatch-brand">
+                @if ($logoUrl)
+                    <span class="ui-dispatch-brand__mark">
+                        <img src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />
+                    </span>
+                @endif
+                <span class="ui-dispatch-brand__copy">
+                    <span class="ui-dispatch-brand__name">PAC</span>
+                    <span class="ui-dispatch-brand__tag">Project Africa Conservation</span>
+                </span>
+            </a>
 
-                <ul class="ml-auto hidden items-center gap-2 xl:gap-3 lg:flex">
+            <nav class="ui-dispatch-nav" aria-label="Navigazione principale">
+                <ul class="ui-dispatch-nav__list">
                     @foreach ($menu as $item)
                         @php
                             $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
                             $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
+                            $haystack = strtolower(($item->title ?? '') . ' ' . ($item->url ?? ''));
+                            $isDonate = strpos($haystack, 'dona') !== false || strpos($haystack, 'donat') !== false;
                         @endphp
-                        <li class="group relative">
+                        <li class="ui-dispatch-nav__item group">
                             <a
                                 href="{{ $item->url }}"
-                                class="ui-button-secondary !rounded-full !border border-transparent !bg-transparent !px-4 !py-2.5 !shadow-none hover:!border-custom-dark-green/10 hover:!bg-white/70"
+                                class="ui-dispatch-nav__link {{ $isDonate ? 'ui-dispatch-nav__link--cta' : '' }}"
                                 @if($isCurrent) aria-current="page" @endif
                                 @if(!empty($item->children)) aria-haspopup="true" @endif>
-                                {{ $item->title }}
+                                {{ $isDonate ? __('Fund an operation', 'my_structure') : $item->title }}
+                                @if($isDonate)
+                                    <span aria-hidden="true">-&gt;</span>
+                                @endif
                             </a>
                             @if (!empty($item->children))
                                 <ul class="ui-header-submenu">
@@ -99,6 +59,62 @@
                     @endforeach
                 </ul>
             </nav>
+
+            <details class="ui-mobile-nav-disclosure ui-dispatch-mobile lg:hidden">
+                <summary
+                    class="ui-dispatch-mobile__summary"
+                    aria-controls="mobile-primary-menu"
+                    aria-label="Apri o chiudi menu principale">
+                    Menu
+                </summary>
+                <nav id="mobile-primary-menu" class="ui-mobile-menu" aria-label="Navigazione mobile">
+                    <ul class="ui-mobile-menu__list">
+                        @foreach ($menu as $item)
+                            @php
+                                $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
+                                $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
+                                $hasChildren = !empty($item->children);
+                            @endphp
+                            <li class="ui-mobile-menu__item">
+                                <a
+                                    href="{{ $item->url }}"
+                                    class="ui-mobile-menu__link"
+                                    @if($isCurrent) aria-current="page" @endif
+                                    @if($hasChildren) aria-haspopup="true" @endif>
+                                    <span>{{ $item->title }}</span>
+                                    @if($hasChildren)
+                                        <span class="ui-mobile-menu__count">{{ count($item->children) }}</span>
+                                    @endif
+                                </a>
+                                @if ($hasChildren)
+                                    <ul class="ui-mobile-menu__submenu">
+                                        @foreach ($item->children as $subitem)
+                                            @php
+                                                $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
+                                                $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
+                                            @endphp
+                                            <li>
+                                                <a href="{{ $subitem->url }}" class="ui-mobile-menu__sublink" @if($isSubCurrent) aria-current="page" @endif>
+                                                    {{ $subitem->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                </nav>
+            </details>
+        </div>
+    </div>
+
+    <div class="ui-dispatch-ticker" aria-label="Metriche operative">
+        <div class="ui-container ui-dispatch-ticker__inner">
+            <span>Field Dispatch #{{ $dispatchNumber }}</span>
+            <span>847 km&#178; sotto pattuglia attiva</span>
+            <span>3 unit&#224; K-9 operative</span>
+            <span>{{ $dispatchDate }}</span>
         </div>
     </div>
 </header>
