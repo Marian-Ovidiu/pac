@@ -5,6 +5,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 $sourceRoots = [
     $root . '/wp-content/themes/my_structure',
+    $root . '/wp-content/plugins/pac-core',
     $root . '/wp-content/plugins/wp-mail-smtp',
 ];
 $excluded = ['/vendor/', '/node_modules/', '/resources/cache/'];

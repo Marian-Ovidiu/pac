@@ -1,7 +1,5 @@
 <?php
 
-use Dotenv\Dotenv;
-
 if (!function_exists('vite_manifest')) {
     function vite_manifest() {
         static $manifest = null;
@@ -134,19 +132,6 @@ if (!function_exists('theme_acf_image_url')) {
 if (!function_exists('camelToKebab')) {
     function camelToKebab($string) {
         return strtolower(preg_replace('/(?<!^)([A-Z])/', '-$1', $string));
-    }
-}
-
-if (!function_exists('my_env')) {
-    function my_env($key, $default = null) {
-        static $envs = null;
-
-        if ($envs === null) {
-            $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-            $envs = $dotenv->safeLoad();
-        }
-
-        return $envs[$key] ?? $default;
     }
 }
 

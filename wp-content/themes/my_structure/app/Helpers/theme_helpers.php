@@ -36,7 +36,9 @@ if (!function_exists('add_base_js')) {
     function add_base_js() {
         add_action('wp_enqueue_scripts', function () {
             $fullSrc = vite_asset('js/main.js');
-            $publishableKey = my_env('PUBLISHABLE_KEY') ?: my_env('TEST_PUBLISHABLE_KEY', '');
+            $publishableKey = function_exists('pac_core_publishable_key')
+                ? pac_core_publishable_key()
+                : '';
 
             if (!$fullSrc) {
                 return;

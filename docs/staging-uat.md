@@ -13,6 +13,12 @@ The manual GitHub Actions workflow `PAC Staging UAT` runs Playwright against the
 
 The donation test refuses to continue unless the public Stripe key starts with `pk_test_`.
 
+The release acceptance gate must additionally verify server-to-server finalization. Staging must define `STRIPE_WEBHOOK_SECRET` and register this test-mode endpoint in Stripe:
+
+```text
+https://staging.example/wp-json/pac/v1/stripe/webhook
+```
+
 ## Required staging secrets
 
 Configure these GitHub environment secrets under the protected `staging` environment:
@@ -37,5 +43,7 @@ After the workflow succeeds, verify in the test inbox or mail catcher:
 3. project and amount are correct
 4. no live recipient received the message
 5. WP Mail SMTP reports no delivery error
+6. Stripe reports a successful `payment_intent.succeeded` webhook delivery
+7. PAC records only one donor and one thank-you email when the event is resent
 
 Record the workflow URL and inbox evidence in the release checklist. Do not mark staging UAT complete until both are present.

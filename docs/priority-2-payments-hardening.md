@@ -2,6 +2,20 @@
 
 Data esecuzione: 2026-04-07
 
+## Aggiornamento architetturale 2026-07-30
+
+La descrizione sotto documenta il passaggio storico di hardening nel tema. Lo stato corrente è ora:
+
+- la logica applicativa vive in [`wp-content/plugins/pac-core`](../wp-content/plugins/pac-core/README.md)
+- gli action name AJAX `pac_create_payment_intent` e `pac_complete_donation` sono preservati
+- il tema contiene soltanto UI, asset e configurazione pubblica
+- `POST /wp-json/pac/v1/stripe/webhook` verifica la firma Stripe e gestisce `payment_intent.succeeded`
+- callback browser e webhook condividono una sola finalizzazione idempotente
+- amount, progetto e donatore vengono recuperati dallo stato pending salvato prima della conferma, non dal callback browser
+- lock concorrente, marker storico `pac_stripe_processed_*`, retry email e retention dei dati pending sono coperti da test automatici
+
+Configurazione, stati, privacy, test locale e rollback sono descritti nel README di PAC Core. I riferimenti al tema nelle sezioni seguenti vanno letti come baseline storica precedente all'estrazione.
+
 ## Scope
 
 Hardening del flusso donazioni Stripe del tema custom `my_structure`, con riduzione del rischio su endpoint custom, validazione payload, amount handling e side effect post-pagamento.

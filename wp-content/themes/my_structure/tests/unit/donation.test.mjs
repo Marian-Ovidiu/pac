@@ -49,4 +49,15 @@ test('builds a normalized donor payload', () => {
         email: 'ada@example.test',
         codice_fiscale: 'ABC',
     });
+
+    assert.deepEqual(form.buildCreateIntentPayload(), {
+        progetto_id: 42,
+        expected_amount_cents: 500,
+        amount_cents: 500,
+        name: 'Ada',
+        surname: 'Lovelace',
+        phone: '+390000',
+        email: 'ada@example.test',
+        codice_fiscale: 'ABC',
+    });
 });

@@ -20,8 +20,15 @@ The repository does not version:
 
 1. Copy `wp-config.example.php` to `wp-config.php`.
 2. Configure database credentials outside Git.
-3. Copy `wp-content/themes/my_structure/.env.example` to `.env` and use Stripe test credentials only.
-4. In `wp-content/themes/my_structure`, run:
+3. Copy `.env.example` to `.env` in the repository root and use Stripe test credentials only.
+4. Install the application plugin dependencies:
+
+```sh
+cd wp-content/plugins/pac-core
+composer install
+```
+
+5. In `wp-content/themes/my_structure`, run:
 
 ```sh
 composer install
@@ -29,22 +36,26 @@ npm ci
 npm run build
 ```
 
-5. Start WordPress with PHP 8.3 and `WP_ENVIRONMENT_TYPE=local`.
+6. Activate `pac-core`, then start WordPress with PHP 8.3 and `WP_ENVIRONMENT_TYPE=local`.
 
 Automatic WordPress updates are disabled by the example local configuration so that runtime smoke tests cannot silently modify the worktree.
 
 ## Deploy
 
 1. Deploy a reviewed commit, never an uncommitted worktree.
-2. Install theme PHP dependencies with:
+2. Install PAC Core and theme PHP dependencies with:
 
 ```sh
+cd wp-content/plugins/pac-core
+composer install --no-dev --optimize-autoloader
+cd ../../themes/my_structure
 composer install --no-dev --optimize-autoloader
 ```
 
 3. Build frontend assets before deployment with `npm ci && npm run build`; commit the resulting `public/` manifest and bundles.
-4. Provide `wp-config.php`, environment variables, Stripe keys and salts through the hosting environment.
+4. Provide `wp-config.php`, environment variables, Stripe keys, `STRIPE_WEBHOOK_SECRET` and salts through the hosting environment.
 5. Synchronize uploads independently from Git.
+6. Configure Stripe `payment_intent.succeeded` delivery to `/wp-json/pac/v1/stripe/webhook` and verify a test-mode delivery before release.
 
 ## WordPress and plugin updates
 

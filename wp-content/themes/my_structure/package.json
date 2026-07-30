@@ -17,7 +17,7 @@
     "watch": "vite build --watch",
     "test": "npm run test:js && npm run test:php",
     "test:js": "node --test tests/unit/*.test.mjs",
-    "test:php": "php tests/php/run.php",
+    "test:php": "php ../../plugins/pac-core/tests/run.php",
     "test:staging": "playwright test"
   },
   "keywords": [],

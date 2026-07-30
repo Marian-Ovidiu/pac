@@ -34,9 +34,22 @@ jobs:
         working-directory: wp-content/themes/my_structure
         run: composer validate --no-check-publish
 
+      - name: Validate PAC Core Composer metadata
+        working-directory: wp-content/plugins/pac-core
+        run: composer validate --strict
+
+      - name: Install PAC Core dependencies
+        working-directory: wp-content/plugins/pac-core
+        run: composer install --no-interaction --prefer-dist
+
       - name: Install PHP dependencies
         working-directory: wp-content/themes/my_structure
         run: composer install --no-interaction --prefer-dist
+
+      - name: Audit PHP dependencies
+        run: |
+          composer audit --working-dir=wp-content/plugins/pac-core --locked
+          composer audit --working-dir=wp-content/themes/my_structure --locked
 
       - name: Install frontend dependencies
         working-directory: wp-content/themes/my_structure

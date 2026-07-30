@@ -148,6 +148,12 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 codice_fiscale: this.formData.codiceFiscale.trim(),
             };
         },
+        buildCreateIntentPayload() {
+            return {
+                ...this.buildDonationPayload(),
+                amount_cents: this.getAmountInCents(),
+            };
+        },
         async createIntent() {
             this.loading = true;
             const amountCents = this.getAmountInCents();
@@ -162,10 +168,10 @@ export default function donationFormData(progettoId, thankYouUrl) {
                     throw new Error('Configurazione Stripe non disponibile.');
                 }
 
-                const res = await callPaymentAction(getActions().createIntent, {
-                    amount_cents: amountCents,
-                    progetto_id: this.progettoId,
-                });
+                const res = await callPaymentAction(
+                    getActions().createIntent,
+                    this.buildCreateIntentPayload(),
+                );
 
                 if (!res?.success || !res?.data?.clientSecret) {
                     throw new Error(res?.data?.message || 'clientSecret mancante o risposta non valida.');

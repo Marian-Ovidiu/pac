@@ -1,14 +1,16 @@
 <?php
 
-namespace Classes;
+declare(strict_types=1);
+
+namespace Pac\Core;
 
 use WP_Error;
 
 final class DonationValidator
 {
-    public static function validatePaymentIntent(object $paymentIntent, int $expectedAmountCents, int $progettoId)
+    public static function validatePaymentIntent(object $paymentIntent, int $expectedAmountCents, int $projectId)
     {
-        if (self::getMetadataValue($paymentIntent, 'integration') !== 'pac_custom_donation') {
+        if (self::metadataValue($paymentIntent, 'integration') !== 'pac_custom_donation') {
             return new WP_Error('invalid_intent_origin', 'Payment intent non riconosciuto.');
         }
 
@@ -16,11 +18,11 @@ final class DonationValidator
             return new WP_Error('invalid_amount', 'Importo del pagamento incoerente.');
         }
 
-        if (($paymentIntent->currency ?? '') !== 'eur') {
+        if (strtolower((string) ($paymentIntent->currency ?? '')) !== 'eur') {
             return new WP_Error('invalid_currency', 'Valuta non supportata.');
         }
 
-        if ((int) self::getMetadataValue($paymentIntent, 'progetto_id') !== $progettoId) {
+        if ((int) self::metadataValue($paymentIntent, 'progetto_id') !== $projectId) {
             return new WP_Error('invalid_project', 'Progetto del pagamento incoerente.');
         }
 
@@ -33,7 +35,7 @@ final class DonationValidator
 
     public static function validateDonorData(array $donorData)
     {
-        if (($donorData['name'] ?? '') === '' || ($donorData['surname'] ?? '') === '') {
+        if (trim((string) ($donorData['name'] ?? '')) === '' || trim((string) ($donorData['surname'] ?? '')) === '') {
             return new WP_Error('invalid_name', 'Nome e cognome sono obbligatori.');
         }
 
@@ -41,14 +43,14 @@ final class DonationValidator
             return new WP_Error('invalid_email', 'Indirizzo email non valido.');
         }
 
-        if (($donorData['phone'] ?? '') === '') {
+        if (trim((string) ($donorData['phone'] ?? '')) === '') {
             return new WP_Error('invalid_phone', 'Telefono obbligatorio.');
         }
 
         return null;
     }
 
-    private static function getMetadataValue(object $paymentIntent, string $key): string
+    private static function metadataValue(object $paymentIntent, string $key): string
     {
         if (!isset($paymentIntent->metadata)) {
             return '';

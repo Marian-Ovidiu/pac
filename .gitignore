@@ -25,6 +25,7 @@ wp-content/debug.log
 /vendor/
 wp-content/themes/my_structure/node_modules/
 wp-content/themes/my_structure/vendor/
+wp-content/plugins/pac-core/vendor/
 
 # WordPress runtime/generated content
 wp-content/cache/

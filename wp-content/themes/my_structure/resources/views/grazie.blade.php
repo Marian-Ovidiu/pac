@@ -1,19 +1,28 @@
 @extends('layouts.mainLayout')
 
 @section('content')
+@php
+    $thankYouImage = $fields->immagine ?? null;
+    $thankYouImageUrl = theme_acf_image_url($thankYouImage);
+    $thankYouImageAlt = is_array($thankYouImage) && !empty($thankYouImage['alt'])
+        ? $thankYouImage['alt']
+        : ($fields->titolo ?? '');
+@endphp
 <section class="py-10 sm:py-16 lg:py-24">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+        <div class="grid grid-cols-1 items-center gap-8 {{ $thankYouImageUrl !== '' ? 'md:grid-cols-2' : '' }}">
+            @if($thankYouImageUrl !== '')
             <div class="relative h-full w-full overflow-hidden rounded-lg shadow-lg">
                 <img
-                    src="{{ $fields->immagine['url'] }}"
-                    alt="{{ $fields->immagine['alt'] ?? $fields->titolo }}"
+                    src="{{ $thankYouImageUrl }}"
+                    alt="{{ $thankYouImageAlt }}"
                     loading="lazy"
                     decoding="async"
                     class="h-full w-full object-cover object-center"
                     width="800"
                     height="600">
             </div>
+            @endif
 
             <div class="space-y-6 text-center md:text-left">
                 <h1 class="text-4xl font-extrabold leading-tight text-custom-dark-green sm:text-5xl">

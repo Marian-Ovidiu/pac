@@ -13,7 +13,7 @@
                     <tr>
                         <td>
                             <h1 style="margin:0 0 20px;color:#2f4a2d;font-size:28px;">Grazie per la tua donazione!</h1>
-                            <p style="margin:0 0 16px;line-height:1.6;">Il tuo sostegno al progetto <strong><?php echo $safeProgetto; ?></strong> è stato registrato.</p>
+                            <p style="margin:0 0 16px;line-height:1.6;">Il tuo sostegno al progetto <strong><?php echo $safeProject; ?></strong> è stato registrato.</p>
                             <p style="margin:0 0 16px;line-height:1.6;">Importo donato: <strong><?php echo $safeAmount; ?> EUR</strong></p>
                             <p style="margin:0;line-height:1.6;">Grazie per essere parte di Project Africa Conservation.</p>
                         </td>
