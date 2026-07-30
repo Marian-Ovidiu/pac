@@ -1,5 +1,7 @@
 {
     "name": "hmari/my_structure",
+    "description": "Custom WordPress theme for PAC.",
+    "license": "proprietary",
     "authors": [
         {
             "name": "htn.marian",

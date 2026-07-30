@@ -5,7 +5,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.5",
     "stripe": "^17.7.0",
-    "swiper": "^11.1.14",
+    "swiper": "^14.0.7",
     "vite": "^6.2.3"
   },
   "name": "my_structure",
@@ -15,13 +15,17 @@
     "dev": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:js && npm run test:php",
+    "test:js": "node --test tests/unit/*.test.mjs",
+    "test:php": "php tests/php/run.php",
+    "test:staging": "playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@playwright/test": "^1.62.0",
     "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",

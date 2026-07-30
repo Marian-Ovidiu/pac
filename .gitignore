@@ -35,9 +35,6 @@ wp-content/wc-logs/
 wp-content/ewww/
 wp-content/mu-plugins/
 
-# Local-only plugin not reproducible from this repository
-wp-content/plugins/wp-mail-smtp/
-
 # Backups and exports
 *.sql
 *.zip
@@ -47,3 +44,5 @@ wp-content/plugins/wp-mail-smtp/
 
 # Blade cache is generated at runtime. Vite public/ assets stay versioned.
 wp-content/themes/my_structure/resources/cache/
+wp-content/themes/my_structure/test-results/
+wp-content/themes/my_structure/playwright-report/

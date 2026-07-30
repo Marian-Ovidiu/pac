@@ -1,53 +1,53 @@
 {
-  "_autoplay-Dp-NTGso.js": {
-    "file": "js/autoplay-Dp-NTGso.js",
+  "_autoplay-WPUr4Jj6.js": {
+    "file": "js/autoplay-WPUr4Jj6.js",
     "name": "autoplay",
     "imports": [
-      "_swiper-core-Djsrv6K8.js"
+      "_swiper-core-CC_2adY8.js"
     ]
   },
-  "_swiper-DV8PrLMj.css": {
-    "file": "css/swiper-DV8PrLMj.css",
-    "src": "_swiper-DV8PrLMj.css"
-  },
-  "_swiper-core-Djsrv6K8.js": {
-    "file": "js/swiper-core-Djsrv6K8.js",
+  "_swiper-core-CC_2adY8.js": {
+    "file": "js/swiper-core-CC_2adY8.js",
     "name": "swiper-core"
   },
+  "_swiper-vL0Q9Dr-.css": {
+    "file": "css/swiper-vL0Q9Dr-.css",
+    "src": "_swiper-vL0Q9Dr-.css"
+  },
   "assets/js/homeSlider.js": {
-    "file": "js/homeSlider-JIYpmInY.js",
+    "file": "js/homeSlider-Cf9nk5vI.js",
     "name": "homeSlider",
     "src": "assets/js/homeSlider.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-Djsrv6K8.js",
-      "_autoplay-Dp-NTGso.js"
+      "_swiper-core-CC_2adY8.js",
+      "_autoplay-WPUr4Jj6.js"
     ],
     "css": [
       "css/homeSlider-DE0q59Ew.css",
-      "css/swiper-DV8PrLMj.css"
+      "css/swiper-vL0Q9Dr-.css"
     ]
   },
   "assets/js/main.js": {
-    "file": "js/main-BuYnKPZJ.js",
+    "file": "js/main-BzH5FqwF.js",
     "name": "main",
     "src": "assets/js/main.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-Djsrv6K8.js"
+      "_swiper-core-CC_2adY8.js"
     ],
     "css": [
-      "css/swiper-DV8PrLMj.css"
+      "css/swiper-vL0Q9Dr-.css"
     ]
   },
   "assets/js/progettoSlider.js": {
-    "file": "js/progettoSlider-C_oA2Mjs.js",
+    "file": "js/progettoSlider-LxmV_-K3.js",
     "name": "progettoSlider",
     "src": "assets/js/progettoSlider.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-Djsrv6K8.js",
-      "_autoplay-Dp-NTGso.js"
+      "_swiper-core-CC_2adY8.js",
+      "_autoplay-WPUr4Jj6.js"
     ]
   },
   "assets/scss/style.scss": {

@@ -1,0 +1,42 @@
+name: PAC Staging UAT
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  staging-uat:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: wp-content/themes/my_structure/package-lock.json
+
+      - name: Install test dependencies
+        working-directory: wp-content/themes/my_structure
+        run: npm ci
+
+      - name: Install Chromium
+        working-directory: wp-content/themes/my_structure
+        run: npx playwright install --with-deps chromium
+
+      - name: Run authenticated staging UAT
+        working-directory: wp-content/themes/my_structure
+        run: npm run test:staging
+        env:
+          PAC_STAGING_URL: ${{ secrets.PAC_STAGING_URL }}
+          PAC_STAGING_LOGIN_URL: ${{ secrets.PAC_STAGING_LOGIN_URL }}
+          PAC_STAGING_USER: ${{ secrets.PAC_STAGING_USER }}
+          PAC_STAGING_PASSWORD: ${{ secrets.PAC_STAGING_PASSWORD }}
+          PAC_STAGING_PROJECT_URL: ${{ secrets.PAC_STAGING_PROJECT_URL }}
+          PAC_STAGING_DONOR_EMAIL: ${{ secrets.PAC_STAGING_DONOR_EMAIL }}
+          PAC_REQUIRE_STAGING_UAT: '1'
