@@ -36,8 +36,7 @@
             "app/Helpers/acf_helpers.php",
             "app/Helpers/theme_helpers.php",
             "app/Helpers/translation_helpers.php",
-            "app/Helpers/utility_helpers.php",
-            "app/Helpers/woocommerce_helpers.php"
+            "app/Helpers/utility_helpers.php"
         ]
     },
     "scripts": {

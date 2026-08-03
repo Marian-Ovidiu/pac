@@ -14,7 +14,6 @@ if (!function_exists('my_theme_setup')) {
             'script',
         ]);
 
-        disable_woocommerce_assets();
         add_base_js();
         add_base_css();
         register_menus();

@@ -7,18 +7,6 @@ User-agent: *
 Sitemap: https://project-africa-conservation.org/sitemap_index.xml
 
 # ---------------------------------------------------------------------------
-# WooCommerce — pagine transazionali (URL senza lingua e con prefisso Polylang)
-# ---------------------------------------------------------------------------
-Disallow: /shop/
-Disallow: /cart/
-Disallow: /checkout/
-Disallow: /my-account/
-Disallow: /*/shop/
-Disallow: /*/cart/
-Disallow: /*/checkout/
-Disallow: /*/my-account/
-
-# ---------------------------------------------------------------------------
 # Archivi WordPress category / tag non usati sul sito (allineato al 404 in tema)
 # ---------------------------------------------------------------------------
 Disallow: /category/
@@ -38,7 +26,8 @@ Disallow: /wp-register.php
 Disallow: /xmlrpc.php
 
 # ---------------------------------------------------------------------------
-# Upload: solo cartelle sensibili WooCommerce; il resto di /uploads/ resta indicizzabile
+# Upload: cartelle residue del vecchio WooCommerce, rimosso dal progetto. Restano
+# elencate finché le directory esistono su disco; il resto di /uploads/ è indicizzabile.
 # ---------------------------------------------------------------------------
 Disallow: /wp-content/uploads/wc-logs/
 Disallow: /wp-content/uploads/woocommerce_transient_files/
@@ -54,4 +43,3 @@ Disallow: /*?preview=true
 Disallow: /*?session_id=
 Disallow: /*?s=
 Disallow: /*?orderby=
-Disallow: /*?add-to-cart=

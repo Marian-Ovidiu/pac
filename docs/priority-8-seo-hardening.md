@@ -108,16 +108,20 @@ l'impostazione è inerte e i post rendono `index`, ma chiunque attivi quel toggl
 dall'admin deindicizza l'intero blog senza capire perché. Va riallineata al
 comportamento desiderato invece di restare in contraddizione.
 
-**S-06 — WooCommerce attivo senza prodotti.** *(configurazione)*
+**S-06 — WooCommerce attivo senza prodotti.** *(risolto il 2026-08-03)*
 
-WooCommerce è attivo con **0 prodotti pubblicati** e genera comunque `/shop`,
-`/cart`, `/checkout`, `/my-account`. Sono coperti solo da `Disallow` in
-`robots.txt`, che impedisce la scansione ma **non l'indicizzazione** di URL
-linkati dall'esterno. `pt_product_sitemap` è inoltre `on`.
+WooCommerce era attivo con **0 prodotti pubblicati** e generava comunque `/shop`,
+`/cart`, `/checkout`, `/my-account`, coperti solo da `Disallow` in `robots.txt`,
+che impedisce la scansione ma **non l'indicizzazione** di URL linkati
+dall'esterno. `pt_product_sitemap` era inoltre `on`.
 
-Da decidere: se il negozio non serve, disattivare il plugin è più pulito di
-qualsiasi mitigazione SEO. I pagamenti passano da `pac-core` e Stripe, non da
-WooCommerce.
+Il plugin era stato installato per due motivi entrambi decaduti: modellare i
+progetti come prodotti, approccio poi abbandonato, e collegare Stripe. Dopo
+l'estrazione dei pagamenti in `pac-core`, Stripe non passa più da WooCommerce.
+
+WooCommerce e `woocommerce-gateway-stripe` sono stati rimossi. Nel database non
+c'era nulla da preservare: 0 prodotti, 0 ordini, 0 coupon e nessuna pagina Woo
+configurata. Dettaglio della rimozione più sotto.
 
 ### Medio
 
@@ -185,6 +189,37 @@ una description scritta a mano. È un intervento editoriale, elencato sotto.
 I fix non introducono dipendenze e degradano in modo sicuro: se Rank Math viene
 disattivato, i filtri semplicemente non vengono eseguiti.
 
+### Rimozione di WooCommerce — S-06
+
+Rimossi dal repository `wp-content/plugins/woocommerce/` e
+`wp-content/plugins/woocommerce-gateway-stripe/`, per 6.227 file.
+
+Ripulito anche il codice del tema che esisteva solo per contenere WooCommerce:
+
+- eliminato `app/Helpers/woocommerce_helpers.php`, che disattivava pagine, asset
+  e feature del plugin, e rimosso dall'autoload in `composer.json`;
+- rimossi gli hook `disable_woocommerce_features`, `disable_woocommerce_pages`,
+  `disable_woocommerce_assets`, `tp_redirect` e `custom_load_textdomain` da
+  `app/Core/App.php` e `app/Helpers/theme_helpers.php`;
+- rimossa da `ProgettoController` la lettura dei gateway di pagamento Woo e la
+  variabile `pagamenti_disponibili`, che nessuna view usava più dopo il redesign;
+- ripulito `robots.txt` dalle regole diventate morte.
+
+Le chiamate a `\WC()` erano già protette da `function_exists`, quindi la
+rimozione non poteva provocare fatal error. Verificato dopo la rimozione: sette
+template rispondono 200 senza errori PHP, build riuscita, 5 test JS, 20 test PHP
+e 40 test Playwright verdi.
+
+**Ordine obbligatorio in produzione:** disattivare WooCommerce e
+`woocommerce-gateway-stripe` dall'admin **prima** di distribuire questa versione.
+Se i file spariscono mentre i plugin risultano ancora attivi in database,
+WordPress li disattiva da solo ma con un avviso di errore.
+
+Restano in database **20 tabelle `wc_*`** e le directory
+`uploads/wc-logs/`, `uploads/woocommerce_uploads/` e
+`uploads/woocommerce_transient_files/`. Sono inerti e la loro pulizia è una
+scelta di manutenzione separata, da fare solo dopo un backup.
+
 ## Azioni richieste in produzione — non deployabili
 
 Queste sono opzioni nel database WordPress. Il DB locale è un dump e non viene
@@ -197,7 +232,8 @@ promosso, quindi vanno rifatte a mano nell'admin di produzione.
    essere indicizzato. Le due impostazioni devono concordare.
 3. **S-05** — azzerare `pt_post_robots` o allinearlo alla decisione presa in S-04,
    così che il toggle `custom_robots` non nasconda più un `noindex` inatteso.
-4. **S-06** — decidere se WooCommerce serve. Se no, disattivarlo.
+4. **S-06** — disattivare WooCommerce e `woocommerce-gateway-stripe` dall'admin
+   **prima** di distribuire la versione che ne rimuove i file.
 5. **S-08** — caricare un'immagine Open Graph dedicata 1200×630 e impostarla come
    default in `Rank Math → Impostazioni generali → Social`. Verificare in
    produzione che `og:image` venga effettivamente emesso.
