@@ -55,9 +55,7 @@ I flussi principali sono:
   action AJAX, Stripe Payment Element e recupero delle donazioni pendenti.
 - I contenuti strutturati esistenti restano governati da ACF; il redesign non
   richiede nuovi field group per poter funzionare.
-- Il sito contiene pagine IT, EN, FR e DE, ma Polylang non è attivo e le
-  traduzioni dei singoli progetti non sono complete. Le lingue incomplete non
-  devono essere presentate come un flusso pienamente disponibile.
+- Il sito pubblica esclusivamente contenuti in italiano.
 - Contact Form 7 è il form builder attivo per il contatto partnership.
 - Iubenda gestisce il consenso cookie e deve restare operativo.
 - Rank Math è installato ma non attivo; il fallback SEO del tema non deve
@@ -113,7 +111,7 @@ comunità locali e non usare persone o condizioni di fragilità come decorazione
 - Modificare il comportamento pubblico di `pac-core`.
 - Inventare metriche, partner, testimonianze, luoghi, risultati o caption.
 - Introdurre un secondo framework UI o nuove dipendenze evitabili.
-- Riattivare o rifondare il sistema multilingua durante il redesign.
+- Introdurre un sistema multilingua durante il redesign.
 - Trasformare il sito in una dashboard, un'app SaaS o un catalogo e-commerce.
 
 ## Acceptance Criteria

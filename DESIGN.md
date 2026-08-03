@@ -126,7 +126,7 @@ Scala base: 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 112, 144 px.
 ## Header e footer
 
 - Header: lockup PAC, Missioni, Diario, Galleria, Aziende e CTA “Dona ora”.
-- Il selettore lingua appare soltanto quando il runtime espone traduzioni reali.
+- Il sito è solo in italiano e non mostra un selettore lingua.
 - Mobile: logo, CTA, pulsante Menu e drawer accessibile.
 - Footer: brand, missione breve, navigazione, trasparenza/legal, contatti, social e
   CTA. Nessuna newsletter senza backend funzionante.

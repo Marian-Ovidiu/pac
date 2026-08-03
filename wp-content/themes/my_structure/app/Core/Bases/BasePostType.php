@@ -60,12 +60,6 @@ abstract class BasePostType
             'post_status' => 'publish',
         ];
 
-        if (function_exists('pll_current_language')) {
-            $defaults['lang'] = pll_current_language();
-        } else {
-            $defaults['lang'] = 'it';
-        }
-
         $queryArgs = wp_parse_args($args, $defaults);
         $query     = new WP_Query($queryArgs);
 

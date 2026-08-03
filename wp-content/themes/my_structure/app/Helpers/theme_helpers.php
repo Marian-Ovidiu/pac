@@ -138,55 +138,6 @@ if (!function_exists('pac_disable_category_tag_archives')) {
 
 add_action('template_redirect', 'pac_disable_category_tag_archives', 2);
 
-/**
- * Pagine tradotte legacy — vedi docs/priority-8-seo-hardening.md.
- *
- * Il sito è solo in italiano. Le vecchie pagine EN/FR/DE erano irraggiungibili
- * dal frontend ma indicizzabili e presenti in sitemap, dichiarate `lang="it-IT"`
- * e in concorrenza con gli originali italiani. Sono state cestinate, ma la
- * cancellazione vive nel database e non è deployabile: questa regola serve a
- * chiudere le stesse URL anche dove il cestinamento non è ancora stato fatto.
- *
- * 410 e non 404: il contenuto è stato rimosso deliberatamente e non tornerà a
- * quelle URL, e Google deindicizza un 410 più in fretta di un 404.
- *
- * Quando le pagine saranno sparite dall'indice ovunque, questa lista può essere
- * eliminata. Se un giorno il multilingua verrà riattivato, va rimossa prima.
- */
-if (!function_exists('pac_legacy_translated_slugs')) {
-    function pac_legacy_translated_slugs() {
-        return [
-            'homepage-english', 'homepage-francais', 'homepage-deutsch',
-            'projects', 'projets', 'projekte',
-            'companies-english', 'entreprises-francais', 'unternehmen-deutsch',
-            'galleria-english', 'galerie-francais', 'galerie-deutsch',
-            'thank-you', 'merci', 'danke',
-        ];
-    }
-}
-
-if (!function_exists('pac_gone_legacy_translations')) {
-    function pac_gone_legacy_translations() {
-        if (is_admin() || wp_doing_ajax() || wp_doing_cron()) {
-            return;
-        }
-
-        $path = (string) wp_parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
-        $slug = trim($path, '/');
-
-        if ($slug === '' || !in_array($slug, pac_legacy_translated_slugs(), true)) {
-            return;
-        }
-
-        global $wp_query;
-        $wp_query->set_404();
-        status_header(410);
-        nocache_headers();
-    }
-}
-
-add_action('template_redirect', 'pac_gone_legacy_translations', 2);
-
 add_filter('wp_sitemaps_taxonomies', static function ($taxonomies) {
     if (!is_array($taxonomies)) {
         return $taxonomies;

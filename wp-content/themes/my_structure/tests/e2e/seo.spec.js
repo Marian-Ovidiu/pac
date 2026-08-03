@@ -130,10 +130,10 @@ const legacyTranslatedSlugs = [
     'thank-you', 'merci', 'danke',
 ];
 
-test('legacy translated URLs are gone, not merely missing', async ({ request }) => {
+test('removed translated URLs return the standard not-found response', async ({ request }) => {
     for (const slug of legacyTranslatedSlugs) {
         const response = await request.get(`/${slug}/`, { maxRedirects: 0 });
-        expect(response.status(), `/${slug}/ is 410 Gone`).toBe(410);
+        expect(response.status(), `/${slug}/ is 404 Not Found`).toBe(404);
     }
 });
 

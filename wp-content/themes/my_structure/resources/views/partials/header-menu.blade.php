@@ -17,13 +17,6 @@
         $primaryItems[] = $item;
     }
 
-    $languages = [];
-    if (function_exists('pll_get_the_languages')) {
-        $rawLanguages = pll_get_the_languages(['raw' => 1, 'hide_if_empty' => 1]);
-        if (is_array($rawLanguages) && count($rawLanguages) > 1) {
-            $languages = array_values(array_filter($rawLanguages, static fn($language) => !empty($language['url'])));
-        }
-    }
 @endphp
 
 <header class="site-header" x-data="mobileNavigation">
@@ -56,22 +49,6 @@
         </nav>
 
         <div class="site-header__actions">
-            @if(!empty($languages))
-                <div class="language-switcher">
-                    <button type="button" class="language-switcher__trigger" aria-haspopup="true">
-                        {{ strtoupper(pll_current_language('slug')) }}
-                    </button>
-                    <ul>
-                        @foreach($languages as $language)
-                            <li>
-                                <a href="{{ esc_url($language['url']) }}" lang="{{ esc_attr($language['slug']) }}" @if(!empty($language['current_lang'])) aria-current="page" @endif>
-                                    {{ strtoupper($language['slug']) }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
             <a class="button site-header__donate" href="{{ esc_url($missionsUrl) }}">Dona ora</a>
             <button
                 type="button"
@@ -125,15 +102,6 @@
             </nav>
             <div class="mobile-navigation__bottom">
                 <a class="button button--light" href="{{ esc_url($missionsUrl) }}">Sostieni una missione</a>
-                @if(!empty($languages))
-                    <div class="mobile-navigation__languages" aria-label="Lingue disponibili">
-                        @foreach($languages as $language)
-                            <a href="{{ esc_url($language['url']) }}" lang="{{ esc_attr($language['slug']) }}" @if(!empty($language['current_lang'])) aria-current="page" @endif>
-                                {{ strtoupper($language['slug']) }}
-                            </a>
-                        @endforeach
-                    </div>
-                @endif
             </div>
         </div>
     </div>

@@ -237,7 +237,6 @@ if (!function_exists('theme_mission_media')) {
     function theme_mission_media($mission, $image = null) {
         $missionId = is_object($mission) && isset($mission->id) ? (int) $mission->id : 0;
         $slug = $missionId > 0 ? (string) get_post_field('post_name', $missionId) : '';
-        $caption = 'Immagine illustrativa generata con IA.';
         $assets = [
             'sociale-nigeria' => [
                 'asset' => 'pac-mission-community-table-illustrative',
@@ -262,7 +261,7 @@ if (!function_exists('theme_mission_media')) {
         }
 
         $definition = $assets[$slug];
-        return theme_media_or_generated($image, $definition['asset'], $definition['alt'], $caption);
+        return theme_media_or_generated($image, $definition['asset'], $definition['alt']);
     }
 }
 

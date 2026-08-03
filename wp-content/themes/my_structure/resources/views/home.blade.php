@@ -9,8 +9,7 @@
     $heroImage = theme_media_or_generated(
         $data->immagine_1 ?? null,
         'pac-home-hero-illustrative',
-        'Paesaggio illustrativo con sentiero tra erbe e un’acacia.',
-        'Immagine illustrativa generata con IA.'
+        'Paesaggio illustrativo con sentiero tra erbe e un’acacia.'
     );
 @endphp
 @extends('layouts.mainLayout')

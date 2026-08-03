@@ -248,7 +248,12 @@ sparite dall'indice si può eliminare, e va rimossa comunque se il multilingua
 verrà riattivato.
 
 Dopo l'intervento `page-sitemap.xml` elenca **quattro sole pagine italiane**.
-Polylang resta installato ma disattivo: non ha effetti SEO e non è stato toccato.
+Decisione aggiornata il 2026-08-03: il sito è definitivamente monolingua. Le
+pagine e i progetti tradotti sono stati eliminati, insieme alle tassonomie e alle
+opzioni Polylang; il plugin e le dipendenze `pll_*` sono stati rimossi dal
+repository. La procedura ripetibile per la produzione è
+`scripts/remove-polylang-data.php`, da eseguire prima in dry-run e poi con
+`--apply` dopo un backup del database.
 
 Restano in database **20 tabelle `wc_*`** e le directory
 `uploads/wc-logs/`, `uploads/woocommerce_uploads/` e

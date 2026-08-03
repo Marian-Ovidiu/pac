@@ -11,7 +11,6 @@ const routes = [
     ['thanks', '/grazie/', 1],
 ];
 const widths = [320, 390, 768, 1024, 1440];
-const aiCaption = 'Immagine illustrativa generata con IA.';
 
 test.beforeEach(async ({ context }) => {
     await context.route('**/*', async (route) => {
@@ -99,9 +98,7 @@ for (const width of widths) {
                 expect(media.imageHeight, `${media.asset} image height`).toBeGreaterThanOrEqual(media.frameHeight - 1);
             }
 
-            if (name === 'home' || name === 'missions' || name === 'mission') {
-                await expect(page.getByText(aiCaption, { exact: true }).first()).toBeVisible();
-            }
+            await expect(page.locator('[data-generated-illustrative="true"] figcaption')).toHaveCount(0);
             if (name === 'companies') {
                 await expect(generated.locator('img')).toHaveAttribute('alt', '');
             }

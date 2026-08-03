@@ -6,9 +6,9 @@ Data inventario: 2026-07-30. Baseline visuale approvata: “Quaderno di campo �
 
 Gli asset generati in questa run sono temporanei e illustrativi. Non costituiscono
 prova di attività PAC, non sostituiscono fotografie autentiche e non ricevono
-luogo, data, nome di persona o progetto non verificati. Quando un'immagine
-fotorealistica inserita accanto a una missione può essere interpretata come prova,
-la caption obbligatoria è: **“Immagine illustrativa generata con IA.”**
+luogo, data, nome di persona o progetto non verificati. Il tema non aggiunge
+didascalie tecniche automatiche sotto questi media; resta obbligatorio un testo
+alternativo coerente con la funzione informativa o decorativa dell'immagine.
 
 ## Linguaggio visivo condiviso
 
@@ -189,8 +189,8 @@ Eseguita con PHP 8.3.31 e server integrato su `127.0.0.1:8080`:
 - conteggio degli asset generati per template rispettato: 5 in Home, 5
   nell'archivio missioni, 1 in missione, aziende e grazie, 0 in galleria, diario
   e articolo, dove restano richiesti media autentici;
-- caption "Immagine illustrativa generata con IA." presente su Home, archivio e
-  missione; `alt=""` confermato sugli asset decorativi di aziende e grazie;
+- nessuna didascalia tecnica automatica sotto gli asset illustrativi; `alt=""`
+  confermato sugli asset decorativi di aziende e grazie;
 - AccessLint WCAG A/AA senza violazioni sui template principali.
 
 Web vitals locali desktop, non equivalenti a Lighthouse su staging:

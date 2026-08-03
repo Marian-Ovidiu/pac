@@ -56,8 +56,7 @@ Gli asset in `wp-content/themes/my_structure/assets/media/generated/` sono
 
 - gli slot documentali (galleria, featured image del diario) non ricevono
   immagini generate, mai: usano il fallback PAC finché non arrivano foto reali;
-- gli asset fotorealistici accanto a una missione portano la caption
-  "Immagine illustrativa generata con IA.";
+- gli asset illustrativi non mostrano didascalie tecniche automatiche;
 - gli asset puramente decorativi (aziende, grazie) hanno `alt=""`;
 - gli ACF reali hanno sempre la precedenza tramite `theme_media_or_generated()`.
 
@@ -70,8 +69,7 @@ riproducibili identici dai prompt: vanno conservati fuori dal repository.
   DOM/AJAX del form donazione va preservato.
 - Nessuna metrica o dato viene mostrato come reale se non proviene da contenuto
   verificato.
-- Il selettore lingua resta nascosto finché Polylang non restituisce permalink
-  tradotti reali.
+- Il sito pubblica esclusivamente contenuti in italiano.
 - Gli asset Vite in `public/` restano versionati; `resources/cache/`,
   `test-results/` e `playwright-report/` no.
 
