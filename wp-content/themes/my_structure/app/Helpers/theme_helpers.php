@@ -155,3 +155,51 @@ add_filter('rank_math/sitemap/exclude_taxonomy', static function ($exclude, $typ
 
     return $exclude;
 }, 10, 2);
+
+if (!function_exists('pac_localized_document_title')) {
+    function pac_localized_document_title($title) {
+        if (is_404()) {
+            return 'Pagina non trovata — PAC';
+        }
+
+        if (is_search()) {
+            $query = get_search_query();
+            return $query !== ''
+                ? sprintf('Risultati per “%s” — PAC', $query)
+                : 'Ricerca — PAC';
+        }
+
+        return $title;
+    }
+}
+
+add_filter('pre_get_document_title', 'pac_localized_document_title', 20);
+add_filter('rank_math/frontend/title', 'pac_localized_document_title', 20);
+
+if (!function_exists('pac_label_company_contact_form')) {
+    function pac_label_company_contact_form($content) {
+        if (!is_page_template('template-aziende.php')) {
+            return $content;
+        }
+
+        foreach (['your-name', 'your-email', 'tel-212', 'rs', 'your-message'] as $fieldName) {
+            $pattern = sprintf(
+                '/<(input|textarea)(?![^>]*\bid=)([^>]*\bname=["\']%s["\'])/i',
+                preg_quote($fieldName, '/')
+            );
+            $content = preg_replace($pattern, '<$1 id="' . $fieldName . '"$2', $content, 1);
+        }
+
+        return $content;
+    }
+}
+
+add_filter('wpcf7_form_elements', 'pac_label_company_contact_form', 20);
+
+add_filter('wpcf7_form_additional_atts', static function ($attributes) {
+    if (is_page_template('template-aziende.php')) {
+        $attributes['aria-label'] = 'Modulo contatto aziende';
+    }
+
+    return $attributes;
+}, 20);

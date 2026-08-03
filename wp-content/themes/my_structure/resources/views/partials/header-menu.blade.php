@@ -1,120 +1,140 @@
 @php
     $options = \Models\Options\OpzioniGlobaliFields::get();
-    $logoUrl = $options->logo['url'] ?? null;
-    $dispatchNumber = '47';
-    $dispatchDate = date_i18n('M Y');
+    $missionsUrl = home_url('/4-progetti-antibracconaggio-sociale/');
+    $primaryItems = [];
+
+    foreach ($menu as $item) {
+        $haystack = strtolower(($item->title ?? '') . ' ' . ($item->url ?? ''));
+        if (str_contains($haystack, 'home')) {
+            continue;
+        }
+        if (str_contains($haystack, 'progett')) {
+            $item->display_title = 'Missioni';
+            $missionsUrl = $item->url ?: $missionsUrl;
+        } else {
+            $item->display_title = $item->title;
+        }
+        $primaryItems[] = $item;
+    }
+
+    $languages = [];
+    if (function_exists('pll_get_the_languages')) {
+        $rawLanguages = pll_get_the_languages(['raw' => 1, 'hide_if_empty' => 1]);
+        if (is_array($rawLanguages) && count($rawLanguages) > 1) {
+            $languages = array_values(array_filter($rawLanguages, static fn($language) => !empty($language['url'])));
+        }
+    }
 @endphp
 
-<header class="ui-site-header ui-dispatch-header">
-    <div class="ui-dispatch-header__bar">
-        <div class="ui-container ui-dispatch-header__inner">
-            <a href="{{ home_url('/') }}" title="{{ __('Home', 'my_structure') }}" class="ui-dispatch-brand">
-                @if ($logoUrl)
-                    <span class="ui-dispatch-brand__mark">
-                        <img src="{{ $logoUrl }}" alt="Project Africa Conservation logo" />
-                    </span>
-                @endif
-                <span class="ui-dispatch-brand__copy">
-                    <span class="ui-dispatch-brand__name">PAC</span>
-                    <span class="ui-dispatch-brand__tag">Project Africa Conservation</span>
-                </span>
-            </a>
+<header class="site-header" x-data="mobileNavigation">
+    <div class="site-container site-header__inner">
+        <a href="{{ esc_url(home_url('/')) }}" class="site-header__brand" aria-label="PAC Project Africa Conservation — torna alla Home">
+            @include('components.brand-lockup', ['options' => $options])
+        </a>
 
-            <nav class="ui-dispatch-nav" aria-label="Navigazione principale">
-                <ul class="ui-dispatch-nav__list">
-                    @foreach ($menu as $item)
-                        @php
-                            $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
-                            $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
-                            $haystack = strtolower(($item->title ?? '') . ' ' . ($item->url ?? ''));
-                            $isDonate = strpos($haystack, 'dona') !== false || strpos($haystack, 'donat') !== false;
-                        @endphp
-                        <li class="ui-dispatch-nav__item group">
-                            <a
-                                href="{{ $item->url }}"
-                                class="ui-dispatch-nav__link {{ $isDonate ? 'ui-dispatch-nav__link--cta' : '' }}"
-                                @if($isCurrent) aria-current="page" @endif
-                                @if(!empty($item->children)) aria-haspopup="true" @endif>
-                                {{ $isDonate ? __('Fund an operation', 'my_structure') : $item->title }}
-                                @if($isDonate)
-                                    <span aria-hidden="true">-&gt;</span>
-                                @endif
-                            </a>
-                            @if (!empty($item->children))
-                                <ul class="ui-header-submenu">
-                                    @foreach ($item->children as $subitem)
-                                        @php
-                                            $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
-                                            $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
-                                        @endphp
-                                        <li>
-                                            <a href="{{ $subitem->url }}" class="ui-header-submenu__link" @if($isSubCurrent) aria-current="page" @endif>
-                                                {{ $subitem->title }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </li>
-                    @endforeach
-                </ul>
-            </nav>
+        <nav class="desktop-navigation" aria-label="Navigazione principale">
+            <ul>
+                @foreach($primaryItems as $item)
+                    @php
+                        $classes = is_array($item->classes ?? null) ? $item->classes : [];
+                        $isCurrent = in_array('current-menu-item', $classes, true) || in_array('current_page_item', $classes, true);
+                    @endphp
+                    <li>
+                        <a href="{{ esc_url($item->url) }}" @if($isCurrent) aria-current="page" @endif>
+                            {{ $item->display_title }}
+                        </a>
+                        @if(!empty($item->children))
+                            <ul class="desktop-navigation__submenu">
+                                @foreach($item->children as $child)
+                                    <li><a href="{{ esc_url($child->url) }}">{{ $child->title }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        </nav>
 
-            <details class="ui-mobile-nav-disclosure ui-dispatch-mobile lg:hidden">
-                <summary
-                    class="ui-dispatch-mobile__summary"
-                    aria-controls="mobile-primary-menu"
-                    aria-label="Apri o chiudi menu principale">
-                    Menu
-                </summary>
-                <nav id="mobile-primary-menu" class="ui-mobile-menu" aria-label="Navigazione mobile">
-                    <ul class="ui-mobile-menu__list">
-                        @foreach ($menu as $item)
-                            @php
-                                $itemClasses = is_array($item->classes ?? null) ? $item->classes : [];
-                                $isCurrent = in_array('current-menu-item', $itemClasses, true) || in_array('current_page_item', $itemClasses, true);
-                                $hasChildren = !empty($item->children);
-                            @endphp
-                            <li class="ui-mobile-menu__item">
-                                <a
-                                    href="{{ $item->url }}"
-                                    class="ui-mobile-menu__link"
-                                    @if($isCurrent) aria-current="page" @endif
-                                    @if($hasChildren) aria-haspopup="true" @endif>
-                                    <span>{{ $item->title }}</span>
-                                    @if($hasChildren)
-                                        <span class="ui-mobile-menu__count">{{ count($item->children) }}</span>
-                                    @endif
+        <div class="site-header__actions">
+            @if(!empty($languages))
+                <div class="language-switcher">
+                    <button type="button" class="language-switcher__trigger" aria-haspopup="true">
+                        {{ strtoupper(pll_current_language('slug')) }}
+                    </button>
+                    <ul>
+                        @foreach($languages as $language)
+                            <li>
+                                <a href="{{ esc_url($language['url']) }}" lang="{{ esc_attr($language['slug']) }}" @if(!empty($language['current_lang'])) aria-current="page" @endif>
+                                    {{ strtoupper($language['slug']) }}
                                 </a>
-                                @if ($hasChildren)
-                                    <ul class="ui-mobile-menu__submenu">
-                                        @foreach ($item->children as $subitem)
-                                            @php
-                                                $subitemClasses = is_array($subitem->classes ?? null) ? $subitem->classes : [];
-                                                $isSubCurrent = in_array('current-menu-item', $subitemClasses, true) || in_array('current_page_item', $subitemClasses, true);
-                                            @endphp
-                                            <li>
-                                                <a href="{{ $subitem->url }}" class="ui-mobile-menu__sublink" @if($isSubCurrent) aria-current="page" @endif>
-                                                    {{ $subitem->title }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
                             </li>
                         @endforeach
                     </ul>
-                </nav>
-            </details>
+                </div>
+            @endif
+            <a class="button site-header__donate" href="{{ esc_url($missionsUrl) }}">Dona ora</a>
+            <button
+                type="button"
+                class="menu-trigger"
+                x-ref="trigger"
+                @click="show()"
+                :aria-expanded="open.toString()"
+                aria-controls="mobile-navigation">
+                <span>Menu</span>
+                <span class="menu-trigger__lines" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 
-    <div class="ui-dispatch-ticker" aria-label="Metriche operative">
-        <div class="ui-container ui-dispatch-ticker__inner">
-            <span>Field Dispatch #{{ $dispatchNumber }}</span>
-            <span>847 km&#178; sotto pattuglia attiva</span>
-            <span>3 unit&#224; K-9 operative</span>
-            <span>{{ $dispatchDate }}</span>
+    <div
+        id="mobile-navigation"
+        class="mobile-navigation"
+        x-cloak
+        x-show="open"
+        x-transition.opacity.duration.300ms
+        @keydown="handleKeydown($event)"
+        @click.self="close()"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu principale">
+        <div class="mobile-navigation__panel" x-ref="panel">
+            <div class="mobile-navigation__top">
+                @include('components.brand-lockup', ['options' => $options])
+                <button type="button" class="mobile-navigation__close" @click="close()">Chiudi</button>
+            </div>
+            <nav aria-label="Navigazione mobile">
+                <ul class="mobile-navigation__list">
+                    @foreach($primaryItems as $item)
+                        @if(!empty($item->children))
+                            <li>
+                                <details>
+                                    <summary>{{ $item->display_title }}</summary>
+                                    <ul>
+                                        <li><a href="{{ esc_url($item->url) }}">Tutte le missioni</a></li>
+                                        @foreach($item->children as $child)
+                                            <li><a href="{{ esc_url($child->url) }}">{{ $child->title }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </details>
+                            </li>
+                        @else
+                            <li><a href="{{ esc_url($item->url) }}">{{ $item->display_title }}</a></li>
+                        @endif
+                    @endforeach
+                </ul>
+            </nav>
+            <div class="mobile-navigation__bottom">
+                <a class="button button--light" href="{{ esc_url($missionsUrl) }}">Sostieni una missione</a>
+                @if(!empty($languages))
+                    <div class="mobile-navigation__languages" aria-label="Lingue disponibili">
+                        @foreach($languages as $language)
+                            <a href="{{ esc_url($language['url']) }}" lang="{{ esc_attr($language['slug']) }}" @if(!empty($language['current_lang'])) aria-current="page" @endif>
+                                {{ strtoupper($language['slug']) }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </header>

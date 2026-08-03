@@ -19,17 +19,17 @@ class ProgettoController extends BaseController
         }
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
         $opzioniArchivio = OpzioniArchivioProgettoFields::get('option');
-        // wp_localize_script: global `highlights` (stesso nome di PageController::galleria). La view passa ancora l’array inline a typingEffect().
-        $this->addVarJs('main', 'highlights', [
-            $opzioniArchivio->highlights_frase_1 ?? '',
-            $opzioniArchivio->highlights_frase_2 ?? '',
-            $opzioniArchivio->highlights_frase_3 ?? '',
-        ], true, 1.0);
-
         $this->render('archivio-progetto', [
             'progetti'              => $progetti,
             'pagamenti_disponibili' => $available_gateways,
             'opzioniArchivio'       => $opzioniArchivio,
+            'latestPosts'            => get_posts([
+                'post_type' => 'post',
+                'post_status' => 'publish',
+                'posts_per_page' => 2,
+                'orderby' => 'date',
+                'order' => 'DESC',
+            ]),
         ]);
     }
 
@@ -57,6 +57,13 @@ class ProgettoController extends BaseController
         $this->render('single-progetto', [
             'progetto'              => Progetto::find(get_the_ID()),
             'pagamenti_disponibili' => $available_gateways,
+            'latestPosts'            => get_posts([
+                'post_type' => 'post',
+                'post_status' => 'publish',
+                'posts_per_page' => 2,
+                'orderby' => 'date',
+                'order' => 'DESC',
+            ]),
         ]);
     }
 }

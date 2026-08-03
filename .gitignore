@@ -16,6 +16,11 @@ create_autologin_*.php
 Thumbs.db
 wp-content/themes/my_structure/.claude/
 
+# Agent tooling installed locally, not project source.
+# .codex/ and .impeccable/critique/ stay versioned: sono citati dai piani in docs/.
+.claude/
+.agents/
+
 # Logs
 *.log
 wp-content/debug.log
@@ -47,3 +52,9 @@ wp-content/mu-plugins/
 wp-content/themes/my_structure/resources/cache/
 wp-content/themes/my_structure/test-results/
 wp-content/themes/my_structure/playwright-report/
+
+# Master 4:3 degli asset illustrativi generati: circa 51 MB di PNG che servono
+# solo a rigenerare i crop. I derivati serviti dal tema restano versionati in
+# wp-content/themes/my_structure/assets/media/generated/.
+# I master non sono riproducibili identici dai prompt: vanno conservati fuori dal repo.
+assets/masters/

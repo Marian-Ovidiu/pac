@@ -1,146 +1,107 @@
-@extends('layouts.mainLayout')
-@section('content')
 @php
-    $img          = $opzioniArchivio->immagine_hero ?? [];
-    $heroTitle    = $opzioniArchivio->titolo_hero   ?? 'Operazioni sul campo.';
-    $heroText     = $opzioniArchivio->testo_sotto_hero ?? '';
-    $count        = count($progetti);
-
-    $typingTitoli = array_values(array_filter([
+    $missions = array_values($progetti ?? []);
+    $missionCount = count($missions);
+    $heroTitle = wp_strip_all_tags($opzioniArchivio->titolo_hero ?? 'Ogni progetto, una missione.');
+    $areas = array_values(array_filter([
         $opzioniArchivio->highlights_frase_1 ?? null,
         $opzioniArchivio->highlights_frase_2 ?? null,
         $opzioniArchivio->highlights_frase_3 ?? null,
     ]));
 @endphp
+@extends('layouts.mainLayout')
 
-{{-- ── HERO ─────────────────────────────────────────────── --}}
-<section class="fd-archive-hero" aria-labelledby="fd-archive-title">
-    <div class="ui-container fd-archive-hero__inner">
-
-        <div class="fd-archive-hero__copy">
-            <span class="fd-label">Archivio operazioni</span>
-
-            <h1 class="fd-archive-hero__title" id="fd-archive-title">
-                {!! $heroTitle !!}
-            </h1>
-
-            @if(!empty($typingTitoli))
-                <p class="fd-archive-hero__ticker"
-                   x-data="typingEffect({{ json_encode($typingTitoli) }})"
-                   aria-live="polite"
-                   aria-atomic="true">
-                    <span x-text="displayText"></span>
-                </p>
+@section('content')
+<section class="page-hero">
+    <div class="site-container page-hero__grid">
+        <div class="page-hero__copy">
+            <h1>{{ $heroTitle }}</h1>
+            @if(!empty($opzioniArchivio->testo_sotto_hero))
+                <p class="page-hero__lead">{{ wp_strip_all_tags($opzioniArchivio->testo_sotto_hero) }}</p>
             @endif
+            <a class="button" href="#mission-list">Scegli una missione</a>
+        </div>
+        @include('components.media-figure', [
+            'image' => theme_media_or_generated(
+                $opzioniArchivio->immagine_hero ?? null,
+                'pac-missions-archive-illustrative',
+                '',
+                '',
+                true
+            ),
+            'alt' => '',
+            'ratio' => 'hero',
+            'loading' => 'eager',
+            'class' => 'page-hero__media',
+        ])
+    </div>
+</section>
 
-            @if($heroText)
-                <div class="fd-archive-hero__text">
-                    {!! wp_strip_all_tags($heroText) !!}
-                </div>
-            @endif
+@if(!empty($areas))
+<section class="intervention-areas" aria-labelledby="intervention-areas-title">
+    <div class="site-container intervention-areas__inner">
+        <h2 id="intervention-areas-title">Aree raccontate dalle missioni</h2>
+        <ul>
+            @foreach($areas as $area)<li>{{ $area }}</li>@endforeach
+        </ul>
+    </div>
+</section>
+@endif
 
-            <dl class="fd-archive-hero__stats" aria-label="Numeri operazioni PAC">
-                <div>
-                    <dd>{{ $count }}+</dd>
-                    <dt>Operazioni documentate</dt>
-                </div>
-                <div>
-                    <dd>50k</dd>
-                    <dt>Ettari protetti</dt>
-                </div>
-                <div>
-                    <dd>6</dd>
-                    <dt>Paesi attivi</dt>
-                </div>
-            </dl>
-
-            <a href="#fd-archive-list"
-               class="field-dispatch-button field-dispatch-button--primary fd-archive-hero__cta"
-               aria-label="Scorri all'elenco dei progetti">
-                Scopri le operazioni &#8594;
-            </a>
+<section id="mission-list" class="section" aria-labelledby="mission-list-title">
+    <div class="site-container">
+        <div class="section-heading section-heading--row">
+            <div>
+                <h2 id="mission-list-title">Scegli la missione che vuoi sostenere.</h2>
+                <p>{{ $missionCount }} {{ $missionCount === 1 ? 'missione pubblicata' : 'missioni pubblicate' }}. Ogni scheda usa i contenuti disponibili nel progetto, senza aggiungere risultati non documentati.</p>
+            </div>
         </div>
 
-        @if(!empty($img['url']))
-            <figure class="fd-archive-hero__photo">
-                <img src="{{ esc_url($img['url']) }}"
-                     alt="{{ $img['alt'] ?? $heroTitle }}"
-                     loading="eager"
-                     decoding="async"
-                     width="{{ $img['width'] ?? '' }}"
-                     height="{{ $img['height'] ?? '' }}">
-                <figcaption class="field-dispatch-caption">
-                    <span>Operazioni PAC</span>
-                    <span>{{ $heroTitle }}</span>
-                </figcaption>
-            </figure>
+        @if(!empty($missions))
+            <div class="mission-grid">
+                @foreach($missions as $index => $mission)
+                    @include('components.mission-card', [
+                        'title' => $mission->titolo_card ?: $mission->title,
+                        'summary' => $mission->testo_hero ?: $mission->content,
+                        'need' => $mission->problemi_testo_1,
+                        'action' => $mission->soluzioni_testo_1,
+                        'image' => $mission->immagine_hero ?: $mission->featured_image,
+                        'mission' => $mission,
+                        'url' => get_permalink($mission->id),
+                        'loading' => $index < 2 ? 'eager' : 'lazy',
+                    ])
+                @endforeach
+            </div>
+        @else
+            @include('components.empty-state', [
+                'title' => 'Nessuna missione pubblicata',
+                'text' => 'Consulta il Diario per gli aggiornamenti disponibili.',
+                'actionUrl' => home_url('/diario-di-bordo/'),
+                'actionLabel' => 'Vai al Diario',
+            ])
         @endif
-
     </div>
 </section>
 
-{{-- ── LIST ─────────────────────────────────────────────── --}}
-<section class="fd-archive-list" id="fd-archive-list" aria-label="Elenco operazioni PAC">
-    <div class="ui-container">
-
-        <div class="fd-archive-list__head">
-            <span class="fd-label">{{ $count }} operazioni</span>
-            <p class="fd-archive-list__desc">
-                Ogni scheda rappresenta un impegno concreto sul campo.
-                Anti-bracconaggio, K-9, supporto comunit&#224;, sorveglianza attiva.
-            </p>
+<section class="section section--paper">
+    <div class="site-container transparency-block">
+        <div>
+            <h2>Trasparenza significa poter leggere prima di scegliere.</h2>
+            <p>Ogni pagina missione mette in relazione il bisogno descritto, le azioni proposte e il form dedicato al progetto. Non mostriamo percentuali di allocazione prive di una fonte disponibile.</p>
         </div>
-
-        <ol class="fd-archive-cards" role="list">
-            @foreach($progetti as $index => $progetto)
-                @php
-                    $permalink   = get_permalink($progetto->id);
-                    $num         = str_pad((string)($index + 1), 3, '0', STR_PAD_LEFT);
-                    $thumb       = $progetto->featured_image ?? '';
-                    $thumbAlt    = $progetto->titolo_card ?? 'Operazione PAC';
-                    $excerpt     = wp_trim_words(wp_strip_all_tags($progetto->content ?? ''), 22, '&#8230;');
-                @endphp
-
-                <li class="fd-archive-card {{ $index % 2 === 1 ? 'fd-archive-card--reverse' : '' }}">
-
-                    @if($thumb)
-                        <figure class="fd-archive-card__media">
-                            <a href="{{ esc_url($permalink) }}"
-                               tabindex="-1"
-                               aria-hidden="true">
-                                <img src="{{ esc_url($thumb) }}"
-                                     alt="{{ esc_attr($thumbAlt) }}"
-                                     loading="{{ $index < 2 ? 'eager' : 'lazy' }}"
-                                     decoding="async">
-                            </a>
-                        </figure>
-                    @endif
-
-                    <div class="fd-archive-card__body">
-                        <span class="fd-archive-card__num" aria-hidden="true">#{{ $num }}</span>
-                        <h2 class="fd-archive-card__title">
-                            <a href="{{ esc_url($permalink) }}"
-                               class="fd-archive-card__link">
-                                {{ $progetto->titolo_card }}
-                            </a>
-                        </h2>
-                        @if($excerpt)
-                            <p class="fd-archive-card__excerpt">{{ $excerpt }}</p>
-                        @endif
-                        <a href="{{ esc_url($permalink) }}"
-                           class="fd-archive-card__cta"
-                           aria-label="Scopri operazione: {{ $progetto->titolo_card }}">
-                            Leggi operazione &#8594;
-                        </a>
-                    </div>
-
-                    <span class="fd-archive-card__badge">[ACTIVE]</span>
-
-                </li>
-            @endforeach
-        </ol>
-
+        <a class="button button--secondary" href="{{ esc_url(home_url('/diario-di-bordo/')) }}">Leggi gli aggiornamenti</a>
     </div>
 </section>
 
-@stop
+@if(!empty($latestPosts))
+<section class="section" aria-labelledby="project-journal-title">
+    <div class="site-container">
+        <div class="section-heading"><h2 id="project-journal-title">Dal Diario di bordo</h2><p>Gli ultimi contenuti pubblicati da PAC.</p></div>
+        <div class="article-grid">
+            @foreach($latestPosts as $post)
+                @include('components.article-teaser', ['post' => $post])
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+@endsection

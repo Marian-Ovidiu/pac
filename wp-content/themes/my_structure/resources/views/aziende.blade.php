@@ -1,255 +1,124 @@
 @php
-    /**
-     * @var Models\AziendeFields $fields
-     */
-    $normalizeImage = static function ($image) {
-        if (is_array($image)) {
-            return $image;
-        }
-
-        if (is_numeric($image)) {
-            $imageId = (int) $image;
-            $src = wp_get_attachment_image_src($imageId, 'full');
-
-            if (!$src) {
-                return [];
-            }
-
-            return [
-                'url' => $src[0],
-                'width' => $src[1] ?? null,
-                'height' => $src[2] ?? null,
-                'alt' => get_post_meta($imageId, '_wp_attachment_image_alt', true),
-                'title' => get_the_title($imageId),
-                'caption' => wp_get_attachment_caption($imageId),
-                'description' => get_post_field('post_content', $imageId),
-            ];
-        }
-
-        if (is_string($image) && filter_var($image, FILTER_VALIDATE_URL)) {
-            return ['url' => $image];
-        }
-
-        return [];
-    };
-
-    $heroImage = $normalizeImage($fields->immagine_hero ?? null);
-    $bannerImage = $normalizeImage($fields->immagine_banner ?? null);
-
-    $partnerBenefits = [
-        [
-            'number' => '01',
-            'title' => 'Impatto reale e misurabile',
-            'text' => 'I fondi vengono destinati ai progetti sul campo, con aggiornamenti chiari e trasparenza sull’avanzamento.',
-        ],
-        [
-            'number' => '02',
-            'title' => 'Visibilita e reputazione',
-            'text' => 'Il tuo brand entra nella comunicazione ufficiale PAC, rafforzando un posizionamento positivo e credibile.',
-        ],
-        [
-            'number' => '03',
-            'title' => 'Valore sociale',
-            'text' => 'Clienti, collaboratori e comunita vedono un impegno concreto verso un futuro piu giusto e sostenibile.',
-        ],
-    ];
-
+    /** @var Models\AziendeFields $fields */
+    $contactEmail = 'info@project-africa-conservation.org';
     $collaborationWays = [
-        [
-            'title' => 'Donazioni dirette',
-            'text' => 'Sostieni finanziariamente uno o piu progetti specifici, con obiettivi chiari e rendicontazione.',
-        ],
-        [
-            'title' => 'Sponsorizzazioni',
-            'text' => 'Associa il tuo brand a una missione PAC e rendi visibile il contributo nei materiali di progetto.',
-        ],
-        [
-            'title' => 'Eventi aziendali solidali',
-            'text' => 'Coinvolgi team, clienti o stakeholder in raccolte fondi, campagne interne ed eventi dedicati.',
-        ],
+        ['title' => 'Contributo a una missione', 'text' => 'Scegliere insieme un progetto pubblicato e definire una forma di sostegno coerente con il bisogno descritto.'],
+        ['title' => 'Iniziativa condivisa', 'text' => 'Valutare una raccolta fondi o un’attività aziendale collegata a una missione PAC.'],
+        ['title' => 'Supporto continuativo', 'text' => 'Aprire un confronto su una collaborazione nel tempo e sulle modalità di aggiornamento disponibili.'],
     ];
-
-    $impactItems = [
-        ['value' => 'Scuole', 'label' => 'spazi educativi e strutture locali'],
-        ['value' => 'Materiali', 'label' => 'strumenti didattici e beni essenziali'],
-        ['value' => 'Ranger', 'label' => 'supporto operativo sul territorio'],
-        ['value' => 'Comunita', 'label' => 'azioni concrete per famiglie e bambini'],
+    $processSteps = [
+        ['title' => 'Raccontaci la proposta', 'text' => 'Obiettivi, disponibilità e missioni di interesse aiutano a inquadrare la richiesta.'],
+        ['title' => 'Verifichiamo il perimetro', 'text' => 'PAC valuta coerenza, fattibilità e contenuti effettivamente disponibili.'],
+        ['title' => 'Definiamo le modalità', 'text' => 'Contributo, comunicazione e aggiornamenti vengono concordati prima dell’avvio.'],
+        ['title' => 'Manteniamo il contatto', 'text' => 'La relazione prosegue attraverso i canali e i materiali realmente concordati.'],
     ];
 @endphp
 @extends('layouts.mainLayout')
+
 @section('content')
-    <section class="companies-hero">
-        <div class="companies-hero__overlay" aria-hidden="true"></div>
-
-        <div class="ui-container">
-            <div class="companies-hero__layout">
-                <div class="companies-hero__content">
-                    <span class="companies-kicker companies-kicker--light">Partnership aziendali</span>
-                    <h1>{{ $fields->hero_titolo ?: 'Collaboriamo per il Futuro dell’Africa' }}</h1>
-                    <div class="companies-hero__text">
-                        {!! $fields->hero_sottotitolo !!}
-                    </div>
-                    <div class="companies-hero__actions">
-                        <a href="#companies-contact" class="companies-button companies-button--primary">Diventa azienda partner</a>
-                        <a href="#companies-how" class="companies-button companies-button--secondary">Scopri come collaborare</a>
-                    </div>
-                    <dl class="companies-hero__proof" aria-label="Valori della partnership PAC">
-                        <div>
-                            <dt>Trasparenza</dt>
-                            <dd>aggiornamenti sui progetti</dd>
-                        </div>
-                        <div>
-                            <dt>Impatto</dt>
-                            <dd>azioni sul campo</dd>
-                        </div>
-                        <div>
-                            <dt>Valore</dt>
-                            <dd>CSR e reputazione</dd>
-                        </div>
-                    </dl>
-                </div>
-
-                @if(!empty($heroImage['url']))
-                    <figure class="companies-hero__media">
-                        <img
-                            src="{{ $heroImage['url'] }}"
-                            alt="{{ $heroImage['alt'] ?? ($fields->hero_titolo ?? 'Aziende') }}"
-                            class="companies-hero__image"
-                            loading="eager"
-                            decoding="async" />
-                        <figcaption>
-                            <span>Partnership PAC</span>
-                            <strong>Fiducia, rispetto e impatto condiviso</strong>
-                        </figcaption>
-                    </figure>
-                @endif
+<section class="page-hero page-hero--companies">
+    <div class="site-container page-hero__grid">
+        <div class="page-hero__copy">
+            <h1>{{ $fields->hero_titolo ?: 'Costruiamo collaborazioni legate a missioni reali.' }}</h1>
+            <p class="page-hero__lead">{{ wp_strip_all_tags($fields->hero_sottotitolo ?: 'Se la tua azienda vuole sostenere PAC, partiamo dagli obiettivi, dai progetti pubblicati e da ciò che possiamo documentare insieme.') }}</p>
+            <div class="page-hero__actions">
+                <a class="button" href="#partner-contact">Proponi una collaborazione</a>
+                <a class="text-link text-link--large" href="#collaboration-ways">Scopri le modalità <span aria-hidden="true">↓</span></a>
             </div>
         </div>
-    </section>
+        @include('components.media-figure', [
+            'image' => theme_media_or_generated(
+                $fields->immagine_hero ?? null,
+                'pac-companies-collaboration-illustrative',
+                '',
+                '',
+                true
+            ),
+            'alt' => '',
+            'ratio' => 'hero',
+            'loading' => 'eager',
+            'class' => 'page-hero__media',
+        ])
+    </div>
+</section>
 
-    <section class="companies-benefits">
-        <div class="ui-container">
-            <div class="companies-section-head">
-                <span class="companies-kicker">Perche scegliere PAC</span>
-                <h2>{{ $fields->perche_titolo ?: 'Perché collaborare con noi?' }}</h2>
-                <p>Una partnership PAC unisce responsabilita sociale, benefici reputazionali e risultati concreti per persone, fauna e territori.</p>
-            </div>
-
-            <div class="companies-benefits__grid">
-                @foreach($partnerBenefits as $benefit)
-                    <article class="companies-benefit-card">
-                        <span>{{ $benefit['number'] }}</span>
-                        <h3>{{ $benefit['title'] }}</h3>
-                        <p>{{ $benefit['text'] }}</p>
-                    </article>
-                @endforeach
-            </div>
+<section id="collaboration-ways" class="section section--paper" aria-labelledby="collaboration-ways-title">
+    <div class="site-container editorial-split">
+        <div class="section-heading">
+            <h2 id="collaboration-ways-title">{{ $fields->come_titolo ?: 'Tre modi per iniziare il confronto.' }}</h2>
+            <p>{{ wp_strip_all_tags($fields->come_testo ?: 'La forma della collaborazione dipende dalla missione, dalle risorse disponibili e dagli obiettivi condivisi.') }}</p>
         </div>
-    </section>
-
-    <section id="companies-how" class="companies-how">
-        <div class="ui-container">
-            <div class="companies-how__layout">
-                <figure class="companies-how__media">
-                    @if(!empty($bannerImage['url']))
-                        <img
-                            src="{{ $bannerImage['url'] }}"
-                            alt="{{ $bannerImage['alt'] ?? 'Elefante africano nella savana' }}"
-                            title="{{ $bannerImage['title'] ?? '' }}"
-                            loading="lazy"
-                            decoding="async" />
-                    @endif
-                    <figcaption>
-                        <span>Partnership PAC</span>
-                        <strong>Conservazione, educazione e comunita</strong>
-                    </figcaption>
-                </figure>
-
-                <div class="companies-how__content">
-                    <span class="companies-kicker">Modalita di collaborazione</span>
-                    <h2>{{ $fields->come_titolo ?: 'Come la tua azienda può aiutare?' }}</h2>
-                    <p>Ogni azienda puo costruire una forma di supporto coerente con obiettivi, valori e capacita di coinvolgimento.</p>
-
-                    <div class="companies-how__items">
-                        @foreach($collaborationWays as $index => $way)
-                            <article>
-                                <span>{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
-                                <div>
-                                    <h3>{{ $way['title'] }}</h3>
-                                    <p>{{ $way['text'] }}</p>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-
-                    <a href="#companies-contact" class="companies-inline-link">Scopri le modalita <span aria-hidden="true">&rarr;</span></a>
-                </div>
-            </div>
+        <div class="editorial-rows">
+            @foreach($collaborationWays as $way)
+                <article><h3>{{ $way['title'] }}</h3><p>{{ $way['text'] }}</p></article>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="companies-impact">
-        <div class="ui-container">
-            <div class="companies-impact__intro">
-                <span class="companies-kicker companies-kicker--light">Dove va il tuo supporto</span>
-                <h2>Dal contributo aziendale a risultati concreti.</h2>
-                <p>Colleghiamo ogni partnership a bisogni reali: educazione, protezione della fauna, supporto ai ranger e sviluppo delle comunita locali.</p>
-            </div>
-
-            <div class="companies-impact__grid">
-                @foreach($impactItems as $item)
-                    <article>
-                        <strong>{{ $item['value'] }}</strong>
-                        <span>{{ $item['label'] }}</span>
-                    </article>
-                @endforeach
-            </div>
+<section class="section" aria-labelledby="partner-process-title">
+    <div class="site-container">
+        <div class="section-heading">
+            <h2 id="partner-process-title">Dal primo contatto a un accordo chiaro.</h2>
+            <p>Il processo serve a evitare promesse generiche e a collegare ogni proposta a contenuti e attività verificabili.</p>
         </div>
-    </section>
+        <ol class="process-list">
+            @foreach($processSteps as $step)
+                <li><h3>{{ $step['title'] }}</h3><p>{{ $step['text'] }}</p></li>
+            @endforeach
+        </ol>
+    </div>
+</section>
 
-    <section class="companies-trust">
-        <div class="ui-container">
-            <div class="companies-trust__panel">
-                <div>
-                    <span class="companies-kicker">Trust & accountability</span>
-                    <h2>Una collaborazione seria, chiara, rendicontabile.</h2>
-                </div>
-                <p>Il nostro obiettivo e costruire partnership sostenibili nel tempo: definiamo insieme priorita, messaggi, modalita di coinvolgimento e aggiornamenti da condividere con stakeholder, team e clienti.</p>
-                <div class="companies-trust__logos" aria-label="Spazi logo partner">
-                    <span>Partner</span>
-                    <span>CSR</span>
-                    <span>Impact</span>
-                    <span>PAC</span>
-                </div>
-            </div>
+<section class="section section--forest" aria-labelledby="partner-transparency-title">
+    <div class="site-container editorial-split">
+        <div><h2 id="partner-transparency-title">Visibilità soltanto su basi concordate.</h2></div>
+        <div>
+            <p>Loghi, risultati e materiali di collaborazione vengono pubblicati dopo un accordo reale e con l’autorizzazione delle parti coinvolte. Le missioni disponibili sono il riferimento per iniziare un confronto concreto.</p>
+            <a class="text-link text-link--light" href="{{ esc_url(home_url('/4-progetti-antibracconaggio-sociale/')) }}">Consulta le missioni pubblicate <span aria-hidden="true">→</span></a>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="companies-contact" class="companies-contact">
-        <div class="ui-container">
-            <div class="companies-contact__head">
-                <span class="companies-kicker">Contatto partnership</span>
-                <h2>{{ $fields->form_titolo ?: 'Diventa un partner oggi stesso' }}</h2>
-                <p>{!! $fields->form_testo !!}</p>
-            </div>
-
-            <div class="companies-contact__card">
-                <div class="companies-contact__aside">
-                    <h3>Costruiamo insieme la tua partnership.</h3>
-                    <p>Raccontaci obiettivi, valori e tipo di coinvolgimento. Ti risponderemo con una proposta concreta e sostenibile.</p>
-                    <ul>
-                        <li>Analisi del progetto piu coerente</li>
-                        <li>Modalita di contributo e comunicazione</li>
-                        <li>Follow-up e aggiornamenti sul campo</li>
-                    </ul>
-                </div>
-
-                <div class="companies-contact__form">
-                    @if($fields->shortcode_form)
-                        {!! apply_filters('the_content', wpautop(do_shortcode($fields->shortcode_form))) !!}
-                    @endif
-                </div>
-            </div>
+<section class="section partner-faq" aria-labelledby="partner-faq-title">
+    <div class="site-container editorial-split">
+        <div><h2 id="partner-faq-title">Prima di scriverci</h2></div>
+        <div class="faq-list">
+            <details>
+                <summary>È necessario scegliere subito una missione?</summary>
+                <p>No. Puoi indicare interessi e obiettivi nel messaggio; il confronto serve anche a individuare il progetto più coerente.</p>
+            </details>
+            <details>
+                <summary>La proposta viene pubblicata automaticamente?</summary>
+                <p>No. L’invio del form apre un contatto e non autorizza PAC a pubblicare logo, nome o contenuti dell’azienda.</p>
+            </details>
+            <details>
+                <summary>Come riceveremo gli aggiornamenti?</summary>
+                <p>Canali, frequenza e materiali disponibili vengono definiti nel perimetro della collaborazione.</p>
+            </details>
         </div>
-    </section>
+    </div>
+</section>
+
+<section id="partner-contact" class="section section--paper partner-contact" aria-labelledby="partner-contact-title">
+    <div class="site-container partner-contact__grid">
+        <div>
+            <h2 id="partner-contact-title">Raccontaci la tua proposta.</h2>
+            <p>Descrivi obiettivi, tipo di coinvolgimento e missioni di interesse. Ti ricontatteremo usando i dati inseriti nel modulo.</p>
+            <p><a class="text-link" href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a></p>
+        </div>
+        <div class="partner-contact__form">
+            @if(!empty($fields->shortcode_form))
+                {!! apply_filters('the_content', do_shortcode($fields->shortcode_form)) !!}
+            @else
+                @include('components.empty-state', [
+                    'title' => 'Il modulo non è disponibile',
+                    'text' => 'Puoi inviare la proposta tramite email.',
+                    'actionUrl' => 'mailto:' . $contactEmail,
+                    'actionLabel' => 'Scrivi a PAC',
+                ])
+            @endif
+        </div>
+    </div>
+</section>
 @endsection

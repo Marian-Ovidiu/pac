@@ -129,6 +129,294 @@ if (!function_exists('theme_acf_image_url')) {
     }
 }
 
+if (!function_exists('theme_media_data')) {
+    /**
+     * Normalizza un media ACF/WordPress e verifica che i file locali esistano.
+     * Un media assente viene reso dal componente come fallback grafico, evitando
+     * richieste 404 e layout shift.
+     *
+     * @param mixed  $image
+     * @param string $fallbackAlt
+     * @return array{available: bool, id: int, url: string, alt: string, width: int, height: int, srcset: string, sizes: string, caption: string}
+     */
+    function theme_media_data($image, $fallbackAlt = '') {
+        $id = 0;
+        $url = '';
+        $alt = trim((string) $fallbackAlt);
+        $width = 0;
+        $height = 0;
+        $caption = '';
+        $generatedAsset = '';
+        $decorative = false;
+
+        if (is_array($image)) {
+            $id = isset($image['ID']) ? (int) $image['ID'] : (isset($image['id']) ? (int) $image['id'] : 0);
+            $url = isset($image['url']) ? trim((string) $image['url']) : '';
+            $alt = trim((string) ($image['alt'] ?? '')) ?: $alt;
+            $width = (int) ($image['width'] ?? 0);
+            $height = (int) ($image['height'] ?? 0);
+            $caption = trim(wp_strip_all_tags((string) ($image['caption'] ?? '')));
+            $generatedAsset = sanitize_file_name((string) ($image['generated_asset'] ?? ''));
+            $decorative = !empty($image['decorative']);
+        } elseif (is_numeric($image)) {
+            $id = (int) $image;
+        } elseif (is_string($image)) {
+            $url = trim($image);
+        } elseif (is_object($image) && isset($image->ID)) {
+            $id = (int) $image->ID;
+        }
+
+        if ($id > 0) {
+            $source = wp_get_attachment_image_src($id, 'full');
+            if ($source) {
+                $url = (string) $source[0];
+                $width = (int) ($source[1] ?? $width);
+                $height = (int) ($source[2] ?? $height);
+            }
+            $attachmentAlt = trim((string) get_post_meta($id, '_wp_attachment_image_alt', true));
+            $alt = $attachmentAlt !== '' ? $attachmentAlt : $alt;
+            $attachmentCaption = trim(wp_strip_all_tags((string) wp_get_attachment_caption($id)));
+            $caption = $attachmentCaption !== '' ? $attachmentCaption : $caption;
+        }
+
+        $available = $url !== '' && theme_media_url_available($url, $id);
+
+        return [
+            'available' => $available,
+            'id' => $id,
+            'url' => $available ? $url : '',
+            'alt' => $alt,
+            'width' => $available && $width > 0 ? $width : 1600,
+            'height' => $available && $height > 0 ? $height : 1000,
+            'srcset' => $available && $id > 0 ? (string) (wp_get_attachment_image_srcset($id, 'large') ?: '') : '',
+            'sizes' => '(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 660px',
+            'caption' => $caption,
+            'generated_asset' => $generatedAsset,
+            'decorative' => $decorative,
+        ];
+    }
+}
+
+if (!function_exists('theme_generated_media')) {
+    /**
+     * Descrive un asset illustrativo temporaneo senza creare allegati WordPress
+     * o modificare i contratti ACF. Le fotografie redazionali reali continuano
+     * ad avere la precedenza tramite theme_media_or_generated().
+     */
+    function theme_generated_media($asset, $alt = '', $caption = '', $decorative = false) {
+        $asset = sanitize_file_name((string) $asset);
+        $baseUrl = trailingslashit(get_template_directory_uri()) . 'assets/media/generated/';
+
+        return [
+            'url' => $baseUrl . $asset . '-hero-1600.jpg',
+            'alt' => $decorative ? '' : trim((string) $alt),
+            'width' => 1600,
+            'height' => 1000,
+            'caption' => trim((string) $caption),
+            'generated_asset' => $asset,
+            'decorative' => (bool) $decorative,
+        ];
+    }
+}
+
+if (!function_exists('theme_media_or_generated')) {
+    function theme_media_or_generated($image, $asset, $alt = '', $caption = '', $decorative = false) {
+        $media = theme_media_data($image, $alt);
+
+        return $media['available']
+            ? $image
+            : theme_generated_media($asset, $alt, $caption, $decorative);
+    }
+}
+
+if (!function_exists('theme_mission_media')) {
+    /**
+     * Associa alle sole quattro missioni pubblicate un'immagine illustrativa.
+     * L'asset viene usato soltanto quando ACF e featured image non sono disponibili.
+     */
+    function theme_mission_media($mission, $image = null) {
+        $missionId = is_object($mission) && isset($mission->id) ? (int) $mission->id : 0;
+        $slug = $missionId > 0 ? (string) get_post_field('post_name', $missionId) : '';
+        $caption = 'Immagine illustrativa generata con IA.';
+        $assets = [
+            'sociale-nigeria' => [
+                'asset' => 'pac-mission-community-table-illustrative',
+                'alt' => 'Tavolo vuoto con sedute e quaderni chiusi in uno spazio ombreggiato.',
+            ],
+            'cani-k-9' => [
+                'asset' => 'pac-mission-k9-tracks-illustrative',
+                'alt' => 'Impronte canine e di scarponi affiancate su terreno asciutto.',
+            ],
+            'antibracconaggio' => [
+                'asset' => 'pac-mission-habitat-illustrative',
+                'alt' => 'Erba alta e alberi di acacia in un paesaggio illustrativo.',
+            ],
+            'sociale-ghana' => [
+                'asset' => 'pac-mission-study-space-illustrative',
+                'alt' => 'Quaderno bianco e matita su un tavolo illuminato da ombre di foglie.',
+            ],
+        ];
+
+        if (!isset($assets[$slug])) {
+            return $image;
+        }
+
+        $definition = $assets[$slug];
+        return theme_media_or_generated($image, $definition['asset'], $definition['alt'], $caption);
+    }
+}
+
+if (!function_exists('theme_generated_media_sources')) {
+    /**
+     * Restituisce i derivati deliberatamente ritagliati per il componente media.
+     */
+    function theme_generated_media_sources($asset, $ratio = 'landscape') {
+        $asset = sanitize_file_name((string) $asset);
+        $baseUrl = trailingslashit(get_template_directory_uri()) . 'assets/media/generated/';
+        $desktopVariant = $ratio === 'card' ? 'card' : 'hero';
+        $desktopWidths = $ratio === 'card' ? [600, 900, 1200] : [800, 1200, 1600];
+        $mobileWidths = [480, 640, 800];
+        $sourceSet = static function ($variant, $widths, $format) use ($baseUrl, $asset) {
+            return implode(', ', array_map(
+                static fn($width) => $baseUrl . $asset . '-' . $variant . '-' . $width . '.' . $format . ' ' . $width . 'w',
+                $widths
+            ));
+        };
+
+        return [
+            'desktop' => [
+                'avif' => $sourceSet($desktopVariant, $desktopWidths, 'avif'),
+                'webp' => $sourceSet($desktopVariant, $desktopWidths, 'webp'),
+                'jpg' => $sourceSet($desktopVariant, $desktopWidths, 'jpg'),
+            ],
+            'mobile' => [
+                'avif' => $sourceSet('mobile', $mobileWidths, 'avif'),
+                'webp' => $sourceSet('mobile', $mobileWidths, 'webp'),
+                'jpg' => $sourceSet('mobile', $mobileWidths, 'jpg'),
+            ],
+            'fallback' => $baseUrl . $asset . '-' . $desktopVariant . '-' . max($desktopWidths) . '.jpg',
+            'width' => max($desktopWidths),
+            'height' => $desktopVariant === 'card' ? 800 : 1000,
+        ];
+    }
+}
+
+if (!function_exists('theme_media_url_available')) {
+    function theme_media_url_available($url, $attachmentId = 0) {
+        $url = trim((string) $url);
+        if ($url === '' || !preg_match('/\.(avif|gif|jpe?g|png|webp|mp4|m4v|ogg|webm)(?:\?.*)?$/i', $url)) {
+            return false;
+        }
+
+        if ((int) $attachmentId > 0) {
+            $file = get_attached_file((int) $attachmentId);
+            if (is_string($file) && $file !== '') {
+                return is_file($file);
+            }
+        }
+
+        $parsedPath = (string) (wp_parse_url($url, PHP_URL_PATH) ?: '');
+        $uploadsMarker = '/wp-content/uploads/';
+        $uploadsPosition = strpos($parsedPath, $uploadsMarker);
+        if ($uploadsPosition !== false) {
+            $relativeUpload = ltrim(substr($parsedPath, $uploadsPosition + strlen($uploadsMarker)), '/');
+            return is_file(WP_CONTENT_DIR . '/uploads/' . rawurldecode($relativeUpload));
+        }
+
+        $uploads = wp_get_upload_dir();
+        $baseUrl = isset($uploads['baseurl']) ? untrailingslashit((string) $uploads['baseurl']) : '';
+        $baseDir = isset($uploads['basedir']) ? untrailingslashit((string) $uploads['basedir']) : '';
+        if ($baseUrl !== '' && $baseDir !== '' && str_starts_with($url, $baseUrl . '/')) {
+            $relative = ltrim(substr($url, strlen($baseUrl)), '/');
+            return is_file($baseDir . '/' . $relative);
+        }
+
+        $parsed = wp_parse_url($url);
+        $home = wp_parse_url(home_url('/'));
+        if (is_array($parsed) && is_array($home) && ($parsed['host'] ?? '') === ($home['host'] ?? '')) {
+            $path = isset($parsed['path']) ? rawurldecode((string) $parsed['path']) : '';
+            if ($path !== '') {
+                return is_file(ABSPATH . ltrim($path, '/'));
+            }
+        }
+
+        return true;
+    }
+}
+
+if (!function_exists('theme_prepare_article_content')) {
+    /**
+     * Mantiene il contenuto editoriale ma normalizza gli H1 interni e sostituisce
+     * media locali assenti con uno stato esplicito, evitando richieste 404.
+     */
+    function theme_prepare_article_content($html) {
+        $html = (string) $html;
+        $html = preg_replace('/<h1\b([^>]*)>/i', '<h2$1>', $html);
+        $html = preg_replace('/<\/h1>/i', '</h2>', $html);
+
+        if (!class_exists('DOMDocument') || trim($html) === '') {
+            return $html;
+        }
+
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+        $dom->loadHTML(
+            '<?xml encoding="utf-8" ?><div id="pac-article-root">' . $html . '</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+
+        $createFallback = static function ($document) {
+            $fallback = $document->createElement('div');
+            $fallback->setAttribute('class', 'inline-media-fallback');
+            $fallback->setAttribute('role', 'img');
+            $fallback->setAttribute('aria-label', 'Contenuto multimediale non disponibile');
+            $fallback->appendChild($document->createTextNode('Contenuto multimediale non disponibile in questa installazione.'));
+            return $fallback;
+        };
+
+        foreach (iterator_to_array($dom->getElementsByTagName('video')) as $video) {
+            $sources = [];
+            if ($video->hasAttribute('src')) {
+                $sources[] = $video->getAttribute('src');
+            }
+            foreach ($video->getElementsByTagName('source') as $source) {
+                $sources[] = $source->getAttribute('src');
+            }
+            $hasAvailableSource = false;
+            foreach (array_filter($sources) as $sourceUrl) {
+                if (theme_media_url_available($sourceUrl)) {
+                    $hasAvailableSource = true;
+                    break;
+                }
+            }
+            if (!$hasAvailableSource && $video->parentNode) {
+                $video->parentNode->replaceChild($createFallback($dom), $video);
+            }
+        }
+
+        foreach (iterator_to_array($dom->getElementsByTagName('img')) as $image) {
+            $sourceUrl = $image->getAttribute('src');
+            if (!theme_media_url_available($sourceUrl) && $image->parentNode) {
+                $image->parentNode->replaceChild($createFallback($dom), $image);
+            }
+        }
+
+        $root = $dom->getElementById('pac-article-root');
+        if (!$root) {
+            return $html;
+        }
+
+        $output = '';
+        foreach ($root->childNodes as $child) {
+            $output .= $dom->saveHTML($child);
+        }
+
+        return $output;
+    }
+}
+
 if (!function_exists('camelToKebab')) {
     function camelToKebab($string) {
         return strtolower(preg_replace('/(?<!^)([A-Z])/', '-$1', $string));

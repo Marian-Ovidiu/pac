@@ -8,7 +8,7 @@ export default defineConfig({
     retries: 1,
     reporter: [['list'], ['html', { open: 'never' }]],
     use: {
-        baseURL: process.env.PAC_STAGING_URL,
+        baseURL: process.env.PAC_LOCAL_URL || process.env.PAC_STAGING_URL,
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

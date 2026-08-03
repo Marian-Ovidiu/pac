@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@accesslint/playwright": "^0.8.0"
+  }
+}

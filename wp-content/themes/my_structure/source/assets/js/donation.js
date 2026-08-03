@@ -107,6 +107,8 @@ export default function donationFormData(progettoId, thankYouUrl) {
         customAmount: '',
         showAmountError: false,
         loading: false,
+        errorMessage: '',
+        statusMessage: '',
         stripe: null,
         clientSecret: null,
         paymentIntentId: null,
@@ -156,6 +158,8 @@ export default function donationFormData(progettoId, thankYouUrl) {
         },
         async createIntent() {
             this.loading = true;
+            this.errorMessage = '';
+            this.statusMessage = 'Preparazione del pagamento sicuro in corso.';
             const amountCents = this.getAmountInCents();
             const publishableKey = getPublishableKey();
 
@@ -182,6 +186,7 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 this.stripe = Stripe(publishableKey);
                 this.elements = this.stripe.elements({ clientSecret: this.clientSecret });
                 this.step = 3;
+                this.statusMessage = 'Metodo di pagamento pronto.';
 
                 await this.$nextTick(() => {
                     const paymentElement = this.elements.create('payment');
@@ -190,7 +195,8 @@ export default function donationFormData(progettoId, thankYouUrl) {
                 });
             } catch (error) {
                 console.error("Errore nella creazione dell'intent:", error);
-                alert(error.message || 'Errore nella creazione del pagamento.');
+                this.errorMessage = error.message || 'Non è stato possibile preparare il pagamento. Riprova.';
+                this.statusMessage = '';
             } finally {
                 this.loading = false;
             }
@@ -236,6 +242,8 @@ export default function donationFormData(progettoId, thankYouUrl) {
             }
 
             this.loading = true;
+            this.errorMessage = '';
+            this.statusMessage = 'Pagamento in elaborazione. Non chiudere questa pagina.';
 
             try {
                 savePendingDonation(this.buildDonationPayload());
@@ -261,11 +269,13 @@ export default function donationFormData(progettoId, thankYouUrl) {
 
                 if (paymentIntent?.status === 'succeeded') {
                     await this.finalizeInlinePayment(paymentIntent.id);
+                    this.statusMessage = 'Donazione completata. Reindirizzamento in corso.';
                     window.location.href = this.thankYouUrl;
                 }
             } catch (error) {
                 console.error('Errore Stripe:', error);
-                alert(error.message || 'Errore durante il pagamento.');
+                this.errorMessage = error.message || 'Il pagamento non è stato completato. Controlla i dati e riprova.';
+                this.statusMessage = '';
             } finally {
                 this.loading = false;
             }

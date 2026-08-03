@@ -3,6 +3,7 @@ import sass from 'sass';
 import path from 'path';
 export default defineConfig({
     root: 'source',
+    base: './',
     build: {
         outDir: path.resolve(__dirname, 'public'),
         emptyOutDir: true,

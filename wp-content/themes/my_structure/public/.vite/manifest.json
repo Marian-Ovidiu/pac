@@ -1,57 +1,41 @@
 {
-  "_autoplay-WPUr4Jj6.js": {
-    "file": "js/autoplay-WPUr4Jj6.js",
-    "name": "autoplay",
-    "imports": [
-      "_swiper-core-CC_2adY8.js"
-    ]
+  "_a11y-tw6eRNcn.js": {
+    "file": "js/a11y-tw6eRNcn.js",
+    "name": "a11y"
   },
-  "_swiper-core-CC_2adY8.js": {
-    "file": "js/swiper-core-CC_2adY8.js",
-    "name": "swiper-core"
-  },
-  "_swiper-vL0Q9Dr-.css": {
-    "file": "css/swiper-vL0Q9Dr-.css",
-    "src": "_swiper-vL0Q9Dr-.css"
+  "assets/images/pittogramma.webp": {
+    "file": "webp/pittogramma-CvVVxy19.webp",
+    "src": "assets/images/pittogramma.webp"
   },
   "assets/js/homeSlider.js": {
-    "file": "js/homeSlider-Cf9nk5vI.js",
+    "file": "js/homeSlider-D2EwMw8b.js",
     "name": "homeSlider",
     "src": "assets/js/homeSlider.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-CC_2adY8.js",
-      "_autoplay-WPUr4Jj6.js"
+      "_a11y-tw6eRNcn.js"
     ],
     "css": [
-      "css/homeSlider-DE0q59Ew.css",
-      "css/swiper-vL0Q9Dr-.css"
+      "css/homeSlider-BIKjf0OP.css"
     ]
   },
   "assets/js/main.js": {
-    "file": "js/main-sCCZHMg-.js",
+    "file": "js/main-BfRhuyPj.js",
     "name": "main",
     "src": "assets/js/main.js",
-    "isEntry": true,
-    "imports": [
-      "_swiper-core-CC_2adY8.js"
-    ],
-    "css": [
-      "css/swiper-vL0Q9Dr-.css"
-    ]
+    "isEntry": true
   },
   "assets/js/progettoSlider.js": {
-    "file": "js/progettoSlider-LxmV_-K3.js",
+    "file": "js/progettoSlider-DwrnAq_2.js",
     "name": "progettoSlider",
     "src": "assets/js/progettoSlider.js",
     "isEntry": true,
     "imports": [
-      "_swiper-core-CC_2adY8.js",
-      "_autoplay-WPUr4Jj6.js"
+      "_a11y-tw6eRNcn.js"
     ]
   },
   "assets/scss/style.scss": {
-    "file": "css/style-DhPWQxb0.css",
+    "file": "css/style-hMyh4-_E.css",
     "src": "assets/scss/style.scss",
     "isEntry": true
   }

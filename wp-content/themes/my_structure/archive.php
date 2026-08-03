@@ -1,8 +1,8 @@
 <?php
-if (is_home()) {
-    var_dump('diocane');die();
+
+if (is_home() || is_post_type_archive('post')) {
     \Controllers\PostController::call('archive');
+    return;
 }
-if (is_single()) {
-    \Controllers\PostController::call('single');
-}
+
+\Controllers\PageController::call('notFound');

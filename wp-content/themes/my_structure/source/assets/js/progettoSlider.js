@@ -1,5 +1,5 @@
 import Swiper from 'swiper';
-import { Autoplay, Pagination, A11y, Keyboard } from 'swiper/modules';
+import { Pagination, A11y, Keyboard, Navigation } from 'swiper/modules';
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.swiper-progetto').forEach((swiperEl) => {
@@ -7,15 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const shouldLoop = slides.length > 2;
 
         new Swiper(swiperEl, {
-            modules: [Autoplay, Pagination, A11y, Keyboard],
+            modules: [Pagination, A11y, Keyboard, Navigation],
             slidesPerView: 1,
             spaceBetween: 0,
             loop: shouldLoop,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            speed: 600,
+            autoplay: false,
+            speed: 450,
             keyboard: {
                 enabled: true,
                 onlyInViewport: true,
@@ -24,6 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
             pagination: {
                 el: swiperEl.querySelector('.swiper-pagination'),
                 clickable: true,
+            },
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
             },
             a11y: {
                 enabled: true,

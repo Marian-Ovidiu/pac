@@ -18,6 +18,8 @@
     "test": "npm run test:js && npm run test:php",
     "test:js": "node --test tests/unit/*.test.mjs",
     "test:php": "php ../../plugins/pac-core/tests/run.php",
+    "test:ui:local": "PAC_LOCAL_URL=http://127.0.0.1:8080 playwright test tests/e2e/local-ui.spec.js",
+    "test:performance:local": "PAC_LOCAL_URL=http://127.0.0.1:8080 playwright test tests/e2e/local-performance.spec.js",
     "test:staging": "playwright test"
   },
   "keywords": [],
