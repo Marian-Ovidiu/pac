@@ -19,8 +19,8 @@ The repository does not version:
 ## Local bootstrap
 
 1. Copy `wp-config.example.php` to `wp-config.php`.
-2. Configure database credentials outside Git.
-3. Copy `.env.example` to `.env` in the repository root and use Stripe test credentials only.
+2. Copy `.env.example` to `.env` and configure database credentials outside Git. The config template loads the root `.env` before WordPress connects to MySQL.
+3. Use Stripe test credentials only in the local `.env` file.
 4. Install the application plugin dependencies:
 
 ```sh
@@ -53,7 +53,7 @@ composer install --no-dev --optimize-autoloader
 ```
 
 3. Build frontend assets before deployment with `npm ci && npm run build`; commit the resulting `public/` manifest and bundles.
-4. Provide `wp-config.php`, environment variables, Stripe keys, `STRIPE_WEBHOOK_SECRET` and salts through the hosting environment.
+4. Provide `wp-config.php` and a root `.env` outside Git, or equivalent server-level environment variables. Include the database credentials, Stripe keys, `STRIPE_WEBHOOK_SECRET` and WordPress salts. Server-level variables take precedence over `.env` values.
 5. Synchronize uploads independently from Git.
 6. Configure Stripe `payment_intent.succeeded` delivery to `/wp-json/pac/v1/stripe/webhook` and verify a test-mode delivery before release.
 

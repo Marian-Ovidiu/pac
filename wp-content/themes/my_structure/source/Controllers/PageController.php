@@ -46,7 +46,11 @@ class PageController extends BaseController
 
     public function notFound()
     {
-        status_header(404);
+        // Uno status già impostato a monte, come il 410 delle pagine tradotte
+        // legacy, non va declassato a 404: la pagina 404 resta la stessa.
+        if (http_response_code() !== 410) {
+            status_header(404);
+        }
         nocache_headers();
         $this->render('404');
     }

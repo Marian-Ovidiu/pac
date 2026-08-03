@@ -68,11 +68,12 @@ assimilabili a doorway pages, ma attivamente sottoposte all'indicizzazione via
 sitemap, in duplicazione diretta di Home, Progetti, Galleria e Aziende, con la
 lingua dichiarata sbagliata.
 
-Richiede una decisione editoriale, non un fix tecnico. Opzioni:
+**Decisione presa il 2026-08-03: il sito resta solo in italiano.** Le pagine
+tradotte sono state rimosse. Dettaglio dell'intervento più sotto.
 
-1. riattivare Polylang, completare traduzioni e permalink e generare hreflang reali;
-2. mantenere le pagine ma `noindex` ed escluderle dalla sitemap, in attesa di 1;
-3. eliminarle e ripristinarle quando il multilingua sarà completo.
+L'inventario reale era più ampio degli 11 URL in sitemap: **15 pagine**, perché
+anche le tre pagine di ringraziamento tradotte (`thank-you`, `merci`, `danke`)
+erano pubblicate, più **sette menu** non italiani.
 
 **S-02 — Nessuno schema sui contenuti singoli.** *(codice)*
 
@@ -215,6 +216,40 @@ e 40 test Playwright verdi.
 Se i file spariscono mentre i plugin risultano ancora attivi in database,
 WordPress li disattiva da solo ma con un avviso di errore.
 
+### Rimozione delle pagine tradotte — S-01
+
+Il sito resta solo in italiano. Intervento in due parti, perché la sola pulizia
+del database non sarebbe arrivata in produzione.
+
+**Nel database (locale, da ripetere in produzione):**
+
+- **15 pagine cestinate**, non cancellate definitivamente: le dodici in sitemap
+  più `thank-you`, `merci` e `danke`. Restano recuperabili dal cestino finché
+  WordPress non lo svuota, così le traduzioni già scritte non sono perse.
+- **7 menu rimossi**: Header e Footer in inglese, francese e tedesco, più il
+  "Language Menu", che conteneva soltanto il segnaposto morto `#pll_switcher`.
+- la location `header-menu` era assegnata proprio al "Language Menu" ed è stata
+  riassegnata al menu italiano. Non era un problema visibile, perché il tema
+  risolve i menu per slug tramite `MenuWidget` e non per location, ma
+  l'assegnazione era comunque sbagliata.
+
+**Nel codice (deployabile):**
+
+Le quindici URL rispondono **410 Gone** tramite `pac_gone_legacy_translations()`.
+Il 410 dichiara una rimozione deliberata e definitiva, e Google lo elabora più in
+fretta di un 404. La regola vale anche dove le pagine non sono ancora state
+cestinate, quindi il deploy chiude il problema in produzione da solo.
+
+`PageController::notFound()` forzava `status_header(404)` e declassava il 410: ora
+rispetta uno status già impostato a monte. Le 404 normali restano 404.
+
+La lista di slug è volutamente esplicita e documentata: quando le pagine saranno
+sparite dall'indice si può eliminare, e va rimossa comunque se il multilingua
+verrà riattivato.
+
+Dopo l'intervento `page-sitemap.xml` elenca **quattro sole pagine italiane**.
+Polylang resta installato ma disattivo: non ha effetti SEO e non è stato toccato.
+
 Restano in database **20 tabelle `wc_*`** e le directory
 `uploads/wc-logs/`, `uploads/woocommerce_uploads/` e
 `uploads/woocommerce_transient_files/`. Sono inerti e la loro pulizia è una
@@ -225,8 +260,11 @@ scelta di manutenzione separata, da fare solo dopo un backup.
 Queste sono opzioni nel database WordPress. Il DB locale è un dump e non viene
 promosso, quindi vanno rifatte a mano nell'admin di produzione.
 
-1. **S-01** — decidere il destino delle 11 pagine tradotte. In attesa della
-   decisione restano indicizzabili e in sitemap.
+1. **S-01** — cestinare le 15 pagine tradotte ed eliminare i 7 menu non italiani
+   anche in produzione, e riassegnare la location `header-menu` al menu italiano.
+   Il 410 in codice copre le URL anche prima di questa pulizia, ma le pagine
+   resterebbero altrimenti visibili in admin. Dopo la pulizia va invalidata la
+   cache sitemap di Rank Math, che altrimenti continua a servire la lista vecchia.
 2. **S-04** — attivare `Rank Math → Sitemap → Post` per allineare la sitemap ai
    post indicizzabili, oppure rendere i post `noindex` se il Diario non deve
    essere indicizzato. Le due impostazioni devono concordare.

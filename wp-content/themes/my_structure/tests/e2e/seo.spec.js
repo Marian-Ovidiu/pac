@@ -117,6 +117,36 @@ test('journal articles expose BlogPosting with dates and author', async ({ page 
     expect(article.publisher['@id'], 'publisher points at the organisation').toBeTruthy();
 });
 
+const legacyTranslatedSlugs = [
+    'homepage-english', 'homepage-francais', 'homepage-deutsch',
+    'projects', 'projets', 'projekte',
+    'companies-english', 'entreprises-francais', 'unternehmen-deutsch',
+    'galleria-english', 'galerie-francais', 'galerie-deutsch',
+    'thank-you', 'merci', 'danke',
+];
+
+test('legacy translated URLs are gone, not merely missing', async ({ request }) => {
+    for (const slug of legacyTranslatedSlugs) {
+        const response = await request.get(`/${slug}/`, { maxRedirects: 0 });
+        expect(response.status(), `/${slug}/ is 410 Gone`).toBe(410);
+    }
+});
+
+test('a genuinely unknown URL still answers 404, not 410', async ({ request }) => {
+    const response = await request.get('/una-pagina-che-non-e-mai-esistita/', { maxRedirects: 0 });
+    expect(response.status()).toBe(404);
+});
+
+test('the sitemap only lists Italian pages', async ({ request }) => {
+    const response = await request.get('/page-sitemap.xml');
+    expect(response.status()).toBe(200);
+    const body = await response.text();
+
+    for (const slug of legacyTranslatedSlugs) {
+        expect(body, `${slug} is absent from the sitemap`).not.toContain(`/${slug}`);
+    }
+});
+
 test('the thank-you page stays out of the index', async ({ page }) => {
     await page.goto('/grazie/', { waitUntil: 'domcontentloaded' });
     const { robots } = await readHead(page);
