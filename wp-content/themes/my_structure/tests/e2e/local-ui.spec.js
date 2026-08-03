@@ -45,8 +45,16 @@ for (const width of widths) {
         for (const [name, path] of routes) {
             const consoleErrors = [];
             const failedLocalResources = [];
+            // reCAPTCHA inserisce un iframe google.com e il browser segnala una
+            // violazione CSP report-only sul framing, che compare o no a seconda
+            // dei tempi di caricamento. È rumore di terze parti, non un errore del
+            // tema, e rendeva questo test intermittente su viewport casuali.
+            const isThirdPartyCspNoise = (text) => /report-only Content Security Policy/i.test(text)
+                && /google\.com/i.test(text);
             const consoleListener = (message) => {
-                if (message.type() === 'error') consoleErrors.push(message.text());
+                if (message.type() === 'error' && !isThirdPartyCspNoise(message.text())) {
+                    consoleErrors.push(message.text());
+                }
             };
             const responseListener = (response) => {
                 const url = response.url();

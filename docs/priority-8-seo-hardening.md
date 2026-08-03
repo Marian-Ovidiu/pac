@@ -255,33 +255,62 @@ Restano in database **20 tabelle `wc_*`** e le directory
 `uploads/woocommerce_transient_files/`. Sono inerti e la loro pulizia è una
 scelta di manutenzione separata, da fare solo dopo un backup.
 
-## Azioni richieste in produzione — non deployabili
+## Fix applicati nel database locale — 2026-08-03
 
-Queste sono opzioni nel database WordPress. Il DB locale è un dump e non viene
-promosso, quindi vanno rifatte a mano nell'admin di produzione.
+Il database locale verrà esportato verso la produzione, quindi le opzioni
+WordPress sono state sistemate qui invece di essere lasciate come azioni manuali.
 
-1. **S-01** — cestinare le 15 pagine tradotte ed eliminare i 7 menu non italiani
-   anche in produzione, e riassegnare la location `header-menu` al menu italiano.
-   Il 410 in codice copre le URL anche prima di questa pulizia, ma le pagine
-   resterebbero altrimenti visibili in admin. Dopo la pulizia va invalidata la
-   cache sitemap di Rank Math, che altrimenti continua a servire la lista vecchia.
-2. **S-04** — attivare `Rank Math → Sitemap → Post` per allineare la sitemap ai
-   post indicizzabili, oppure rendere i post `noindex` se il Diario non deve
-   essere indicizzato. Le due impostazioni devono concordare.
-3. **S-05** — azzerare `pt_post_robots` o allinearlo alla decisione presa in S-04,
-   così che il toggle `custom_robots` non nasconda più un `noindex` inatteso.
-4. **S-06** — disattivare WooCommerce e `woocommerce-gateway-stripe` dall'admin
-   **prima** di distribuire la versione che ne rimuove i file.
-5. **S-08** — caricare un'immagine Open Graph dedicata 1200×630 e impostarla come
-   default in `Rank Math → Impostazioni generali → Social`. Verificare in
-   produzione che `og:image` venga effettivamente emesso.
-6. **S-09** — compilare gli URL social mancanti.
-7. **S-10** — impostare la tagline del sito.
-8. **S-07** — scrivere description manuali. Priorità nell'ordine: **Aziende,
-   Galleria e Diario di bordo**, che oggi non emettono alcun meta tag; poi
-   l'**archivio progetti**, che ripete il titolo; poi i quattro progetti e
-   l'articolo Ghana, che oggi usano un excerpt tagliato. Il fix in codice evita
-   il troncamento brutto ma non sostituisce una description scritta.
+| ID | Fix |
+|---|---|
+| S-04 | `pt_post_sitemap` attivo: `post-sitemap.xml` esiste e dichiara i due articoli del Diario, coerentemente con il fatto che sono indicizzabili |
+| S-05 | `pt_post_robots` riportato a `["index"]`: il `noindex` dormiente non può più deindicizzare il blog se qualcuno attiva `custom_robots` |
+| S-06 | rimossa `pt_product_sitemap`, che puntava a un post type non più esistente |
+| S-07 | scritte description manuali per Aziende, Galleria, Diario, archivio missioni, i quattro progetti e i due articoli |
+| S-10 | impostata la tagline del sito |
+| S-01 | 15 pagine tradotte cestinate, 7 menu non italiani eliminati, location `header-menu` riassegnata |
+
+Le description sono derivate dai contenuti già presenti sulle pagine, senza
+introdurre affermazioni nuove, e stanno tutte fra 122 e 153 caratteri. Il titolo
+dell'archivio missioni non è più `%pt_plural% Archive`, che generava
+`Progetti Archive - PAC - Project Africa Conservation`.
+
+Dopo ogni modifica va invalidata la cache sitemap di Rank Math, altrimenti
+continua a servire la lista precedente e sembra che nulla sia cambiato.
+
+## Prima di esportare il database in produzione
+
+Il database locale **non è una copia fedele della produzione**. Esportarlo così
+com'è sovrascriverebbe dati reali. Da verificare prima:
+
+1. **`siteurl` e `home` valgono `http://pac.local`.** Vanno sostituiti con il
+   dominio di produzione con una search-replace che gestisca anche i valori
+   serializzati, non con una semplice query SQL.
+2. **Il DB locale contiene 5 soli attachment, di cui 1 con file su disco.** La
+   produzione ne ha molti di più: un import completo distruggerebbe la media
+   library. Vanno preservate le tabelle dei post di tipo `attachment`.
+3. **`pac-core` salva le donazioni in `wp_options`** (chiavi `pac_stripe_*`).
+   Sovrascrivere `wp_options` significa perdere lo storico delle donazioni di
+   produzione e i flag di idempotenza dei webhook Stripe.
+4. Restano 20 tabelle `wc_*` di WooCommerce, ora inerti.
+
+## Azioni ancora richieste — servono dati o decisioni
+
+Queste non sono risolvibili senza materiale o scelte editoriali.
+
+1. **S-06** — disattivare WooCommerce e `woocommerce-gateway-stripe` dall'admin
+   **prima** di distribuire la versione che ne rimuove i file. In locale sono già
+   disattivati, ma se la produzione mantiene il proprio `wp_options` la
+   disattivazione va rifatta lì.
+2. **S-08** — serve un'immagine Open Graph dedicata 1200×630. Oggi il default è il
+   logo condensato, che come card social rende male. L'alternativa disponibile
+   sarebbe uno degli asset illustrativi generati, ma sono immagini IA e
+   `docs/media-asset-plan.md` impone la dicitura esplicita quando possono essere
+   scambiate per documentazione: una card social non può portare quella dicitura.
+   La scelta è editoriale e resta aperta: fotografia autentica, grafica di marca
+   dedicata, oppure il logo attuale su fondo pieno.
+3. **S-09** — servono gli URL reali di Instagram, YouTube e LinkedIn. Non sono
+   deducibili e non vanno indovinati: oggi `sameAs` contiene solo Facebook.
+4. **S-11** — il Diario ha due soli articoli. Tema editoriale, nessun fix tecnico.
 
 ## Verifica
 
@@ -293,5 +322,9 @@ Copertura automatica in `tests/e2e/seo.spec.js`:
 - `NGO` presente nel grafo e nessun `Organization` generico residuo;
 - `BlogPosting` sugli articoli e `WebPage` sulle pagine progetto;
 - `DonateAction` presente sulle pagine progetto;
-- description non troncata a metà parola e entro i limiti di lunghezza;
+- description presente su ogni template indicizzabile, entro i limiti di
+  lunghezza, non troncata a metà parola e non ricavata dal titolo dell'archivio;
+- le 15 URL tradotte legacy rispondono 410, mentre una URL sconosciuta resta 404;
+- `post-sitemap.xml` dichiarato e raggiungibile, con i due articoli del Diario;
+- nessuna URL tradotta residua in `page-sitemap.xml`;
 - pagina Grazie che resta `noindex`.

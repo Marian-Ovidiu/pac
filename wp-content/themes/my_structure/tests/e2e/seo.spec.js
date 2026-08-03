@@ -67,14 +67,19 @@ for (const [name, path] of routes) {
     });
 }
 
-test('descriptions are never cut mid-word', async ({ page }) => {
-    for (const [name, path] of routes) {
+// La pagina Grazie è noindex: una description lì non serve.
+const routesNeedingDescription = routes.filter(([name]) => name !== 'thanks');
+
+test('every indexable template ships a written description', async ({ page }) => {
+    for (const [name, path] of routesNeedingDescription) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         const { description } = await readHead(page);
-        if (!description) continue;
 
+        expect(description, `${name} has a description`).toBeTruthy();
+        expect(description.length, `${name} description length`).toBeGreaterThan(60);
         expect(description.length, `${name} description length`).toBeLessThanOrEqual(160);
         expect(description.trim(), `${name} description trailing punctuation`).not.toMatch(/[,;:–-]$/);
+        expect(description, `${name} description is not a recycled title`).not.toMatch(/Archive\s+[-–]\s+PAC/i);
     }
 });
 
@@ -135,6 +140,18 @@ test('legacy translated URLs are gone, not merely missing', async ({ request }) 
 test('a genuinely unknown URL still answers 404, not 410', async ({ request }) => {
     const response = await request.get('/una-pagina-che-non-e-mai-esistita/', { maxRedirects: 0 });
     expect(response.status()).toBe(404);
+});
+
+test('journal articles are declared in the sitemap they are indexable in', async ({ request }) => {
+    const index = await request.get('/sitemap_index.xml');
+    expect(index.status()).toBe(200);
+    expect(await index.text(), 'post sitemap is declared').toContain('post-sitemap.xml');
+
+    const posts = await request.get('/post-sitemap.xml');
+    expect(posts.status(), 'post sitemap is reachable').toBe(200);
+    const body = await posts.text();
+    expect(body).toContain('/aiutare-il-ghana-il-nostro-impegno-sociale-contro-la-poverta-e-lemarginazione');
+    expect(body).toContain('/ghana-un-dormitorio-per-il-futuro-delleducazione');
 });
 
 test('the sitemap only lists Italian pages', async ({ request }) => {
