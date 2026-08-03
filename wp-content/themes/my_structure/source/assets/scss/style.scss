@@ -865,6 +865,163 @@ h3 {
   color: var(--pac-moss);
 }
 
+.flagship-project__grid {
+  display: grid;
+  align-items: center;
+  gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.flagship-project h2 {
+  max-width: 14ch;
+}
+
+.flagship-project__lead {
+  max-width: 60ch;
+  margin-bottom: 2rem;
+  color: var(--pac-mist);
+  font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
+}
+
+.flagship-project__facts {
+  display: grid;
+  max-width: 36rem;
+  margin: 0 0 2rem;
+  border-block: 1px solid color-mix(in srgb, var(--pac-clay) 42%, transparent);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flagship-project__facts div {
+  padding-block: 1rem;
+}
+
+.flagship-project__facts dt,
+.project-progress__amounts dt {
+  color: var(--pac-stone);
+  font-family: var(--font-data);
+  font-size: 0.7rem;
+}
+
+.flagship-project__facts dt {
+  color: var(--pac-mist);
+}
+
+.flagship-project__facts dd,
+.project-progress__amounts dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.flagship-project__media .media-figure__frame {
+  background: color-mix(in srgb, var(--pac-mist) 20%, var(--pac-forest));
+}
+
+.project-location {
+  margin: -0.75rem 0 2rem;
+  color: var(--pac-green);
+  font-family: var(--font-data);
+  font-size: 0.78rem;
+}
+
+.project-progress {
+  background: var(--pac-mist);
+}
+
+.project-progress__grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.project-progress__intro {
+  max-width: 52ch;
+  color: var(--pac-forest);
+}
+
+.project-progress__status {
+  padding-block: 1.5rem;
+  border-block: 1px solid var(--pac-green);
+}
+
+.project-progress__state {
+  margin-bottom: 1.5rem;
+  color: var(--pac-green);
+  font-family: var(--font-data);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.project-progress__amounts {
+  display: grid;
+  margin: 0 0 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.project-progress__amounts dd {
+  color: var(--pac-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  line-height: 1;
+}
+
+.project-progress progress {
+  display: block;
+  width: 100%;
+  height: 0.8rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--pac-paper);
+  color: var(--pac-green);
+  accent-color: var(--pac-green);
+}
+
+.project-progress progress::-webkit-progress-bar {
+  background: var(--pac-paper);
+}
+
+.project-progress progress::-webkit-progress-value,
+.project-progress progress::-moz-progress-bar {
+  background: var(--pac-green);
+}
+
+.project-progress__percentage,
+.project-progress__pending,
+.project-progress__note {
+  max-width: 58ch;
+  color: var(--pac-forest);
+}
+
+.project-progress__percentage {
+  margin-top: 0.65rem;
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+}
+
+.project-progress__pending {
+  margin-bottom: 1.5rem;
+}
+
+.project-progress__note {
+  margin-block: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--pac-green) 45%, transparent);
+}
+
+.project-objectives .proof-list .rich-text,
+.project-impact .proof-list .rich-text {
+  color: var(--pac-stone);
+}
+
+.project-objectives .proof-list .rich-text > :last-child,
+.project-impact .proof-list .rich-text > :last-child {
+  margin-bottom: 0;
+}
+
+.project-updates__empty {
+  min-height: 20rem;
+}
+
 .transparency-block {
   align-items: end;
 }
@@ -1299,6 +1456,7 @@ textarea[aria-invalid='true'] {
 }
 
 .empty-state h2,
+.empty-state h3,
 .empty-state p {
   max-width: 36rem;
 }
@@ -1963,7 +2121,8 @@ textarea::placeholder,
 @media (min-width: 48rem) {
   .editorial-split,
   .transparency-block,
-  .field-note__grid {
+  .field-note__grid,
+  .project-progress__grid {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
 
@@ -2024,6 +2183,26 @@ textarea::placeholder,
 
   .donation-section__grid {
     grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.72fr);
+  }
+
+  .flagship-project__grid {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  }
+
+  .mission-card--flagship {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 0.9fr);
+  }
+
+  .mission-card--flagship .mission-card__media,
+  .mission-card--flagship .media-figure,
+  .mission-card--flagship .media-figure__frame {
+    height: 100%;
+  }
+
+  .mission-card--flagship .media-figure__frame {
+    min-height: 28rem;
+    border-radius: 0;
   }
 
   .donation-section__panel {

@@ -103,6 +103,10 @@ Scala base: 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 112, 144 px.
 - `ImpactLedger`: elenco di risultati soltanto quando i valori sono disponibili e
   verificati.
 - `MissionCard`: missione, sintesi ACF e azioni Scopri/Sostieni.
+- `FlagshipProject`: progetto prioritario in evidenza, con località verificata,
+  stato della raccolta e accessi a dettaglio e donazione.
+- `ProjectProgress`: budget e avanzamento soltanto quando verificati; in loro
+  assenza mostra uno stato trasparente senza percentuali simulate.
 - `FieldNote`: estratto editoriale o citazione realmente presente.
 - `ProofList`: fatti o principi provenienti dal contenuto esistente.
 - `ArticleTeaser`: data, categoria, titolo, abstract e media opzionale.

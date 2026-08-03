@@ -231,36 +231,47 @@ if (!function_exists('theme_media_or_generated')) {
 
 if (!function_exists('theme_mission_media')) {
     /**
-     * Associa alle sole quattro missioni pubblicate un'immagine illustrativa.
-     * L'asset viene usato soltanto quando ACF e featured image non sono disponibili.
+     * Risolve un fallback illustrativo per area di intervento. Il campo ACF
+     * rende la scelta riusabile; gli slug storici restano soltanto come fallback
+     * compatibile per le missioni già pubblicate.
      */
     function theme_mission_media($mission, $image = null) {
         $missionId = is_object($mission) && isset($mission->id) ? (int) $mission->id : 0;
         $slug = $missionId > 0 ? (string) get_post_field('post_name', $missionId) : '';
+        $visualTheme = is_object($mission) && isset($mission->project_visual_theme)
+            ? (string) $mission->project_visual_theme
+            : '';
         $assets = [
-            'sociale-nigeria' => [
+            'community' => [
                 'asset' => 'pac-mission-community-table-illustrative',
                 'alt' => 'Tavolo vuoto con sedute e quaderni chiusi in uno spazio ombreggiato.',
             ],
-            'cani-k-9' => [
+            'k9' => [
                 'asset' => 'pac-mission-k9-tracks-illustrative',
                 'alt' => 'Impronte canine e di scarponi affiancate su terreno asciutto.',
             ],
-            'antibracconaggio' => [
+            'conservation' => [
                 'asset' => 'pac-mission-habitat-illustrative',
                 'alt' => 'Erba alta e alberi di acacia in un paesaggio illustrativo.',
             ],
-            'sociale-ghana' => [
+            'education' => [
                 'asset' => 'pac-mission-study-space-illustrative',
                 'alt' => 'Quaderno bianco e matita su un tavolo illuminato da ombre di foglie.',
             ],
         ];
+        $legacyThemes = [
+            'sociale-nigeria' => 'community',
+            'cani-k-9' => 'k9',
+            'antibracconaggio' => 'conservation',
+            'sociale-ghana' => 'education',
+        ];
+        $visualTheme = $visualTheme !== '' ? $visualTheme : ($legacyThemes[$slug] ?? '');
 
-        if (!isset($assets[$slug])) {
+        if (!isset($assets[$visualTheme])) {
             return $image;
         }
 
-        $definition = $assets[$slug];
+        $definition = $assets[$visualTheme];
         return theme_media_or_generated($image, $definition['asset'], $definition['alt']);
     }
 }

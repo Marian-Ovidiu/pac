@@ -4,20 +4,22 @@ const routes = [
     ['home', '/'],
     ['missions', '/4-progetti-antibracconaggio-sociale/'],
     ['mission', '/progetto/antibracconaggio/'],
+    ['flagship mission', '/progetto/tetto-scuola-ghana'],
     ['companies', '/aziende/'],
     ['gallery', '/galleria/'],
     ['journal', '/diario-di-bordo/'],
     ['article', '/aiutare-il-ghana-il-nostro-impegno-sociale-contro-la-poverta-e-lemarginazione/'],
     ['thanks', '/grazie/'],
 ];
+const localUrl = new URL(process.env.PAC_LOCAL_URL || 'http://127.0.0.1:8080');
 
 test.beforeEach(async ({ context }) => {
     await context.route('**/*', async (route) => {
         const requestUrl = new URL(route.request().url());
         if (requestUrl.hostname === 'pac.local') {
-            requestUrl.protocol = 'http:';
-            requestUrl.hostname = '127.0.0.1';
-            requestUrl.port = '8080';
+            requestUrl.protocol = localUrl.protocol;
+            requestUrl.hostname = localUrl.hostname;
+            requestUrl.port = localUrl.port;
             await route.continue({ url: requestUrl.toString() });
             return;
         }
@@ -97,7 +99,7 @@ test('the organisation is described as a non profit, not a company', async ({ pa
 });
 
 test('project pages expose a donation action and a web page node', async ({ page }) => {
-    await page.goto('/progetto/antibracconaggio/', { waitUntil: 'domcontentloaded' });
+    await page.goto('/progetto/tetto-scuola-ghana', { waitUntil: 'domcontentloaded' });
     const { types, graph } = await readHead(page);
 
     expect(types).toContain('NGO');
@@ -105,7 +107,7 @@ test('project pages expose a donation action and a web page node', async ({ page
     expect(types).toContain('DonateAction');
 
     const donation = graph.find((entry) => [entry['@type']].flat().includes('DonateAction'));
-    expect(donation.target.urlTemplate).toContain('/progetto/antibracconaggio');
+    expect(donation.target.urlTemplate).toContain('/progetto/tetto-scuola-ghana');
     expect(donation.recipient['@id'], 'donation recipient is the organisation').toBeTruthy();
 });
 
@@ -152,6 +154,12 @@ test('journal articles are declared in the sitemap they are indexable in', async
     const body = await posts.text();
     expect(body).toContain('/aiutare-il-ghana-il-nostro-impegno-sociale-contro-la-poverta-e-lemarginazione');
     expect(body).toContain('/ghana-un-dormitorio-per-il-futuro-delleducazione');
+});
+
+test('the flagship project is declared in the project sitemap', async ({ request }) => {
+    const response = await request.get('/progetto-sitemap.xml');
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain('/progetto/tetto-scuola-ghana');
 });
 
 test('the sitemap only lists Italian pages', async ({ request }) => {

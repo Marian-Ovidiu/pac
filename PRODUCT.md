@@ -53,8 +53,9 @@ I flussi principali sono:
 - Il tema possiede presentazione, navigazione, contenuti e UI della donazione.
 - Devono restare invariati `donationFormData`, project ID, thank-you URL, payload,
   action AJAX, Stripe Payment Element e recupero delle donazioni pendenti.
-- I contenuti strutturati esistenti restano governati da ACF; il redesign non
-  richiede nuovi field group per poter funzionare.
+- I contenuti strutturati esistenti restano governati da ACF; il tema registra
+  inoltre in codice i campi riusabili dei progetti umanitari estesi, così
+  struttura editoriale e template restano sincronizzati tra gli ambienti.
 - Il sito pubblica esclusivamente contenuti in italiano.
 - Contact Form 7 è il form builder attivo per il contatto partnership.
 - Iubenda gestisce il consenso cookie e deve restare operativo.
@@ -74,8 +75,11 @@ I flussi principali sono:
 
 ## Evidence on Hand
 
-- Quattro progetti italiani pubblici: Sociale Ghana, Sociale Nigeria,
-  Antibracconaggio e Cani K-9.
+- Cinque progetti italiani pubblici: il progetto prioritario per il tetto della
+  scuola in Ghana, Sociale Ghana, Sociale Nigeria, Antibracconaggio e Cani K-9.
+- Per il tetto della scuola l’obiettivo economico dichiarato è di 10.000 EUR;
+  importo raccolto e aggiornamenti vengono pubblicati sulla base dei dati
+  registrati nel progetto.
 - Due articoli pubblici nel Diario.
 - Contenuti ACF per Home, progetti, Galleria e Grazie.
 - Pittogramma PAC in

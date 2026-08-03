@@ -9,7 +9,7 @@ class ProgettoController extends BaseController
 {
     public function archive()
     {
-        $progetti = Progetto::all();
+        $progetti = Progetto::prioritizeFlagship(Progetto::all());
         $this->addJs('stripe', 'https://js.stripe.com/v3/', [], true);
         $opzioniArchivio = OpzioniArchivioProgettoFields::get('option');
         $this->render('archivio-progetto', [
@@ -40,7 +40,8 @@ class ProgettoController extends BaseController
             exit;
         }
         $this->render('single-progetto', [
-            'progetto'              => Progetto::find(get_the_ID()),
+            'progetto'              => $progetto,
+            'projectUpdates'         => $progetto->getProjectUpdates(),
             'latestPosts'            => get_posts([
                 'post_type' => 'post',
                 'post_status' => 'publish',

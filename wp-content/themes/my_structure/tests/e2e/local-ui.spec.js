@@ -8,6 +8,7 @@ const routes = [
     ['home', '/'],
     ['projects', '/4-progetti-antibracconaggio-sociale/'],
     ['project', '/progetto/antibracconaggio/'],
+    ['flagship project', '/progetto/tetto-scuola-ghana'],
     ['companies', '/aziende/'],
     ['gallery', '/galleria/'],
     ['journal', '/diario-di-bordo/'],
@@ -15,14 +16,15 @@ const routes = [
     ['thanks', '/grazie/'],
 ];
 const widths = [320, 390, 768, 1024, 1440];
+const localUrl = new URL(process.env.PAC_LOCAL_URL || 'http://127.0.0.1:8080');
 
 test.beforeEach(async ({ context }) => {
     await context.route('**/*', async (route) => {
         const requestUrl = new URL(route.request().url());
         if (requestUrl.hostname === 'pac.local') {
-            requestUrl.protocol = 'http:';
-            requestUrl.hostname = '127.0.0.1';
-            requestUrl.port = '8080';
+            requestUrl.protocol = localUrl.protocol;
+            requestUrl.hostname = localUrl.hostname;
+            requestUrl.port = localUrl.port;
             await route.continue({ url: requestUrl.toString() });
             return;
         }
@@ -179,6 +181,31 @@ test('donation validation retains the existing payment contract', async ({ page 
     expect(contract.ajaxUrl).toContain('/wp-admin/admin-ajax.php');
     expect(contract.init).toContain('init(');
     expect(contract.init).toContain('/grazie/');
+});
+
+test('the flagship project explains need, objectives, transparent progress and expected impact', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    const response = await page.goto('/progetto/tetto-scuola-ghana', { waitUntil: 'domcontentloaded' });
+    expect(response?.status()).toBe(200);
+    await dismissCookieBanner(page);
+
+    await expect(page.getByRole('heading', { level: 1, name: 'Una scuola al riparo dalla pioggia.' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Quando piove, imparare diventa difficile' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'La continuità scolastica conta ogni giorno' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Cosa vogliamo realizzare' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'A che punto siamo' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'L’impatto atteso' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Aggiornamenti del progetto' })).toBeVisible();
+    await expect(page.getByText('Raccolta attiva', { exact: true })).toBeVisible();
+    await expect(page.getByText('10.000 EUR', { exact: true })).toBeVisible();
+    await expect(page.locator('.project-progress progress')).toHaveAttribute('max', '10000');
+    await expect(page.locator('.project-progress progress')).toHaveAttribute('value', '0');
+    await expect(page.locator('[x-data="donationFormData"]').first()).toBeVisible();
+
+    await waitForPageSettle(page);
+    const result = await accesslintAudit(page, { includeFrames: false, includeShadowDom: true });
+    const firstPartyViolations = result.violations.filter((violation) => !violation.selector.includes('iubenda.com/it/cookie-solution'));
+    expect(firstPartyViolations, JSON.stringify(firstPartyViolations, null, 2)).toEqual([]);
 });
 
 test('partnership form exposes labelled fields and its response region', async ({ page }) => {

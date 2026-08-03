@@ -1,7 +1,11 @@
 @php
     /** @var \Models\HomeFields $data */
-    $missions = array_values(array_filter($missions ?? []));
-    $missionCount = count($missions);
+    $allMissions = array_values(array_filter($missions ?? []));
+    $flagshipProject = $flagshipProject ?? null;
+    $missions = array_values(array_filter($allMissions, static function ($mission) use ($flagshipProject) {
+        return !$flagshipProject || (int) $mission->id !== (int) $flagshipProject->id;
+    }));
+    $missionCount = count($allMissions);
     $missionsUrl = home_url('/4-progetti-antibracconaggio-sociale/');
     $galleryUrl = home_url('/galleria/');
     $companiesUrl = home_url('/aziende/');
@@ -45,6 +49,10 @@
     </div>
 </section>
 
+@if($flagshipProject)
+    @include('components.flagship-project', ['project' => $flagshipProject])
+@endif
+
 <section id="come-lavoriamo" class="section section--paper">
     <div class="site-container editorial-split">
         <div class="section-heading">
@@ -68,11 +76,12 @@
     </div>
 </section>
 
+@if(!empty($missions) || !$flagshipProject)
 <section class="section" aria-labelledby="home-missions-title">
     <div class="site-container">
         <div class="section-heading section-heading--row">
             <div>
-                <h2 id="home-missions-title">{{ $data->titolo_progetti ?: 'Scegli la missione che vuoi sostenere.' }}</h2>
+                <h2 id="home-missions-title">{{ $flagshipProject ? 'Altre missioni che puoi sostenere.' : ($data->titolo_progetti ?: 'Scegli la missione che vuoi sostenere.') }}</h2>
                 <p>Ogni scheda apre il bisogno, l'azione prevista e il percorso di donazione del singolo progetto.</p>
             </div>
             <a class="text-link" href="{{ esc_url($missionsUrl) }}">Vedi tutte le missioni <span aria-hidden="true">→</span></a>
@@ -103,6 +112,7 @@
         @endif
     </div>
 </section>
+@endif
 
 @if(!empty($latestPost))
 <section class="section section--forest field-note" data-reveal aria-labelledby="field-note-title">

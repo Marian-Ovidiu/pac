@@ -66,6 +66,7 @@
                         'action' => $mission->soluzioni_testo_1,
                         'image' => $mission->immagine_hero ?: $mission->featured_image,
                         'mission' => $mission,
+                        'featured' => $mission->isFlagship(),
                         'url' => get_permalink($mission->id),
                         'loading' => $index < 2 ? 'eager' : 'lazy',
                     ])

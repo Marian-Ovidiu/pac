@@ -6,7 +6,7 @@
     $missionAction = trim(wp_strip_all_tags((string) ($action ?? '')));
 @endphp
 
-<article class="mission-card">
+<article class="mission-card {{ !empty($featured) ? 'mission-card--flagship' : '' }}">
     @include('components.media-figure', [
         'image' => theme_mission_media($mission ?? null, $image ?? null),
         'alt' => $missionTitle,

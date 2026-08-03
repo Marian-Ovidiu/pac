@@ -11,6 +11,7 @@ class HomeController extends BaseController {
     public function index() {
         $data = HomeFields::get(get_the_ID());
         $mono = MonoFields::get(get_the_ID()) ?? null;
+        $missions = Progetto::prioritizeFlagship(Progetto::all());
         $latestPosts = get_posts([
             'post_type' => 'post',
             'post_status' => 'publish',
@@ -20,7 +21,8 @@ class HomeController extends BaseController {
         ]);
         $this->render('home', [
             'data'=> $data,
-            'missions' => Progetto::all(),
+            'missions' => $missions,
+            'flagshipProject' => Progetto::firstFlagship($missions),
             'latestPost' => $latestPosts[0] ?? null,
             'publishedPostCount' => (int) wp_count_posts('post')->publish,
             'titolo_monologo' => $mono->titolo_monologo,
