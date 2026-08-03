@@ -203,3 +203,162 @@ add_filter('wpcf7_form_additional_atts', static function ($attributes) {
 
     return $attributes;
 }, 20);
+
+/**
+ * SEO strutturato — vedi docs/priority-8-seo-hardening.md.
+ *
+ * Rank Math non emette le entità globali sui contenuti singoli quando il tipo di
+ * schema di default del post type è disattivato, e nessun contenuto esistente ha
+ * postmeta rank_math_schema_*. Il risultato è che progetti e articoli espongono
+ * soltanto BreadcrumbList. Questi filtri riportano il grafo a uno stato corretto
+ * senza toccare le opzioni del plugin, che vivono nel database e non sono
+ * deployabili.
+ */
+
+if (!function_exists('pac_schema_force_global_entities')) {
+    function pac_schema_force_global_entities($canAdd) {
+        return is_singular(['progetto', 'post']) ? true : $canAdd;
+    }
+}
+
+add_filter('rank_math/schema/add_global_entities', 'pac_schema_force_global_entities', 20);
+
+if (!function_exists('pac_schema_donation_url')) {
+    /**
+     * Il form di donazione vive sulle pagine progetto: la DonateAction punta lì,
+     * non a una pagina di donazione dedicata che non esiste.
+     */
+    function pac_schema_donation_url() {
+        if (is_singular('progetto')) {
+            return (string) get_permalink();
+        }
+
+        $projects = get_posts([
+            'post_type' => 'progetto',
+            'numberposts' => 1,
+            'post_status' => 'publish',
+            'fields' => 'ids',
+        ]);
+
+        return $projects ? (string) get_permalink($projects[0]) : '';
+    }
+}
+
+if (!function_exists('pac_schema_adjust_json_ld')) {
+    function pac_schema_adjust_json_ld($data, $jsonld = null) {
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        // PAC è una no profit: NGO invece di Organization generica.
+        if (isset($data['publisher']['@type'])) {
+            $types = (array) $data['publisher']['@type'];
+            if (in_array('Organization', $types, true)) {
+                $data['publisher']['@type'] = 'NGO';
+            }
+        }
+
+        if (!is_singular()) {
+            return $data;
+        }
+
+        $post = get_queried_object();
+        if (!$post instanceof WP_Post) {
+            return $data;
+        }
+
+        $publisherId = $data['publisher']['@id'] ?? '';
+        $permalink = (string) get_permalink($post);
+
+        // Articoli del Diario: BlogPosting completo.
+        if ($post->post_type === 'post') {
+            $article = [
+                '@type' => 'BlogPosting',
+                '@id' => $permalink . '#blogposting',
+                'headline' => wp_strip_all_tags(get_the_title($post)),
+                'url' => $permalink,
+                'datePublished' => get_the_date('c', $post),
+                'dateModified' => get_the_modified_date('c', $post),
+                'inLanguage' => get_bloginfo('language'),
+                'mainEntityOfPage' => ['@id' => $permalink . '#webpage'],
+            ];
+
+            $authorName = get_the_author_meta('display_name', (int) $post->post_author);
+            if ($authorName !== '') {
+                $article['author'] = ['@type' => 'Person', 'name' => $authorName];
+            }
+
+            if ($publisherId !== '') {
+                $article['publisher'] = ['@id' => $publisherId];
+            }
+
+            $thumbnail = get_the_post_thumbnail_url($post, 'full');
+            if (is_string($thumbnail) && $thumbnail !== '') {
+                $article['image'] = $thumbnail;
+            }
+
+            $data['pacBlogPosting'] = $article;
+        }
+
+        // Pagine progetto: la donazione è l'azione primaria della pagina.
+        if ($post->post_type === 'progetto') {
+            $donation = [
+                '@type' => 'DonateAction',
+                '@id' => $permalink . '#donateaction',
+                'name' => sprintf('Sostieni %s', wp_strip_all_tags(get_the_title($post))),
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => $permalink,
+                    'actionPlatform' => 'http://schema.org/DesktopWebPlatform',
+                ],
+            ];
+
+            if ($publisherId !== '') {
+                $donation['recipient'] = ['@id' => $publisherId];
+            }
+
+            $data['pacDonateAction'] = $donation;
+        }
+
+        return $data;
+    }
+}
+
+add_filter('rank_math/json_ld', 'pac_schema_adjust_json_ld', 99, 2);
+
+if (!function_exists('pac_seo_trim_description')) {
+    /**
+     * Le description sono generate da %excerpt% e vengono tagliate a lunghezza
+     * fissa, quindi finiscono a metà parola. Qui il taglio avviene alla fine di
+     * una frase, o almeno di una parola.
+     */
+    function pac_seo_trim_description($description) {
+        $description = trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $description)));
+        $limit = 155;
+
+        // Un excerpt che introduce un elenco lascia due punti penzolanti in SERP.
+        $description = rtrim($description, " ,;:–-");
+
+        if ($description === '' || mb_strlen($description) <= $limit) {
+            return $description;
+        }
+
+        $window = mb_substr($description, 0, $limit);
+
+        // Preferisci la fine di frase, se cade in una porzione utile del testo.
+        if (preg_match_all('/[.!?](?=\s|$)/u', $window, $matches, PREG_OFFSET_CAPTURE)) {
+            $lastSentence = end($matches[0]);
+            $offset = mb_strlen(substr($window, 0, $lastSentence[1])) + 1;
+            if ($offset >= 80) {
+                return trim(mb_substr($description, 0, $offset));
+            }
+        }
+
+        $lastSpace = mb_strrpos($window, ' ');
+        $cut = $lastSpace !== false && $lastSpace >= 60 ? $lastSpace : $limit;
+
+        return rtrim(trim(mb_substr($description, 0, $cut)), " ,;:–-") . '…';
+    }
+}
+
+add_filter('rank_math/frontend/description', 'pac_seo_trim_description', 20);

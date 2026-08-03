@@ -22,6 +22,15 @@ php -S 127.0.0.1:8080 router.php
 `router.php` serve i file esistenti e passa tutto il resto a `index.php`, così i
 permalink funzionano senza Apache. `wp-config.php` è locale e non versionato.
 
+**Il server integrato di PHP è single-thread.** Playwright esegue più spec file
+in parallelo e la contesa rende `local-ui.spec.js` intermittente, su un viewport
+diverso a ogni run. Due contromisure, entrambe valide:
+
+```
+PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8080 router.php   # server concorrente
+npx playwright test tests/e2e/ --workers=1                  # verificato verde 2 run su 2
+```
+
 ## Test
 
 Da `wp-content/themes/my_structure/`:
