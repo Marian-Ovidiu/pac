@@ -19,7 +19,7 @@ The repository does not version:
 ## Local bootstrap
 
 1. Copy `wp-config.example.php` to `wp-config.php`.
-2. Copy `.env.example` to `.env` and configure database credentials outside Git. The config template loads the root `.env` before WordPress connects to MySQL.
+2. Copy `.env.example` to `.env` and configure database credentials outside Git. The standalone `wp-env.php` loader makes values available through `get_data_env('KEY')` before WordPress connects to MySQL.
 3. Use Stripe test credentials only in the local `.env` file.
 4. Install the application plugin dependencies:
 
